@@ -31,7 +31,7 @@
 
 - When calculating the available volume, the full remaining size of iceberg orders should be considered. (<a name="0012-POSR-019" href="#0012-POSR-019">0012-POSR-019</a>)
 - When calculating the available volume, volume outside price monitoring bounds should be considered. (<a name="0012-POSR-020" href="#0012-POSR-020">0012-POSR-020</a>)
-- When calculating the available volume, volume outside the disposal price range should not be considered. (<a name="0012-POSR-030" href="#0012-POSR-030">0012-POSR-030</a>)
+- When calculating the available volume, volume outside the disposal price range should not be considered. (<a name="0012-POSR-033" href="#0012-POSR-033">0012-POSR-033</a>)
 - Given a highly liquid market, if the network’s position is greater than `full disposal size`. The network must attempt to dispose `position * disposal fraction` at the next disposal step. (<a name="0012-POSR-022" href="#0012-POSR-022">0012-POSR-022</a>)
 - Given a highly liquid market, if the network’s position is less than or equal to `full disposal size`. The network must attempt to dispose of its full position at the next disposal step. (<a name="0012-POSR-023" href="#0012-POSR-023">0012-POSR-023</a>)
 - Given a highly liquid market, if the network’s `disposal fraction<1` and `full disposal size`=0, the network must still eventually dispose of its full position. (<a name="0012-POSR-024" href="#0012-POSR-024">0012-POSR-024</a>)
