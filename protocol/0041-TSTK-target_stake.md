@@ -66,7 +66,7 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 
 ## Target stake for spot markets
 
-See [spot market spec](0080-SPOT-product_builtin_spot.md).3600s
+See [spot market spec](0080-SPOT-product_builtin_spot.md).
 
 The target stake of a market is calculated as a fraction of the maximum `total_stake` over a rolling time window. The fraction is controlled by the parameter `scaling_factor` and the length of the window is controlled by the parameter `time_window`.
 
@@ -93,4 +93,11 @@ The above design ensures the `target_stake` of a market is unable to fluctuate d
 
 ### Acceptance criteria
 
-Too be decided.
+- For a spot market, given a `scaling_factor=1` and zero asset decimals. The target stake should be set to the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, given a `scaling_factor=1` and non-zero asset decimals. The target stake should be set to the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, given a `scaling_factor<1` The target stake should be set to the product of the `scaling_factor` and the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, given a LP increases their commitment, the target stake should increase to reflect that change. (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, given a LP decreases their commitment, the target stake will not decrease to reflect that change un till end of the epoch when the reduction is processed and the rolling time window no longer includes the total stake prior to the commitment change.(<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, change of `market.stake.target.scalingFactor` will immediately change the target stake. (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, an increase of `time_window` will immediately change the length of time window over which total stake is measured however new records will not be added hence the target stake will not immediately change (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
+- For a spot market, a decrease of `time_window` will immediately change the length of time window over which the total stake is measured and old records will be dropped hence the target stake will immediately change (<a name="0041-TSTK-XXX" href="#0041-TSTK-XXX">0041-TSTK-XXX</a>)
