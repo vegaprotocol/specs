@@ -368,5 +368,4 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 
 ### Market gets suspended and resumed before it has been enacted (<a name="0043-MKTL-011" href="#0043-MKTL-011">0043-MKTL-011</a>)
 
-1. A market is proposed and then suspended before it is enacted.
-1. The market is resumed and should now be able to leave opening auction.
+1. A market cannot be suspended if the proposal to enact the market is open
