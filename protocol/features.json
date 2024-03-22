@@ -374,6 +374,10 @@
     "milestone": "colosseo",
     "acs": ["0083-RFPR-068"]
   },
+  "Market suspended/resumed before enactment": {
+    "milestone": "colosseo",
+    "acs": ["0043-MKTL-011"]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
