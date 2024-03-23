@@ -365,3 +365,7 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. Once the governance proposal to resumed the market gets enacted the market can now leave the auction.
 1. If no other auction triggers are active the market goes back into its default trading mode immediately (auction gets uncrossed and trades get generated).
 1. If other auction triggers are active the market remains in auction mode until these allow it to leave it.
+
+### Market gets suspended and resumed before it has been enacted (<a name="0043-MKTL-011" href="#0043-MKTL-011">0043-MKTL-011</a>)
+
+1. A market cannot be suspended if the proposal to enact the market is open
