@@ -340,67 +340,67 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 ### Stop orders
 
-- Once triggered, a stop order is removed from the book and cannot be triggered again. (<a name="0014-ORDT-041" href="#0014-ORDT-041">0014-ORDT-041</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- Once triggered, a stop order is removed from the book and cannot be triggered again. (<a name="0014-ORDT-041" href="#0014-ORDT-041">0014-ORDT-041</a>). For spot products (<a name="0014-ORDT-124" href="#0014-ORDT-124">0014-ORDT-124</a>)
 - A stop order placed by a key with a zero position and no open orders will be rejected. (<a name="0014-ORDT-042" href="#0014-ORDT-042">0014-ORDT-042</a>)
 - A stop order placed by a key with a zero position but open orders will be accepted. (<a name="0014-ORDT-043" href="#0014-ORDT-043">0014-ORDT-043</a>)
-- In a spot market, a stop order placed by a key with no position or open orders will be accepted. (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- Attempting to create more stop orders than is allowed by the relevant network parameter will result in the transaction failing to execute. (<a name="0014-ORDT-044" href="#0014-ORDT-044">0014-ORDT-044</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- In a spot market, a stop order placed by a key with no position or open orders will be accepted. (<a name="0014-ORDT-125" href="#0014-ORDT-125">0014-ORDT-125</a>)
+- Attempting to create more stop orders than is allowed by the relevant network parameter will result in the transaction failing to execute. (<a name="0014-ORDT-044" href="#0014-ORDT-044">0014-ORDT-044</a>). For spot products (<a name="0014-ORDT-126" href="#0014-ORDT-126">0014-ORDT-126</a>)
 
-- A stop order wrapping a limit order will, once triggered, place the limit order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-045" href="#0014-ORDT-045">0014-ORDT-045</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A stop order wrapping a market order will, once triggered, place the market order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-046" href="#0014-ORDT-046">0014-ORDT-046</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A stop order wrapping a limit order will, once triggered, place the limit order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-045" href="#0014-ORDT-045">0014-ORDT-045</a>). For spot products (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
+- A stop order wrapping a market order will, once triggered, place the market order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-046" href="#0014-ORDT-046">0014-ORDT-046</a>). For spot products (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
 
-- With a last traded price at 50, a stop order placed with `Rises Above` setting at 75 will be triggered by any trade at price 75 or higher. (<a name="0014-ORDT-047" href="#0014-ORDT-047">0014-ORDT-047</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- With a last traded price at 50, a stop order placed with `Rises Above` setting at 25 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-048" href="#0014-ORDT-048">0014-ORDT-048</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- With a last traded price at 50, a stop order placed with `Falls Below` setting at 25 will be triggered by any trade at price 25 or lower. (<a name="0014-ORDT-049" href="#0014-ORDT-049">0014-ORDT-049</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- With a last traded price at 50, a stop order placed with `Falls Below` setting at 75 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-050" href="#0014-ORDT-050">0014-ORDT-050</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- With a last traded price at 50, a stop order placed with `Rises Above` setting at 75 will be triggered by any trade at price 75 or higher. (<a name="0014-ORDT-047" href="#0014-ORDT-047">0014-ORDT-047</a>). For spot products (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
+- With a last traded price at 50, a stop order placed with `Rises Above` setting at 25 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-048" href="#0014-ORDT-048">0014-ORDT-048</a>). For spot products (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
+- With a last traded price at 50, a stop order placed with `Falls Below` setting at 25 will be triggered by any trade at price 25 or lower. (<a name="0014-ORDT-049" href="#0014-ORDT-049">0014-ORDT-049</a>). For spot products (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
+- With a last traded price at 50, a stop order placed with `Falls Below` setting at 75 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-050" href="#0014-ORDT-050">0014-ORDT-050</a>). For spot products (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
 
 - With a last traded price at 50, a stop order placed with any trigger price which does not trigger immediately will trigger as soon as a trade occurs at a trigger price, and will not wait until the next mark price update to trigger. (<a name="0014-ORDT-051" href="#0014-ORDT-051">0014-ORDT-051</a>)
-- A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. This must be tested both sides (fall below and rise above). (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>). For spot products (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>)
+- A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>). For spot products (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>)
+  - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>). For spot products (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. This must be tested both sides (fall below and rise above). (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>). For spot products (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>)
+  - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>). For spot products (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
-- A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>). For spot products (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
+- If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>). For spot products (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
+- If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>). For spot products (<a name="0014-ORDT-140" href="#0014-ORDT-140">0014-ORDT-140</a>)
 
 - A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:
-  - Be triggered by a fall to `57`. (<a name="0014-ORDT-059" href="#0014-ORDT-059">0014-ORDT-059</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - Not be triggered by a fall to `58`. (<a name="0014-ORDT-060" href="#0014-ORDT-060">0014-ORDT-060</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+  - Be triggered by a fall to `57`. (<a name="0014-ORDT-059" href="#0014-ORDT-059">0014-ORDT-059</a>). For spot products (<a name="0014-ORDT-141" href="#0014-ORDT-141">0014-ORDT-141</a>)
+  - Not be triggered by a fall to `58`. (<a name="0014-ORDT-060" href="#0014-ORDT-060">0014-ORDT-060</a>). For spot products (<a name="0014-ORDT-142" href="#0014-ORDT-142">0014-ORDT-142</a>)
 - A trailing stop order for a 5% rise placed when the price is `50`, followed by a drop to `40` will:
-  - Be triggered by a rise to `42`. (<a name="0014-ORDT-061" href="#0014-ORDT-061">0014-ORDT-061</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - Not be triggered by a rise to `41`. (<a name="0014-ORDT-062" href="#0014-ORDT-062">0014-ORDT-062</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+  - Be triggered by a rise to `42`. (<a name="0014-ORDT-061" href="#0014-ORDT-061">0014-ORDT-061</a>). For spot products (<a name="0014-ORDT-143" href="#0014-ORDT-143">0014-ORDT-143</a>)
+  - Not be triggered by a rise to `41`. (<a name="0014-ORDT-062" href="#0014-ORDT-062">0014-ORDT-062</a>). For spot products (<a name="0014-ORDT-144" href="#0014-ORDT-144">0014-ORDT-144</a>)
 - A trailing stop order for a 25% drop placed when the price is `50`, followed by a price rise to `60`, then to `50`, then another rise to `57` will:
-  - Be triggered by a fall to `45`. (<a name="0014-ORDT-063" href="#0014-ORDT-063">0014-ORDT-063</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-  - Not be triggered by a fall to `46`. (<a name="0014-ORDT-064" href="#0014-ORDT-064">0014-ORDT-064</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+  - Be triggered by a fall to `45`. (<a name="0014-ORDT-063" href="#0014-ORDT-063">0014-ORDT-063</a>). For spot products (<a name="0014-ORDT-145" href="#0014-ORDT-145">0014-ORDT-145</a>)
+  - Not be triggered by a fall to `46`. (<a name="0014-ORDT-064" href="#0014-ORDT-064">0014-ORDT-064</a>). For spot products (<a name="0014-ORDT-146" href="#0014-ORDT-146">0014-ORDT-146</a>)
 
-- A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>). For spot products (<a name="0014-ORDT-147" href="#0014-ORDT-147">0014-ORDT-147</a>)
+- A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>). For spot products (<a name="0014-ORDT-148" href="#0014-ORDT-148">0014-ORDT-148</a>)
 
-- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- An order with a stop is placed during continuous trading. The market goes into auction. The market exits auction, the condition for triggering the stop is not met. The stop order is still present. (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>). For spot products (<a name="0014-ORDT-149" href="#0014-ORDT-149">0014-ORDT-149</a>)
+- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>). For spot products (<a name="0014-ORDT-150" href="#0014-ORDT-150">0014-ORDT-150</a>)
+- An order with a stop is placed during continuous trading. The market goes into auction. The market exits auction, the condition for triggering the stop is not met. The stop order is still present. (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>). For spot products (<a name="0014-ORDT-151" href="#0014-ORDT-151">0014-ORDT-151</a>)
 
-- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>). For spot products (<a name="0014-ORDT-152" href="#0014-ORDT-152">0014-ORDT-152</a>)
+- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>). For spot products (<a name="0014-ORDT-153" href="#0014-ORDT-153">0014-ORDT-153</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
 
-- A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>). For spot products (<a name="0014-ORDT-154" href="#0014-ORDT-154">0014-ORDT-154</a>)
+- All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>). For spot products (<a name="0014-ORDT-155" href="#0014-ORDT-155">0014-ORDT-155</a>)
+- All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>). For spot products (<a name="0014-ORDT-156" href="#0014-ORDT-156">0014-ORDT-156</a>)
 - If a stop order is placed with a position_fraction equal to 0.5 and the position size is 5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
 
 
 ## Stop Orders - Negative Cases
 
-- Stop orders submitted with post_only=True are rejected. (<a name="0014-ORDT-074" href="#0014-ORDT-074">0014-ORDT-074</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- Stop orders submitted with invalid values for trigger price (0, negative values) and trailing percentage (0, negative values) are rejected. (<a name="0014-ORDT-075" href="#0014-ORDT-075">0014-ORDT-075</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>). For spot products (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- Stop orders submitted with post_only=True are rejected. (<a name="0014-ORDT-074" href="#0014-ORDT-074">0014-ORDT-074</a>). For spot products (<a name="0014-ORDT-157" href="#0014-ORDT-157">0014-ORDT-157</a>)
+- Stop orders submitted with invalid values for trigger price (0, negative values) and trailing percentage (0, negative values) are rejected. (<a name="0014-ORDT-075" href="#0014-ORDT-075">0014-ORDT-075</a>). For spot products (<a name="0014-ORDT-158" href="#0014-ORDT-158">0014-ORDT-158</a>)
+- Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>). For spot products (<a name="0014-ORDT-159" href="#0014-ORDT-159">0014-ORDT-159</a>)
+- GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>). For spot products (<a name="0014-ORDT-160" href="#0014-ORDT-160">0014-ORDT-160</a>)
+- Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>). For spot products (<a name="0014-ORDT-161" href="#0014-ORDT-161">0014-ORDT-161</a>)
 - If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
 - A party with a long position cannot enter a buy stop order, and a party with a short position cannot enter a sell stop order (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
@@ -417,7 +417,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
 - All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
 - A stop order with a position size override with a position_fraction set to 0.75, for a trader with long position 20, should create a stop order for selling size 15 when triggered (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
-- Given a spot market, a stop order with a position size override will be rejected (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- Given a spot market, a stop order with a position size override will be rejected (<a name="0014-ORDT-162" href="#0014-ORDT-162">0014-ORDT-162</a>)
 
 ## Perpetuals
 
@@ -429,8 +429,8 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 ## Spot
 
-- A trader submitting a stop order wrapping a buy limit order will have the funds required to execute that order locked in the relevant holding account for the quote asset. (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
-- A trader submitting a stop order wrapping a sell limit order will have the funds required to execute that order locked in the relevant holding account for the base asset (<a name="0014-ORDT-XXX" href="#0014-ORDT-XXX">0014-ORDT-XXX</a>)
+- A trader submitting a stop order wrapping a buy limit order will have the funds required to execute that order locked in the relevant holding account for the quote asset. (<a name="0014-ORDT-163" href="#0014-ORDT-163">0014-ORDT-163</a>)
+- A trader submitting a stop order wrapping a sell limit order will have the funds required to execute that order locked in the relevant holding account for the base asset (<a name="0014-ORDT-164" href="#0014-ORDT-164">0014-ORDT-164</a>)
 
 ### See also
 
