@@ -317,6 +317,8 @@ UTC
 validator
 validator's
 validators
+vAMM
+vAMMs
 vega
 vegaprotocol
 vegatools
