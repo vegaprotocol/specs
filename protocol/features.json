@@ -439,6 +439,14 @@
       "0003-NP-LIMI-007"
     ]
   },
+  "Explicit liquidation range": {
+    "milestone": "colosseo",
+    "acs": [
+      "0012-POSR-031",
+      "0012-POSR-032",
+      "0012-POSR-033"
+    ]
+  },
   "Teams": {
     "milestone": "colosseo",
     "acs": ["0083-RFPR-068"]
