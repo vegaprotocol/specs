@@ -76,9 +76,6 @@ See spec [0041-TSTK](./0041-TSTK-target_stake.md).
 
 The market liquidity fee is calculated using the same mechanism defined in [0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-The liquidity fee is re-calculated at the start of a fee distribution epoch and is fixed for that epoch.
-Note: 1. this may later be applied universally to all products. 2. this "fee distribution epoch" is unrelated to blockchain staking and delegation epochs.
-
 ## 7. Trading
 
 Both buy and sell orders on a `Spot` market define a size (amount of the `base_asset`) to buy or sell at a given price (amount of the `quote_asset`). An orders "value for fee purposes" is always expressed in the `quote_asset`.
