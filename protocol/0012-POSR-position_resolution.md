@@ -115,7 +115,9 @@ Currently only one liquidation strategy is supported and its defined by the foll
 - `max fraction of book side within bounds consumed` (min: `0`, max: `1`): once the network chooses the size of its order (`s_candidate`) the effective size will be calculated as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `disposal slippage range` and `m` is the `max fraction of book side within liquidity bounds consumed`.
 When vAMMs are implemented and provide liquidity then volume implied by vAMMs that lies within the relevant range must be included in the calculation.
 
-Assume the price range implied by the `disposal slippage range` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets its price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
+Assume the price range implied by the `disposal slippage range` is `[a, b]`.
+Assume the the tightest price monitoring bound has lower bound plus one tick of `c` and upper bound minus one tick of `d`.
+Once the network has worked out a size of its immediate or cancel limit order it sets its price to `max(a,c)` if it's a sell order or `min(b,d)` if it's a buy order, and it submits the order.
 
 
 Note that setting:
