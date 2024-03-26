@@ -1,16 +1,45 @@
 {
-  "Markprice updates": {
+  "Market tick size": {
     "milestone": "colosseo",
     "acs": [
-      "0009-MRKP-132",
-      "0053-PERP-043",
-      "0032-PRIM-039",
-      "0032-PRIM-040",
-      "0009-MRKP-036",
-      "0009-MRKP-037"
+      "0004-AMND-060",
+      "0025-OCRE-006",
+      "0028-GOVE-180",
+      "0028-GOVE-182",
+      "0028-GOVE-183",
+      "0028-GOVE-184",
+      "0037-OPEG-020",
+      "0037-OPEG-021"
     ]
   },
-    "Spot": {
+  "Taker fee cap": {
+    "milestone": "colosseo",
+    "acs": [
+      "0057-TRAN-070",
+      "0057-TRAN-071",
+      "0057-TRAN-072",
+      "0057-TRAN-073",
+      "0057-TRAN-074",
+      "0057-TRAN-075"
+    ]
+  },
+  "Isolated margin": {
+    "milestone": "colosseo",
+    "acs": ["0019-MCAL-208"]
+  },
+  "Closeout trades and auctions": {
+    "milestone": "colosseo",
+    "acs": ["0012-POSR-030"]
+  },
+  "Market suspended/resumed before enactment": {
+    "milestone": "colosseo",
+    "acs": ["0043-MKTL-011"]
+  },
+  "Teams": {
+    "milestone": "colosseo",
+    "acs": ["0083-RFPR-068"]
+  },
+  "Spot": {
     "milestone": "colosseo",
     "acs": [
       "0080-SPOT-001",
@@ -243,7 +272,68 @@
       "0068-MATC-089",
       "0068-MATC-090",
       "0068-MATC-091",
-      "0068-MATC-092"
+      "0068-MATC-092",
+      "0041-TSTK-106",
+      "0041-TSTK-107",
+      "0041-TSTK-108",
+      "0041-TSTK-109",
+      "0041-TSTK-110",
+      "0041-TSTK-111",
+      "0041-TSTK-112",
+      "0041-TSTK-113",
+      "0042-LIQF-063",
+      "0042-LIQF-064",
+      "0042-LIQF-065",
+      "0042-LIQF-066",
+      "0042-LIQF-067",
+      "0042-LIQF-068",
+      "0042-LIQF-069",
+      "0042-LIQF-070",
+      "0042-LIQF-071",
+      "0042-LIQF-072",
+      "0042-LIQF-073",
+      "0042-LIQF-074",
+      "0042-LIQF-075",
+      "0042-LIQF-076",
+      "0042-LIQF-077",
+      "0042-LIQF-078",
+      "0042-LIQF-079",
+      "0042-LIQF-080",
+      "0042-LIQF-081",
+      "0042-LIQF-082",
+      "0042-LIQF-083",
+      "0042-LIQF-084",
+      "0042-LIQF-085",
+      "0042-LIQF-086",
+      "0042-LIQF-087",
+      "0042-LIQF-088",
+      "0042-LIQF-089",
+      "0042-LIQF-090",
+      "0042-LIQF-091",
+      "0042-LIQF-100",
+      "0042-LIQF-101",
+      "0042-LIQF-102",
+      "0042-LIQF-103",
+      "0042-LIQF-104",
+      "0042-LIQF-105",
+      "0044-LIME-102",
+      "0044-LIME-103",
+      "0044-LIME-104",
+      "0044-LIME-105",
+      "0044-LIME-106",
+      "0044-LIME-107",
+      "0044-LIME-108",
+      "0044-LIME-109",
+      "0044-LIME-110",
+      "0044-LIME-111",
+      "0044-LIME-112",
+      "0044-LIME-113",
+      "0044-LIME-114",
+      "0044-LIME-115",
+      "0044-LIME-116",
+      "0044-LIME-117",
+      "0044-LIME-118",
+      "0044-LIME-119"
     ]
   },
   "Spot stretch": {
@@ -294,57 +384,85 @@
       "0079-TGAP-007"
     ]
   },
-  "Community Tags": {
+  "Spot stop orders": {
     "milestone": "colosseo",
     "acs": [
-      "0028-GOVE-168",
-      "0028-GOVE-169",
-      "0028-GOVE-170",
-      "0028-GOVE-171",
-      "0028-GOVE-172",
-      "0028-GOVE-173",
-      "0028-GOVE-174",
-      "0028-GOVE-175",
-      "0028-GOVE-176",
-      "0028-GOVE-177",
-      "0028-GOVE-178"
+      "0014-ORDT-124",
+      "0014-ORDT-125",
+      "0014-ORDT-126",
+      "0014-ORDT-140",
+      "0014-ORDT-141",
+      "0014-ORDT-142",
+      "0014-ORDT-143",
+      "0014-ORDT-144",
+      "0014-ORDT-145",
+      "0014-ORDT-146",
+      "0014-ORDT-147",
+      "0014-ORDT-148",
+      "0014-ORDT-149",
+      "0014-ORDT-150",
+      "0014-ORDT-151",
+      "0014-ORDT-152",
+      "0014-ORDT-153",
+      "0014-ORDT-154",
+      "0014-ORDT-155",
+      "0014-ORDT-156",
+      "0014-ORDT-157",
+      "0014-ORDT-158",
+      "0014-ORDT-159",
+      "0014-ORDT-160",
+      "0014-ORDT-161",
+      "0014-ORDT-162",
+      "0014-ORDT-163",
+      "0014-ORDT-164",
+      "0014-ORDT-165",
+      "0014-ORDT-166",
+      "0014-ORDT-167",
+      "0014-ORDT-168",
+      "0014-ORDT-169",
+      "0014-ORDT-170",
+      "0014-ORDT-171",
+      "0014-ORDT-172",
+      "0014-ORDT-173",
+      "0014-ORDT-174",
+      "0014-ORDT-175",
+      "0014-ORDT-176",
+      "0014-ORDT-177"
     ]
   },
-  "Perpetual funding rates": {
-    "milestone": "colosseo",
-    "acs": ["0053-PERP-036"]
-  },
-  "Market tick size": {
+  "Spot ammend": {
     "milestone": "colosseo",
     "acs": [
-      "0004-AMND-060",
-      "0025-OCRE-006",
-      "0028-GOVE-180",
-      "0028-GOVE-182",
-      "0028-GOVE-183",
-      "0028-GOVE-184",
-      "0037-OPEG-020",
-      "0037-OPEG-021"
+      "0037-OPEG-019",
+      "0004-AMND-030",
+      "0004-AMND-031",
+      "0004-AMND-032",
+      "0004-AMND-033",
+      "0004-AMND-034",
+      "0004-AMND-035",
+      "0004-AMND-036",
+      "0004-AMND-037",
+      "0004-AMND-038",
+      "0004-AMND-039",
+      "0004-AMND-040",
+      "0004-AMND-041",
+      "0004-AMND-042",
+      "0004-AMND-043",
+      "0004-AMND-044",
+      "0004-AMND-045",
+      "0004-AMND-046",
+      "0004-AMND-047",
+      "0004-AMND-048",
+      "0004-AMND-049",
+      "0004-AMND-050",
+      "0004-AMND-051",
+      "0004-AMND-052",
+      "0004-AMND-053",
+      "0004-AMND-054",
+      "0004-AMND-055",
+      "0011-MARA-018",
+      "0011-MARA-019"
     ]
-  },
-  "Taker fee cap": {
-    "milestone": "colosseo",
-    "acs": [
-      "0057-TRAN-070",
-      "0057-TRAN-071",
-      "0057-TRAN-072",
-      "0057-TRAN-073",
-      "0057-TRAN-074",
-      "0057-TRAN-075"
-    ]
-  },
-  "Isolated margin": {
-    "milestone": "colosseo",
-    "acs": ["0019-MCAL-208"]
-  },
-  "Closeout trades and auctions": {
-    "milestone": "colosseo",
-    "acs": ["0012-POSR-030"]
   },
   "New asset bridge": {
     "milestone": "colosseo",
@@ -370,13 +488,44 @@
       "0003-NP-LIMI-007"
     ]
   },
-  "Teams": {
+  "Markprice updates": {
     "milestone": "colosseo",
-    "acs": ["0083-RFPR-068"]
+    "acs": [
+      "0009-MRKP-132",
+      "0053-PERP-043",
+      "0032-PRIM-039",
+      "0032-PRIM-040",
+      "0009-MRKP-036",
+      "0009-MRKP-037"
+    ]
   },
-  "Market suspended/resumed before enactment": {
+  "Perpetual funding rates": {
     "milestone": "colosseo",
-    "acs": ["0043-MKTL-011"]
+    "acs": ["0053-PERP-036"]
+  },
+  "Explicit liquidation range": {
+    "milestone": "colosseo",
+    "acs": [
+      "0012-POSR-031",
+      "0012-POSR-032",
+      "0012-POSR-033"
+    ]
+  },
+  "Community Tags": {
+    "milestone": "colosseo",
+    "acs": [
+      "0028-GOVE-168",
+      "0028-GOVE-169",
+      "0028-GOVE-170",
+      "0028-GOVE-171",
+      "0028-GOVE-172",
+      "0028-GOVE-173",
+      "0028-GOVE-174",
+      "0028-GOVE-175",
+      "0028-GOVE-176",
+      "0028-GOVE-177",
+      "0028-GOVE-178"
+    ]
   },
   "Unknown": {
     "milestone": "unknown",
