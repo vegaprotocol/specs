@@ -70,8 +70,10 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 ## Acceptance criteria
 
 - As a user, I can propose a market with a different precision than its settlement asset
-  - This proposal is valid if the precision is NOT greater than the settlement asset precision - position precision (<a name="0070-MKTD-021" href="#0070-MKTD-021">0070-MKTD-021</a>). For product spot: (<a name="0070-MKTD-022" href="#0070-MKTD-022">0070-MKTD-022</a>)
-  - This proposal is NOT valid if the precision is greater than the settlement asset precision - position precision (<a name="0070-MKTD-023" href="#0070-MKTD-023">0070-MKTD-023</a>). For product spot: (<a name="0070-MKTD-024" href="#0070-MKTD-024">0070-MKTD-024</a>)
+  - This proposal is valid if the precision is NOT greater than the settlement asset precision - position precision (<a name="0070-MKTD-021" href="#0070-MKTD-021">0070-MKTD-021</a>). For product spot, the market precision should be NOT greater than the quote asset precision - position precision (<a name="0070-MKTD-022" href="#0070-MKTD-022">0070-MKTD-022</a>)
+  - This proposal is NOT valid if the precision is greater than the settlement asset precision - position precision (<a name="0070-MKTD-023" href="#0070-MKTD-023">0070-MKTD-023</a>). For product spot this proposal is NOT valid if the market precision is greater than the quote asset precision - position precision (<a name="0070-MKTD-024" href="#0070-MKTD-024">0070-MKTD-024</a>). 
+  - For product spot, position precision should be NOT greater than base asset precision (<a name="0070-MKTD-025" href="#0070-MKTD-025">0070-MKTD-025</a>)
+  - For product spot, the market prososal is NOT valid if the position precision is greater than base asset precision (<a name="0070-MKTD-026" href="#0070-MKTD-026">0070-MKTD-026</a>)
 - Assert that the settlement calculation can be correctly calculated when:
   - settlement data precision is > than the settlement asset precision (i.e. settlement data has more precision (decimal places) than the settlement asset and precision will be lost) (<a name="0070-MKTD-018" href="#0070-MKTD-018">0070-MKTD-018</a>)
   - settlement data precision is < than the settlement asset precision (i.e. settlement data has less precision (decimal places) than the settlement asset and no precision will be lost) (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
