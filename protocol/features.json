@@ -1,16 +1,45 @@
 {
-  "Markprice updates": {
+  "Market tick size": {
     "milestone": "colosseo",
     "acs": [
-      "0009-MRKP-132",
-      "0053-PERP-043",
-      "0032-PRIM-039",
-      "0032-PRIM-040",
-      "0009-MRKP-036",
-      "0009-MRKP-037"
+      "0004-AMND-060",
+      "0025-OCRE-006",
+      "0028-GOVE-180",
+      "0028-GOVE-182",
+      "0028-GOVE-183",
+      "0028-GOVE-184",
+      "0037-OPEG-020",
+      "0037-OPEG-021"
     ]
   },
-    "Spot": {
+  "Taker fee cap": {
+    "milestone": "colosseo",
+    "acs": [
+      "0057-TRAN-070",
+      "0057-TRAN-071",
+      "0057-TRAN-072",
+      "0057-TRAN-073",
+      "0057-TRAN-074",
+      "0057-TRAN-075"
+    ]
+  },
+  "Isolated margin": {
+    "milestone": "colosseo",
+    "acs": ["0019-MCAL-208"]
+  },
+  "Closeout trades and auctions": {
+    "milestone": "colosseo",
+    "acs": ["0012-POSR-030"]
+  },
+  "Market suspended/resumed before enactment": {
+    "milestone": "colosseo",
+    "acs": ["0043-MKTL-011"]
+  },
+  "Teams": {
+    "milestone": "colosseo",
+    "acs": ["0083-RFPR-068"]
+  },
+  "Spot": {
     "milestone": "colosseo",
     "acs": [
       "0080-SPOT-001",
@@ -355,98 +384,6 @@
       "0079-TGAP-007"
     ]
   },
-  "Community Tags": {
-    "milestone": "colosseo",
-    "acs": [
-      "0028-GOVE-168",
-      "0028-GOVE-169",
-      "0028-GOVE-170",
-      "0028-GOVE-171",
-      "0028-GOVE-172",
-      "0028-GOVE-173",
-      "0028-GOVE-174",
-      "0028-GOVE-175",
-      "0028-GOVE-176",
-      "0028-GOVE-177",
-      "0028-GOVE-178"
-    ]
-  },
-  "Perpetual funding rates": {
-    "milestone": "colosseo",
-    "acs": ["0053-PERP-036"]
-  },
-  "Market tick size": {
-    "milestone": "colosseo",
-    "acs": [
-      "0004-AMND-060",
-      "0025-OCRE-006",
-      "0028-GOVE-180",
-      "0028-GOVE-182",
-      "0028-GOVE-183",
-      "0028-GOVE-184",
-      "0037-OPEG-020",
-      "0037-OPEG-021"
-    ]
-  },
-  "Taker fee cap": {
-    "milestone": "colosseo",
-    "acs": [
-      "0057-TRAN-070",
-      "0057-TRAN-071",
-      "0057-TRAN-072",
-      "0057-TRAN-073",
-      "0057-TRAN-074",
-      "0057-TRAN-075"
-    ]
-  },
-  "Isolated margin": {
-    "milestone": "colosseo",
-    "acs": ["0019-MCAL-208"]
-  },
-  "Closeout trades and auctions": {
-    "milestone": "colosseo",
-    "acs": ["0012-POSR-030"]
-  },
-  "New asset bridge": {
-    "milestone": "colosseo",
-    "acs": [
-      "0027-ASSP-027",
-      "0027-ASSP-028",
-      "0027-ASSP-029",
-      "0027-ASSP-030",
-      "0027-ASSP-031",
-      "0027-ASSP-032",
-      "0027-ASSP-033",
-      "0027-ASSP-034",
-      "0027-ASSP-035",
-      "0031-ETHB-084",
-      "0031-ETHB-085",
-      "0069-VCBS-089",
-      "0069-VCBS-090",
-      "0069-VCBS-091",
-      "0069-VCBS-092",
-      "0069-VCBS-093",
-      "0069-VCBS-094",
-      "0080-SPOT-023",
-      "0003-NP-LIMI-007"
-    ]
-  },
-  "Explicit liquidation range": {
-    "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-031",
-      "0012-POSR-032",
-      "0012-POSR-033"
-    ]
-  },
-  "Teams": {
-    "milestone": "colosseo",
-    "acs": ["0083-RFPR-068"]
-  },
-  "Market suspended/resumed before enactment": {
-    "milestone": "colosseo",
-    "acs": ["0043-MKTL-011"]
-  },
   "Spot stop orders": {
     "milestone": "colosseo",
     "acs": [
@@ -493,7 +430,7 @@
       "0014-ORDT-177"
     ]
   },
-    "spot ammend": {
+  "Spot ammend": {
     "milestone": "colosseo",
     "acs": [
       "0037-OPEG-019",
@@ -527,7 +464,70 @@
       "0011-MARA-019"
     ]
   },
-    "Unknown": {
+  "New asset bridge": {
+    "milestone": "colosseo",
+    "acs": [
+      "0027-ASSP-027",
+      "0027-ASSP-028",
+      "0027-ASSP-029",
+      "0027-ASSP-030",
+      "0027-ASSP-031",
+      "0027-ASSP-032",
+      "0027-ASSP-033",
+      "0027-ASSP-034",
+      "0027-ASSP-035",
+      "0031-ETHB-084",
+      "0031-ETHB-085",
+      "0069-VCBS-089",
+      "0069-VCBS-090",
+      "0069-VCBS-091",
+      "0069-VCBS-092",
+      "0069-VCBS-093",
+      "0069-VCBS-094",
+      "0080-SPOT-023",
+      "0003-NP-LIMI-007"
+    ]
+  },
+  "Markprice updates": {
+    "milestone": "colosseo",
+    "acs": [
+      "0009-MRKP-132",
+      "0053-PERP-043",
+      "0032-PRIM-039",
+      "0032-PRIM-040",
+      "0009-MRKP-036",
+      "0009-MRKP-037"
+    ]
+  },
+  "Perpetual funding rates": {
+    "milestone": "colosseo",
+    "acs": ["0053-PERP-036"]
+  },
+  "Explicit liquidation range": {
+    "milestone": "colosseo",
+    "acs": [
+      "0012-POSR-031",
+      "0012-POSR-032",
+      "0012-POSR-033"
+    ]
+  },
+  "Community Tags": {
+    "milestone": "colosseo",
+    "acs": [
+      "0028-GOVE-168",
+      "0028-GOVE-169",
+      "0028-GOVE-170",
+      "0028-GOVE-171",
+      "0028-GOVE-172",
+      "0028-GOVE-173",
+      "0028-GOVE-174",
+      "0028-GOVE-175",
+      "0028-GOVE-176",
+      "0028-GOVE-177",
+      "0028-GOVE-178"
+    ]
+  },
+  "Unknown": {
     "milestone": "unknown",
     "acs": []
   }
