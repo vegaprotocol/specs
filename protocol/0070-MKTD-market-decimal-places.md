@@ -12,6 +12,8 @@ This document aims to outline how we are to handle the decimal places of a given
 
 It is possible to configure a market where orders can only be priced in increments of a specific size. This is done by specifying a different (smaller) number of decimal places than its settlement asset supports. Simply put: a market that settles in GBP can be configured to have 0 decimal places, in which case the price levels on the orderbook will be at least separated by £1, rather than the default penny.
 
+In order to ensure that the smallest mark-to-market cashflow caused by the smallest price change on the smallest position is addressed, we need to make sure the asset precision is not less than the sum of market precision and position precision. 
+
 This effectively means that prices of submitted orders should be treated as a value that is an order of magnitude greater than what the user will submit. This is trivial to calculate, and is done when the market is created by passing in the asset details (which specify how many decimal places any given asset supports):
 
 ```go
