@@ -97,3 +97,25 @@ where $p_{liq}$ is the liquidation price (above or below the specified ranges), 
 ## Specified Key
 
 When a key is specified, the existence of any current vAMM should be checked and, if one exists, the above values also calculated for it and populated in the requisite areas of the response to allow easy comparison. 
+
+
+## Acceptance criteria
+- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1100, 900, 2, 2, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+ 1. Loss on Commitment at Upper Bound: 8.515
+ 1. Loss on Commitment at Lower Bound: 9.762
+ 1. Position Size at Upper Bound: -0.166
+ 1. Position Size at Lower Bound: 0.201
+ 1. Liquidation Price at Upper Bound: 1633.663
+ 1. Liquidation Price at Lower Bound: 454.545
+
+
+- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1300, 900, 1, 5, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+ 1. Loss on Commitment at Upper Bound: 10.948
+ 1. Loss on Commitment at Lower Bound: 21.289
+ 1. Position Size at Upper Bound: -0.069
+ 1. Position Size at Lower Bound: 0.437
+ 1. Liquidation Price at Upper Bound: 2574.257
+ 1. Liquidation Price at Lower Bound: 727.273
+
+- A request with an empty upper *or* lower bound price is valid and will return the metrics for the bound which *was* specified with the metrics for the unspecified bound empty. (<a name="0014-NP-VAMM-002" href="#0014-NP-VAMM-002">0014-NP-VAMM-002</a>)
+- A request with an empty upper *and* lower bound is invalid and receives an error code back. (<a name="0014-NP-VAMM-003" href="#0014-NP-VAMM-003">0014-NP-VAMM-003</a>)
