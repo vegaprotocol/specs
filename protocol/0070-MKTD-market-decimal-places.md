@@ -88,7 +88,7 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 - For product spot the proposal is valid if the market decimal + position decimal is less than or equal to the quote asset decimal (<a name="0070-MKTD-022" href="#0070-MKTD-022">0070-MKTD-022</a>).
   - This proposal is NOT valid if the market decimal + position decimal is greater than the settlement asset decimal (<a name="0070-MKTD-023" href="#0070-MKTD-023">0070-MKTD-023</a>).
   - For product spot this proposal is NOT valid if the market decimal + position decimal is greater than the quote asset decimal (<a name="0070-MKTD-024" href="#0070-MKTD-024">0070-MKTD-024</a>).
-  - For product spot, position decimal should be NOT greater than base asset decimal (<a name="0070-MKTD-025" href="#0070-MKTD-025">0070-MKTD-025</a>)
+  - For product spot, the proposal is valid if position decimals are less than or equal than base asset decimals (<a name="0070-MKTD-025" href="#0070-MKTD-025">0070-MKTD-025</a>).
   - For product spot, the market proposal is NOT valid if the position decimal is greater than base asset decimal (<a name="0070-MKTD-026" href="#0070-MKTD-026">0070-MKTD-026</a>)
 - Assert that the settlement calculation can be correctly calculated when:
   - settlement data decimal is > than the settlement asset decimal (i.e. settlement data has more decimal places than the settlement asset and precision will be lost) (<a name="0070-MKTD-018" href="#0070-MKTD-018">0070-MKTD-018</a>)
