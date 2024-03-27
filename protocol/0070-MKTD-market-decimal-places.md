@@ -5,7 +5,7 @@ This document aims to outline how we are to handle the decimal places of a given
 ## Terminology
 
 - Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-- Market decimal palces: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9).
+- Market decimal places: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9).
 - Asset decimal places: the number of decimal places for a given asset. Again, a market with decimal 9 that settles in ETH will have a market decimal of 9, whereas the asset decimal is 18.
 
 ## Mechanics
@@ -16,14 +16,14 @@ In cash settled futures market and perpetual market, in order to ensure that the
 
 ```go
 market decimal places + position decimal places <= asset decimal places
-position decimal palces <= asset decimal places
+position decimal places <= asset decimal places
 ```
 
 In spot market, in order to ensure we are able to represent the smallest trade at the smallest price in quote asset decimals, we need
 
 ```go
 market decimal places + position decimal places <= quote asset decimal places
-position decimal palces <= base asset decimal places
+position decimal places <= base asset decimal places
 ```
 
 This effectively means that prices of submitted orders should be treated as a value that is an order of magnitude greater than what the user will submit. This is trivial to calculate, and is done when the market is created by passing in the asset details (which specify how many decimal places any given asset supports):
@@ -92,8 +92,8 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
   - For product spot, the market proposal is NOT valid if the position decimal is greater than base asset decimal (<a name="0070-MKTD-026" href="#0070-MKTD-026">0070-MKTD-026</a>)
 - Assert that the settlement calculation can be correctly calculated when:
   - settlement data decimal is > than the settlement asset decimal (i.e. settlement data has more decimal places than the settlement asset and precision will be lost) (<a name="0070-MKTD-018" href="#0070-MKTD-018">0070-MKTD-018</a>)
-  - settlement data decimal is < than the settlement asset deciaml (i.e. settlement data has less decimal places than the settlement asset and no precision will be lost) (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
-  - settlement data decimal is equal to the settlement asset decimaln (i.e. settlement data has less decimal places than the settlement asset and no precision will be lost) (<a name="0070-MKTD-020" href="#0070-MKTD-020">0070-MKTD-020</a>)
+  - settlement data decimal is < than the settlement asset decimal (i.e. settlement data has less decimal places than the settlement asset and no precision will be lost) (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
+  - settlement data decimal is equal to the settlement asset decimal (i.e. settlement data has less decimal places than the settlement asset and no precision will be lost) (<a name="0070-MKTD-020" href="#0070-MKTD-020">0070-MKTD-020</a>)
 - As a user all orders placed (either directly or through LP) are shown in events with prices in market decimal places (<a name="0070-MKTD-003" href="#0070-MKTD-003">0070-MKTD-003</a>). For product spot: (<a name="0070-MKTD-010" href="#0070-MKTD-010">0070-MKTD-010</a>)
 - As a user all transfers (margin top-up, release, MTM settlement) are calculated and communicated (via events) in asset decimal places (<a name="0070-MKTD-004" href="#0070-MKTD-004">0070-MKTD-004</a>). For product spot: (<a name="0070-MKTD-011" href="#0070-MKTD-011">0070-MKTD-011</a>)
 - As a user I should see the market data prices using market decimal places. (<a name="0070-MKTD-005" href="#0070-MKTD-005">0070-MKTD-005</a>). For product spot: (<a name="0070-MKTD-012" href="#0070-MKTD-012">0070-MKTD-012</a>)
