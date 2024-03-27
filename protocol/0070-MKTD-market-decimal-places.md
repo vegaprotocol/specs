@@ -12,7 +12,12 @@ This document aims to outline how we are to handle the decimal places of a given
 
 It is possible to configure a market where orders can only be priced in increments of a specific size. This is done by specifying a different (smaller) number of decimal places than its settlement asset supports. Simply put: a market that settles in GBP can be configured to have 0 decimal places, in which case the price levels on the orderbook will be at least separated by £1, rather than the default penny.
 
-In order to ensure that the smallest mark-to-market cashflow caused by the smallest price change on the smallest position is addressed, we need to make sure the asset precision is not less than the sum of market precision and position precision. 
+In order to ensure we are able to represent the smallest trade at the smallest price in quote asset decimals. We want
+
+```go
+market decimal places +  position decimal places <= quote asset decimal places
+position decimal palces <= base asset decimal places
+```
 
 This effectively means that prices of submitted orders should be treated as a value that is an order of magnitude greater than what the user will submit. This is trivial to calculate, and is done when the market is created by passing in the asset details (which specify how many decimal places any given asset supports):
 
@@ -72,10 +77,10 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 ## Acceptance criteria
 
 - As a user, I can propose a market with a different precision than its settlement asset
-  - This proposal is valid if the precision is NOT greater than the settlement asset precision - position precision (<a name="0070-MKTD-021" href="#0070-MKTD-021">0070-MKTD-021</a>). For product spot, the market precision should be NOT greater than the quote asset precision - position precision (<a name="0070-MKTD-022" href="#0070-MKTD-022">0070-MKTD-022</a>)
-  - This proposal is NOT valid if the precision is greater than the settlement asset precision - position precision (<a name="0070-MKTD-023" href="#0070-MKTD-023">0070-MKTD-023</a>). For product spot this proposal is NOT valid if the market precision is greater than the quote asset precision - position precision (<a name="0070-MKTD-024" href="#0070-MKTD-024">0070-MKTD-024</a>). 
-  - For product spot, position precision should be NOT greater than base asset precision (<a name="0070-MKTD-025" href="#0070-MKTD-025">0070-MKTD-025</a>)
-  - For product spot, the market prososal is NOT valid if the position precision is greater than base asset precision (<a name="0070-MKTD-026" href="#0070-MKTD-026">0070-MKTD-026</a>)
+  - This proposal is valid if the precision is NOT greater than the settlement asset precision - position precision (<a name="0070-MKTD-021" href="#0070-MKTD-021">0070-MKTD-021</a>). For product spot, the market decimal should be NOT greater than the quote asset decimal - position decimal (<a name="0070-MKTD-022" href="#0070-MKTD-022">0070-MKTD-022</a>)
+  - This proposal is NOT valid if the precision is greater than the settlement asset precision - position precision (<a name="0070-MKTD-023" href="#0070-MKTD-023">0070-MKTD-023</a>). For product spot this proposal is NOT valid if the market decimal is greater than the quote asset decimal - position decimal (<a name="0070-MKTD-024" href="#0070-MKTD-024">0070-MKTD-024</a>). 
+  - For product spot, position decimal should be NOT greater than base asset decimal (<a name="0070-MKTD-025" href="#0070-MKTD-025">0070-MKTD-025</a>)
+  - For product spot, the market prososal is NOT valid if the position decimal is greater than base asset decimal (<a name="0070-MKTD-026" href="#0070-MKTD-026">0070-MKTD-026</a>)
 - Assert that the settlement calculation can be correctly calculated when:
   - settlement data precision is > than the settlement asset precision (i.e. settlement data has more precision (decimal places) than the settlement asset and precision will be lost) (<a name="0070-MKTD-018" href="#0070-MKTD-018">0070-MKTD-018</a>)
   - settlement data precision is < than the settlement asset precision (i.e. settlement data has less precision (decimal places) than the settlement asset and no precision will be lost) (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
