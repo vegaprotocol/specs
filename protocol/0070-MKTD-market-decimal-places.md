@@ -5,7 +5,7 @@ This document aims to outline how we are to handle the decimal places of a given
 ## Terminology
 
 - Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-- Market decimal palces: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9). Synonymous with _market tick_.
+- Market decimal palces: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9). 
 - Asset decimal places: the number of decimal places for a given asset. Again, a market with decimal 9 that settles in ETH will have a market decimal of 9, whereas the asset decimal is 18.
 
 ## Mechanics
