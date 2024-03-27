@@ -5,7 +5,7 @@ This document aims to outline how we are to handle the decimal places of a given
 ## Terminology
 
 - Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-- Market decimal palces: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9). 
+- Market decimal palces: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market decimal is 9).
 - Asset decimal places: the number of decimal places for a given asset. Again, a market with decimal 9 that settles in ETH will have a market decimal of 9, whereas the asset decimal is 18.
 
 ## Mechanics
@@ -101,4 +101,3 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 - As a user, offsets specified in pegged orders represent the smallest incremental value to tick away from the pegged price of a pegged order according to the market decimal places (<a name="0070-MKTD-007" href="#0070-MKTD-007">0070-MKTD-007</a>). For product spot: (<a name="0070-MKTD-014" href="#0070-MKTD-014">0070-MKTD-014</a>)
 - Trades prices, like orders, are shown in market decimal places. The transfers and margin requirements are in asset decimal places. ( <a name="0070-MKTD-008" href="#0070-MKTD-008">0070-MKTD-008</a>). For product spot: ( <a name="0070-MKTD-015" href="#0070-MKTD-015">0070-MKTD-015</a>)
 - Settlement data received during trading on a perpetuals market is correctly handled according to the specified decimal places (<a name="0070-MKTD-017" href="#0070-MKTD-017">0070-MKTD-017</a>)
-
