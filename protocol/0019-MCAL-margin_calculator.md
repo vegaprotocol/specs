@@ -72,6 +72,8 @@
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * 1) = 605` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * -1) = 595`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
 
+    - When placing an order to buy `10` at a price of `3` on a market in an opening auction with an indicative uncrossing price of `100` and a long risk factor of `0.1`, the resulting margin is `100` (<a name="0019-MCAL-234" href="#0019-MCAL-234">0019-MCAL-234</a>)
+
 ## Acceptance Criteria (Isolated-margin)
 
 **When party has a newly created short position:**
@@ -681,7 +683,7 @@ We are assuming that:
 
 Use the same calculation as above with the following re-defined:
 
-- For the orders part of the margin: use `market_observable` =  volume weighted average price of the party's long / short orders.
+- For the orders part of the margin: use `market_observable` = max(volume weighted average price of the party's long / short orders, sum of volumes of party's long / short orders * auction price), where `auction price` = max(mark price, indicative uncrossing price). If any of the values is unavailable at the time of calculation assume it's equal to `0`
 
 ## Scaling other margin levels
 
