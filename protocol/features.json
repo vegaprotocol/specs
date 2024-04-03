@@ -529,6 +529,10 @@
       "0028-GOVE-178"
     ]
   },
+  "LPs voting without gov token": {
+    "milestone": "colosseo",
+    "acs": ["0028-GOVE-185"]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
