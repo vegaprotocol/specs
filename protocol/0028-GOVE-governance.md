@@ -91,6 +91,7 @@ In a future iteration of the governance system we may restrict proposal submissi
 ### Market change proposal
 
 Market change proposals can also be submitted by any party which has at least the minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`. Note that such a party can submit a proposal even if it doesn't hold any amount of the governance token.
+Moreover, market LPs can vote on market change proposals even if they don't have `governance.proposal.updateMarket.minVoterBalance` governance tokens.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` and no governance tokens then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` and no governance tokens then they cannot submit a market change proposal.
 
 ### Duration of the proposal
@@ -598,6 +599,8 @@ APIs should also exist for clients to:
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
 - At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
+- A market LP with ELS > 0 can vote on a market change proposal even if the key doesn't meet the `governance.proposal.updateMarket.minVoterBalance` for governance token.  (<a name="0028-GOVE-185" href="#0028-GOVE-185">0028-GOVE-185</a>).
+
 
 #### Network parameter change proposals
 
