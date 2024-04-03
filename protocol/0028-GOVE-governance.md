@@ -91,7 +91,7 @@ In a future iteration of the governance system we may restrict proposal submissi
 ### Market change proposal
 
 Market change proposals can also be submitted by any party which has at least the minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`. Note that such a party can submit a proposal even if it doesn't hold any amount of the governance token.
-Moreover market LPs can vote on market change proposals even if they don't have `governance.proposal.updateMarket.minVoterBalance` governance tokens.
+Moreover, market LPs can vote on market change proposals even if they don't have `governance.proposal.updateMarket.minVoterBalance` governance tokens.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` and no governance tokens then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` and no governance tokens then they cannot submit a market change proposal.
 
 ### Duration of the proposal
