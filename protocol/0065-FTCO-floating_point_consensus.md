@@ -94,10 +94,11 @@ This section outlines floating-point quantities `vega` currently relies on:
             - Up: 10%,
             - Down: 10%.
     - Upon market enactment risk factors get calculated (their values change from defaults).
-    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price monitoring bounds and probability of trading get calculated (their values change from defaults).
-    - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
-    - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
-    - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
+    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price monitoring bounds get calculated (their values change from defaults).
+    - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds get recalculated.
+    - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds get recalculated again and the time-based trigger countdown gets reset.
+    - When the time-based trigger elapses price monitoring bounds get recalculated.
+    - When mark price is updated, probability of trading get recalculated.
 
 1. Event announcing diverging values gets emitted (<a name="0065-FTCO-004" href="#0065-FTCO-004">0065-FTCO-004</a>). For product spot: (<a name="0065-FTCO-006" href="#0065-FTCO-006">0065-FTCO-006</a>)
    - For all the state variables nodes submit candidate values that differ by up to half the tolerance.
