@@ -205,6 +205,8 @@ Let:
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 - $s_{i}$ be the share of the rewards for entity $i$
 
+NOTE: As reward metrics can be negative (e.g. a party has negative relative returns, all reward metrics must be offset by the lowest reward metric to ensure all metrics are positive before calculating each parties share of the rewards )
+
 $$d_{i}=r_{i} M_{i}$$
 
 Note if the entity is a team, $M_{i}$ is set to `1` as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
