@@ -972,10 +972,11 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ### Relative returns
 
 - If an eligible party has zero net returns, their relative returns reward metric should be zero (<a name="0056-REWA-111" href="#0056-REWA-111">0056-REWA-111</a>).
-- If an eligible party has non-zero net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).
+- If an eligible party has negative net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-113" href="#0056-REWA-113">0056-REWA-113</a>).
 - If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
-- If a `window_length>1` is specified in the recurring transfer, if an eligible party has zero net returns in all epochs, their relative return metric should be zero (<a name="0056-REWA-113" href="#0056-REWA-113">0056-REWA-113</a>).
-- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs. Note epochs with zero returns should be included. (<a name="0056-REWA-114" href="#0056-REWA-114">0056-REWA-114</a>).
+- If a `window_length>1` is specified in the recurring transfer, if an eligible party has zero net returns in all epochs, their relative return metric should be zero (<a name="0056-REWA-114" href="#0056-REWA-114">0056-REWA-114</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs. Note epochs with zero returns should be included. (<a name="0056-REWA-115" href="#0056-REWA-115">0056-REWA-115</a>).
 
 ### Returns volatility
 
