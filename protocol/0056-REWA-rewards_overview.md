@@ -59,7 +59,7 @@ For each game, each entities (individual or team) **current reward metric** and 
 | [Validator Ranking](#validator-ranking-metric)          | every epoch                       |
 
 
-For each game, the following data for each party should be published every MTM period so dAPPs are able to relay information to users about their eligibility and expected rewards.
+For each game, the following data for each party should be published every MTM period so APIs able to relay information to users about their eligibility and expected rewards.
 
 | Game Information                                       | Update Frequency                  |
 | ------------------------------------------------------ | --------------------------------- |
