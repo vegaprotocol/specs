@@ -130,6 +130,32 @@ If a party **is not** a consensus or standby validator, their reward metric is s
 
 $$m_v = 0$$
 
+### Realised Returns metric
+
+The realised returns metric, , $m_{rz}$, measures the returns a party has realised across a number of epochs.
+
+Let $rz_i$ be a parties realised returns in an epoch. At the start of each epoch, the network will set $rz_i$ to `0`.
+
+During the epoch, each parties realised returns will be incremented as follows:
+
+- a party pays or receives a funding payment
+
+$$rz_i = rz_i + fundingPayment$$
+
+- a party **reduces** their position
+
+$$rz_i = rz_i + (tradePrice - averageEntryPrice) * positionDelta$$
+
+At the end of the epoch, the average realised return metric over the last $N$ epochs is calculated as follows.
+
+Let:
+
+- $m_{rz}$ be the parties relative return reward metric
+- $rz_i$ be the parties realised returns in the i th epoch
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
@@ -985,6 +1011,16 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
 - If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
 - If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+
+### Realised returns
+
+- If an eligible party has a non-profitable position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-109" href="#0056-REWA-109">0056-REWA-109</a>).
+- If an eligible party has a non-profitable position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-110" href="#0056-REWA-110">0056-REWA-110</a>).
+- If an eligible party had a non-profitable position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-111" href="#0056-REWA-111">0056-REWA-111</a>).
+- If a party open and closed a position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).
+- If an eligible party has a profitable position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-113" href="#0056-REWA-113">0056-REWA-113</a>).
+- If an eligible party has a profitable position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-114" href="#0056-REWA-114">0056-REWA-114</a>).
+- If an eligible party had a profitable position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-115" href="#0056-REWA-115">0056-REWA-115</a>).
 
 ### Validator ranking metric
 
