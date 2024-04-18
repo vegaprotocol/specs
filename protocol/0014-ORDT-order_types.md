@@ -363,7 +363,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>). For spot products (<a name="0014-ORDT-177" href="#0014-ORDT-177">0014-ORDT-177</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>). For spot products (<a name="0014-ORDT-166" href="#0014-ORDT-166">0014-ORDT-166</a>)
-- If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>). For spot products (<a name="0014-ORDT-140" href="#0014-ORDT-140">0014-ORDT-140</a>)
+- If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>).
 
 - A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:
   - Be triggered by a fall to `57`. (<a name="0014-ORDT-059" href="#0014-ORDT-059">0014-ORDT-059</a>). For spot products (<a name="0014-ORDT-141" href="#0014-ORDT-141">0014-ORDT-141</a>)
