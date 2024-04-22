@@ -104,7 +104,7 @@ Let:
 - $r_i$ be the parties change in pnl in the i th epoch
 - $N$ be the window length specified in the recurring transfer.
 
-$$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
+$$m_{rr} = \frac{\sum_{i}^{n}{r_{i}}}{N}$$
 
 ### Returns volatility metric
 
@@ -204,6 +204,8 @@ Let:
 - $r_{i}$ be the reward metric value for entity $i$
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 - $s_{i}$ be the share of the rewards for entity $i$
+
+NOTE: As reward metrics can be negative (e.g. a party has negative relative returns, all reward metrics must be offset by the lowest **negative** reward metric to ensure all metrics are positive before calculating each parties share of the rewards)
 
 $$d_{i}=r_{i} M_{i}$$
 
@@ -969,10 +971,14 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Relative returns
 
-- If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
-- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
+- If an eligible party has zero net returns, their relative returns reward metric should be zero (<a name="0056-REWA-111" href="#0056-REWA-111">0056-REWA-111</a>).
+- If an eligible party has negative net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-113" href="#0056-REWA-113">0056-REWA-113</a>).
 - If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
-- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-087" href="#0056-REWA-087">0056-REWA-087</a>).
+- If a `window_length>1` is specified in the recurring transfer, if an eligible party has zero net returns in all epochs, their relative return metric should be zero (<a name="0056-REWA-114" href="#0056-REWA-114">0056-REWA-114</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs. Note epochs with zero returns should be included. (<a name="0056-REWA-115" href="#0056-REWA-115">0056-REWA-115</a>).
+- Given a recurring transfer is setup such that all eligible parties have a positive reward score, each parties metric is not offset and parties receive the correct rewards. (<a name="0056-REWA-116" href="#0056-REWA-116">0056-REWA-116</a>).
+- Give a recurring transfer is setup such that all eligible parties have a negative reward score, each parties metric is offset by the lowest negative score and parties receive the correct rewards. (<a name="0056-REWA-117" href="#0056-REWA-117">0056-REWA-117</a>).
 
 ### Returns volatility
 

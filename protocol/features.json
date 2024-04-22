@@ -536,6 +536,18 @@
     "milestone": "colosseo",
     "acs": ["0028-GOVE-185"]
   },
+  "Reward Improvements": {
+    "milestone": "colosseo",
+    "acs": [
+      "0056-REWA-111",
+      "0056-REWA-112",
+      "0056-REWA-113",
+      "0056-REWA-114",
+      "0056-REWA-115",
+      "0056-REWA-116",
+      "0056-REWA-117"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
