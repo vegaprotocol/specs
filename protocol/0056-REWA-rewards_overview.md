@@ -150,7 +150,7 @@ At the end of the epoch, the average realised return metric over the last $N$ ep
 
 Let:
 
-- $m_{rz}$ be the parties relative return reward metric
+- $m_{rz}$ be the parties realised return reward metric
 - $rz_i$ be the parties realised returns in the i th epoch
 - $N$ be the window length specified in the recurring transfer.
 
