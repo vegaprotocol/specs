@@ -408,5 +408,5 @@ If a party sets up a recurring transfer with a `transfer_interval` field strictl
 If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they have enough funds to cover the next payout, the network will lock these funds and they will be unavailable for other purposes. (<a name="0057-TRAN-077" href="#0057-TRAN-077">0057-TRAN-077</a>)
 
 If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they cancel the recurring transfer the locked funds will not be released and the next payout event will happen regardless. (<a name="0057-TRAN-078" href="#0057-TRAN-078">0057-TRAN-078</a>)
- 
+
 If a party sets up a recurring transfer with a transfer interval strictly greater than `1` and specifies a `cap_reward_fee_multiple`. If `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum`(<a name="0057-TRAN-079" href="#0057-TRAN-079">0057-TRAN-079</a>)
