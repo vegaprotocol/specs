@@ -67,7 +67,6 @@ A recurring transfers needs to contain this specific information:
 - start epoch: at the end of this epoch the first recurring transfer will be made between
 - end epoch (optional): at the end of this epoch the last recurring transfer will be made between, optional. If not specified the transfer run until cancelled (by its creator or by the network as described below).
 - factor, decimal > 0.0 (a factor used with the amount specified for the transfer).
-- transfer interval: number of epochs between transfers, i.e. when 4, funds will be transferred every 4 epochs with the first transfer occurring 4 epochs after the transaction is processed. Must be an integer strictly greater than `0` and less than `100` (this ceiling is for performance reasons and matches the limit on the `window_length` field).
 
 The amount paid at the end of each epoch is calculated using the following formula:
 
@@ -109,6 +108,7 @@ To support entity scoping, the transaction include the following fields:
 A party should be able to configure the distribution of rewards by specifying the following fields:
 
 - `window_length` - the number of epochs over which to evaluate the reward metric. The value should be limited to 100 epochs.
+- `transfer_interval` - number of epochs between transfers, i.e. when 4, funds will be transferred every 4 epochs with the first transfer occurring 4 epochs after the transaction is processed. Must be an integer strictly greater than `0` and less than `100` (this ceiling is for performance reasons and matches the limit on the `window_length` field).
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
 - `cap_reward_fee_multiple` [optional] - if set, the actual amount of reward transferred to each public key during distribution for this transfer will be `min(calculated_reward_in_quantum, cap_reward_fee_multiple × feed_paid_since_last_payout)` (fees paid since last payout is akin to checking the total fees paid over the last `transfer_interval` epochs). When calculating how much of the reward each one is getting, if some is left from the applied cap, we recalculate on the remaining balance only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10. If all keys are capped (i.e. the total amount of the transfer cannot be be sent to eligible keys without breaching the cap) then the remaining balance must be left in the reward pool and included in the distribution in future epochs. If this occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made.
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
