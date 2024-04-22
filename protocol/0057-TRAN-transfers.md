@@ -69,8 +69,6 @@ A recurring transfers needs to contain this specific information:
 - factor, decimal > 0.0 (a factor used with the amount specified for the transfer).
 - transfer interval: number of epochs between transfers, i.e. when 4, funds will be transferred every 4 epochs with the first transfer occurring 4 epochs after the transaction is processed. Must be an integer strictly greater than `0` and less than `100` (this ceiling is for performance reasons and matches the limit on the `window_length` field).
 
-Note, to avoid parties intentionally creating transfers which never occur, either between parties or to fund a [reward pool](#recurring-transfers-to-reward-accounts). The funds for the next scheduled transfer should be taken straight away from the origin account, locked by the network, and distributed to the destination account at the end of the correct epoch. This way, if a user cancels a recurring transfer or withdraws all their funds, the next scheduled transfer will still take place.
-
 The amount paid at the end of each epoch is calculated using the following formula:
 
 $$
