@@ -10,8 +10,6 @@ Each party may have only one AMM configuration per market, and both Spot and Fut
 
 ## Process Overview
 
-### Futures 
-
 The configuration and resultant lifecycle of an automated market maker is as follows:
 
 - Party funds a key which will be used by the strategy with desired token amounts.
@@ -24,19 +22,6 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
 - At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the vAMM configuration will be stopped.
 - The party is finally able to cancel the vAMM through a few different methods. They can choose to either set it into a mode in which it will only reduce position, eventually cancelling when/if the position reaches `0`, or choose to give up the existing position and associated required collateral.
-
-### Spot 
-
-The configuration and resultant lifecycle of an automated market maker is as follows:
-
-- Party funds a key which will be used by the strategy with desired token amounts.
-- Party submits a transaction containing configuration for the strategy on a given market. This will contain:
-  - Amount of funds to commit
-  - Price bounds (upper, lower)
-- Additionally, the transaction should contain data related to the setup of the position but which does not need to be stored:
-   - Maximum slippage (%), used for rebasing position when creating/updating vAMM
-- Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
-- The party can cancel the vAMM at any time, with the spot balances immediately returned to their general accounts.
 
 ## Sub-Account Configuration
 
