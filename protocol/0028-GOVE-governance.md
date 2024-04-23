@@ -553,7 +553,7 @@ APIs should also exist for clients to:
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
-- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
+- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>) For product spot: (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
 - A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
 - At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
 
