@@ -24,8 +24,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
-- Cancellation: When the AMM is cancelled the strategy specified will be followed:
-  - Balances are immediately returned to the user.
+- Cancellation: When the AMM is cancelled, balances are immediately returned to the user.
 - Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface

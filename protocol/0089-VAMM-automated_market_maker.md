@@ -28,9 +28,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
-- Cancellation: When the vAMM is cancelled the strategy specified will be followed:
-  - For futures, either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
-  - For spot, balances are immediately returned to the user.
+- Cancellation: When the vAMM is cancelled the strategy specified will be followed, either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
 - Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface
@@ -43,8 +41,6 @@ All AMM configurations should implement two key interfaces:
 ## AMM Configurations
 
 Initially there will only be one option for AMM behaviour, that of a constant-function curve, however there may be others available in future. As such, the parameters pertaining to this model in particular should be passed in their own structure such that the creation message is similar to:
-
-#### Futures
 
 ```json
 {
@@ -61,24 +57,8 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
   }
 }
 ```
-#### Spot
 
-```json
-{
-  base_commitment,
-  quote_commitment,
-  reference_price,
-  market,
-  slippage_tolerance_percentage,
-  proposed_fee,
-  concentrated_liquidity_params: {
-    upper_price,
-    lower_price,
-  }
-}
-```
-
-### Concentrated Liquidity - Futures
+### Concentrated Liquidity
 
 The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style pricing curve for managing price based upon current market price. This allows for the market maker to automatically provide a pricing curve for any prices within some configurable range, alongside offering the capability to control risk by only trading within certain price bounds and out to known position limits.
 
@@ -96,72 +76,35 @@ Note that the independent long and short ranges mean that at `base price` the ma
 
 Additionally, as all commitments require some processing overhead on the core, there should be a network parameter `market.amm.minCommitmentQuantum` which defines a minimum quantum for commitment. Any `create` or `amend` transaction where `commitment / asset quantum < market.amm.minCommitmentQuantum` should be rejected.
 
-### Concentrated Liquidity - Spot
-
-The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style pricing curve for managing price based upon current market price. This allows for the market maker to automatically provide a pricing curve for any prices within some configurable range.
-
-The concentrated liquidity market maker consists of a liquidity curve of prices specified by a given `upper price` at which the market maker will be fully in the `quote` currency and a `lower price` at which the market maker will be fully in the `base` currency. This is configured through a number of parameters:
-
-- **Upper Price**: The base price is the central price for the market maker. When trading at this level the market maker will have a position fully in the `quote` currency. Volumes for prices below this level will be taken from the curve and no volumes will be offered above it.
-- **Lower Price**: The maximum price bound for market making. Prices between the `upper price` and this price will have volume placed, with no orders below this price. 
-- **Reference Price**: The price at which the specified commitment amount is the account's balance of that token (e.g. if this is the current market price, the commitment amount specified is exactly what will be taken). Note that by design if this price is above the `upper price` a non-zero base commitment specification is invalid, as is a non-zero quote commitment specification if this is below the `lower price`.
-- One of:
-  - **Commitment Base**: This is the initial volume of base token to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail. If specified, the amount of quote token to transfer is implied from current market conditions
-  - **Commitment Quote**: This is the initial volume of quote token to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail. If specified, the amount of base token to transfer is implied from current market conditions.
-
-Additionally, as all commitments require some processing overhead on the core, there should be a network parameter `market.amm.minCommitmentQuantum` which defines a minimum quantum for commitment. Any `create` or `amend` transaction where `commitment / asset quantum < market.amm.minCommitmentQuantum` should be rejected.
-
 ### Creation/Amendment Process
 
 #### Creation
 
-##### Futures
-
 A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the vAMM in line with where it "should" be the vAMM will determine whether the order book is currently able to synchronise the vAMM and reject the transaction if not
 
   1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active vAMMs) it is marked as created and enters normal quoting with no trade necessary.
-  1. If the AMM's `base price` is below the current `best bid` and the AMM has an upper range specified, then the vAMM would need to become short in order to synchronise with the market. In order to do this, the protocol will query each price level in turn starting from `best bid` and:
+  2. If the AMM's `base price` is below the current `best bid` and the AMM has an upper range specified, then the vAMM would need to become short in order to synchronise with the market. In order to do this, the protocol will query each price level in turn starting from `best bid` and:
      1. At each level:
         1. Check the full volume available across all limit orders and other vAMMs at this price and every higher bid (store a running cumulative volume in order to track this).
-        1. Check the volume required for the incoming vAMM to have a fair price at that level.
-        1. If the volume required is less than the full cumulative volume including this level, place a single order on the market for the volume required at the *previous* price level, with a price equal to the *current* price level. e.g. With:
+        2. Check the volume required for the incoming vAMM to have a fair price at that level.
+        3. If the volume required is less than the full cumulative volume including this level, place a single order on the market for the volume required at the *previous* price level, with a price equal to the *current* price level. e.g. With:
            - `best bid` at `10 USDT`
            - Cumulative volume at `8 USDT` equal to `4` contracts
            - Bid offers for `4` contracts at `7 USDT`
            - And a vAMM which would be short `5` contracts for a fair price at `8 USDT` and short `4` contracts at `7 USDT`
            - Enter a limit order to sell `5` contracts for `7 USDT` into the order book and allow it to match.
-     1. If a price level is reached such that the current price is more than the max slippage specified away from the best bid, reject the transaction.
-     1. If there is no upper range specified, it is marked as created immediately.
-  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, then the vAMM would need to become short in order to synchronise with the market. Follow an identical process as above but instead on increasing price levels from `best ask`
+     2. If a price level is reached such that the current price is more than the max slippage specified away from the best bid, reject the transaction.
+     3. If there is no upper range specified, it is marked as created immediately.
+  3. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, then the vAMM would need to become short in order to synchronise with the market. Follow an identical process as above but instead on increasing price levels from `best ask`
      1. If there is no lower range specified, it is marked as created immediately.
 
-##### Spot
-
-A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is fully in the quote asset at `upper price` and moves towards being fully in the base asset at `lower price`, however it is possible to configure an AMM such that this range is either covering, above or below the current market price. In order to bring the vAMM in line with where it "should" be the vAMM will take either the amount of base or quote asset desired and then imply the volume of the other at the current market price. The protocol will then attempt to take both amounts of assets from the user.
-
-  1. A `market effective price` will be determined:
-     1. If there is currently a `best bid` and `best ask` (including existing AMMs) and the market is in continuous trading then the mid price will be used.
-     1. If there is only a bid or only an ask, and the market is in continuous trading, then that best bid or ask will be used.
-     2. If the market is in auction the mark price will be used, or if that is unavailable then the indicative uncrossing price
-  2. An `L` value will be calculated for the liquidity as specified below.
-  3. The correct balances of base and quote tokens will be calculated given the `L` value and the `market effective price`
-  4. These correct balances will be transferred from the user's balances to the AMM's. If they cannot be transferred the transaction will be rejected.
-
 #### Amendment
-
-##### Futures
 
 A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter an aggressive trade to synchronise. In general, the behaviour above will be followed. As the vAMM may be currently holding a position, the existing position should be compared to that required at both sides (best bid/ask) of the order book to determine whether buying or selling is necessary. If the current position is between that required at best bid and best ask the amendment succeeds without requiring a trade.
 
 If reducing the `commitment amount` then only funds contained within the AMMs `general` account are eligible for removal. If the deduction is less than the `general` account's balance then the reduced funds will be removed immediately and the AMM will enter `single-sided` mode as specified above to reduce the position. If a deduction of greater than the `general` account is requested then the transaction is rejected and no changes are made.
 
-##### Spot
-
-The process as above will be followed. By utilising the new reference price, market price and calculated liquidity values the AMM's balance will be adjusted to be correct by transferring from/to the user's general accounts.
-
 #### Cancellation
-
-##### Futures
 
 In addition to amending to reduce the size a user may also cancel their AMM entirely. In order to do this they must submit a transaction containing only a field `Reduction Strategy` which can take two values:
 
@@ -176,10 +119,6 @@ In addition to amending to reduce the size a user may also cancel their AMM enti
   - This acts similarly to the mode when an AMM is synchronising, except that the position will be closed in pieces as the price moves towards the `base price` rather than all at once at the nearest price.
 
 Note that, whilst an `Abandon Position` transaction immediately closes the AMM a `Reduce-Only` transaction will keep it active for an uncertain amount of time into the future. During this time, any Amendment transactions received should move the AMM out of `Reduce-Only` mode and back into standard continuous operation.
-
-##### Spot
-
-The AMM can be cancelled immediately and balances of both tokens will be transferred back to the user's general accounts.
 
 ### Determining Volumes and Prices
 
