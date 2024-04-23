@@ -142,9 +142,13 @@ During the epoch, each parties realised returns will be incremented as follows:
 
 $${rz_i} = {rz_i} + funding payment$$
 
-- a party **reduces** their position
+- a party **reduces** their **LONG** position
 
 $${rz_i} = {rz_i} + (trade price - average entry price) * position delta$$
+
+- a party **reduces** their **SHORT** position
+
+$${rz_i} = {rz_i} + (average entry price - trade price) * position delta$$
 
 At the end of the epoch, the average realised return metric over the last $N$ epochs is calculated as follows.
 
@@ -1014,13 +1018,21 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Realised returns
 
-- If an eligible party has a non-profitable position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-118" href="#0056-REWA-118">0056-REWA-118</a>).
-- If an eligible party has a non-profitable position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-119" href="#0056-REWA-119">0056-REWA-119</a>).
-- If an eligible party had a non-profitable position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-120" href="#0056-REWA-120">0056-REWA-120</a>).
-- If a party open and closed a position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-121" href="#0056-REWA-121">0056-REWA-121</a>).
-- If an eligible party has a profitable position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-122" href="#0056-REWA-122">0056-REWA-122</a>).
-- If an eligible party has a profitable position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-123" href="#0056-REWA-123">0056-REWA-123</a>).
-- If an eligible party had a profitable position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-124" href="#0056-REWA-124">0056-REWA-124</a>).
+- If an eligible party has a non-profitable long position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-118" href="#0056-REWA-118">0056-REWA-118</a>).
+- If an eligible party has a non-profitable long position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-119" href="#0056-REWA-119">0056-REWA-119</a>).
+- If an eligible party had a non-profitable long  position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-120" href="#0056-REWA-120">0056-REWA-120</a>).
+- If a party open and closed a long position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-121" href="#0056-REWA-121">0056-REWA-121</a>).
+- If an eligible party has a profitable long position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-122" href="#0056-REWA-122">0056-REWA-122</a>).
+- If an eligible party has a profitable long position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-123" href="#0056-REWA-123">0056-REWA-123</a>).
+- If an eligible party had a profitable long position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-124" href="#0056-REWA-124">0056-REWA-124</a>).
+
+- If an eligible party has a non-profitable short position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-125" href="#0056-REWA-125">0056-REWA-125</a>).
+- If an eligible party has a non-profitable short position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-126" href="#0056-REWA-126">0056-REWA-126</a>).
+- If an eligible party had a non-profitable short  position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-127" href="#0056-REWA-127">0056-REWA-127</a>).
+- If a party open and closed a short position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-128" href="#0056-REWA-128">0056-REWA-128</a>).
+- If an eligible party has a profitable short position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-129" href="#0056-REWA-129">0056-REWA-129</a>).
+- If an eligible party has a profitable short position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-130" href="#0056-REWA-130">0056-REWA-130</a>).
+- If an eligible party had a profitable short position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-131" href="#0056-REWA-131">0056-REWA-131</a>).
 
 ### Validator ranking metric
 
