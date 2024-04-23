@@ -341,3 +341,4 @@ mathbb
 geq
 vee
 mathbf
+rz
