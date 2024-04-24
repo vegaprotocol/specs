@@ -68,7 +68,7 @@ The concentrated liquidity market maker consists of a liquidity curve of prices 
   - **Commitment Base**: This is the initial volume of base token to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail. If specified, the amount of quote token to transfer is implied from current market conditions
   - **Commitment Quote**: This is the initial volume of quote token to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail. If specified, the amount of base token to transfer is implied from current market conditions.
 
-Additionally, as all commitments require some processing overhead on the core, there should be a network parameter `market.amm.minCommitmentQuantum` which defines a minimum quantum for commitment. Any `create` or `amend` transaction where `commitment / asset quantum < market.amm.minCommitmentQuantum` should be rejected.
+Additionally, as all commitments require some processing overhead on the core, there should be a network parameter `market.amm.minCommitmentQuantum` which defines a minimum quantum for commitment. Any `create` or `amend` transaction where `quote commitment / quote asset quantum + base commitment / base asset quantum < market.amm.minCommitmentQuantum` should be rejected.
 
 ### Creation/Amendment Process
 
@@ -203,7 +203,7 @@ Then simply return the absolute difference between these two prices.
 
 ## Determining Liquidity Contribution
 
-Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0089-VAMM](./0089-VAMM-automated_market_maker.md)
+Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0089-SAMM](./0089-SAMM-automated_market_maker.md)
 
 ## Setting Fees
 
@@ -212,3 +212,14 @@ The `proposed_fee` provided as part of the AMM construction contributes to the f
 ## Market Settlement
 
 At market settlement, an AMM's position will be settled alongside all others as if they are a standard party. Once settlement is complete, any remaining funds in the AMM's account will be transferred back to the creator's general account and the AMM can be removed.
+
+
+## Acceptance Criteria
+
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1000 USDT` is able to create an AMM with commitment `1000 USDT`, lower price `100`, upper price `150`, reference price `100`. (<a name="0090-SAMM-001" href="#0090-SAMM-001">0090-SAMM-001</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1000 USDT` is unable to create an AMM with commitment `1000 USDT`, lower price `100`, upper price `150`, reference price `150`. (<a name="0090-SAMM-002" href="#0090-SAMM-002">0090-SAMM-002</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1000 USDT` is able to create an AMM with commitment `1 ETH`, lower price `100`, upper price `150`, reference price `150`. (<a name="0090-SAMM-003" href="#0090-SAMM-003">0090-SAMM-003</a>)
+- When `market.amm.minCommitmentQuantum` is `100`, mid price of the market `ETH/USDT` is `100`, a user with `10 USDT` is unable to create an AMM with commitment `10 USDT`, lower price `100`, upper price `150`, reference price `150`. (<a name="0090-SAMM-004" href="#0090-SAMM-004">0090-SAMM-004</a>)
+
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` is able to create an AMM with commitment `1 ETH`, lower price `80`, upper price `100`, reference price `100`. (<a name="0090-SAMM-005" href="#0090-SAMM-005">0090-SAMM-005</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` is unable to create an AMM with commitment `1 ETH`, lower price `80`, upper price `100`, reference price `80`. (<a name="0090-SAMM-006" href="#0090-SAMM-006">0090-SAMM-006</a>)
