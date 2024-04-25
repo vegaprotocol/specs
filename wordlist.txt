@@ -119,6 +119,7 @@ frontend
 funder
 FX
 GBP
+geq
 Geth
 Getters
 GFA
@@ -153,6 +154,7 @@ integrations
 intrablock
 IOC
 joinable
+joinable
 JSON
 keyholder
 keypair
@@ -182,6 +184,8 @@ margined
 margining
 marketID
 math
+mathbb
+mathbf
 MDPs
 mempool
 Merkle
@@ -193,9 +197,9 @@ misconfiguration
 MTM
 mu
 multisig
-multisigs
 MultisigControl
 multisignature
+multisigs
 NFTs
 nonfungible
 OAUTH
@@ -250,6 +254,7 @@ RPC
 rulesets
 runnable
 runtime
+rz
 scalability
 scalable
 Scholes
@@ -321,6 +326,8 @@ unstake
 unstaked
 unstakes
 unstaking
+unsynchronised
+Unsynchronised
 untriggered
 unvested
 url
@@ -332,8 +339,9 @@ validator
 validator's
 validators
 vAMM
-vAMMs
 vAMM's
+vAMMs
+vee
 vega
 vegaprotocol
 vegatools
@@ -351,9 +359,3 @@ wBTC
 wei
 whitepaper
 Yubikey
-joinable
-mathbb
-geq
-vee
-mathbf
-rz
