@@ -247,7 +247,7 @@ The account is under control of the network and funds from this account will be 
 A network parameter `market.liquidity.providersFeeCalculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
 Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providersFeeCalculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
-The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account from two different configurable size buckets, defined by the network parameter `market.liquidity.equityLikeShareFeeFraction`. The first bucket, a proportion equal to `market.liquidity.equityLikeShareFeeFraction` of the fee, is divided pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time. The other bucket, `1 - market.liquidity.equityLikeShareFeeFraction`, is divided purely by each LP's in-epoch liquidity score `LP i liquidity score`, scaled again across the value of all LPs at that time.
 
 The LP parties don't control the LP-per-market fee account; the fees from there are then transferred to the LPs' general account at the end epoch as described below.
 
@@ -314,7 +314,7 @@ i.e. your penalty is the bigger of current epoch and average over the hysteresis
 
 ### Applying LP SLA performance penalties to accrued fees
 
-As defined above, for each LP for each epoch you have "penalty fraction" $p_i^n$ which is between `[0,1]` with `0` indicating LP has met commitment 100% of the time and `1` indicating that LP was below `market.liquidity.commitmentMinTimeFraction` of the time.
+As defined above, for each LP for each epoch you have "penalty fraction" $p_i^n$ which is between `[0,1]` with `0` indicating LP has met commitment 100% of the time and `1` indicating that LP was below `market.liquidity.commitmentMinTimeFraction` of the time. All vAMM LPs should also receive a $p_i^n$ value, however this will always be `0`, as they are defined as always meeting their commitment.
 
 If for all $i$ (all the LPs) have $p_i^n = 1$ then all the fees go into the market insurance pool and we stop.
 
@@ -458,3 +458,10 @@ Example 1, generated with [supplementary worksheet](https://docs.google.com/spre
 |   LP2 |   0.05               | 100                                  | 95                | 2344.02439               |
 |   LP3 |   0.6              | 7000                               | 2800                |   69087.03466              |
 |   LP4 |   1                  | 91900                              | 0               | 0                          |
+
+
+### vAMM behaviour
+
+- All vAMMs active on a market at the end of an epoch receive SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-063" href="#0042-LIQF-063">0042-LIQF-063</a>)
+- A vAMM active on a market during an epoch, which was cancelled prior to the end of an epoch, receives SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-064" href="#0042-LIQF-064">0042-LIQF-064</a>)
+- A vAMMs cancelled in a previous epoch does not receive anything and is not considered during SLA rebalancing at the end of an epoch(<a name="0042-LIQF-065" href="#0042-LIQF-065">0042-LIQF-065</a>)
