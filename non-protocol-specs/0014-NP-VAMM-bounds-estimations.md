@@ -4,7 +4,7 @@
 
 ## Summary
 
-The protocol contains the ability for users to create vAMMs which will automatically trade and manage a position on a given market with no further interaction from the user. These are configured through a few different parameters, which uniquely specify the behaviour and volume profile of the vAMM as the price of the market moves, however are not always immediately obvious and intuitive for a user given the set of inputs. As such, it is necessary to provide an API giving canonical conversions between these values. 
+The protocol contains the ability for users to create vAMMs which will automatically trade and manage a position on a given market with no further interaction from the user. These are configured through a few different parameters, which uniquely specify the behaviour and volume profile of the vAMM as the price of the market moves, however are not always immediately obvious and intuitive for a user given the set of inputs. As such, it is necessary to provide an API giving canonical conversions between these values.
 
 The API should take a pool's specification parameters and output various metrics useful for a user deciding on vAMM configuration. Concretely, the API should take the parameters:
 
@@ -37,7 +37,7 @@ And then return the metrics:
 
 There are a few values which are generally useful to calculate many of the above required outputs, so these will be calculated first.
 
-Starting with the average entry price, this value for a given range is equal no matter the absolute volume committed, so can be calculated without reference to the bond or leverage at bounds values. This is taken from the unit liquidity, $L_u$ 
+Starting with the average entry price, this value for a given range is equal no matter the absolute volume committed, so can be calculated without reference to the bond or leverage at bounds values. This is taken from the unit liquidity, $L_u$
 
 $$
 L_u = \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} ,
@@ -49,7 +49,7 @@ $$
 p_a = L_u  p_u  (1 - \frac{L_u}{L_u + p_u}) ,
 $$
 
-where $p_a$ is the average execution price across the range and other values are as defined above. Finally, the risk factor which will be used for calculating leverage at bounds 
+where $p_a$ is the average execution price across the range and other values are as defined above. Finally, the risk factor which will be used for calculating leverage at bounds
 
 $$
 r_f = \min(l_b, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
@@ -96,11 +96,13 @@ where $p_{liq}$ is the liquidation price (above or below the specified ranges), 
 
 ## Specified Key
 
-When a key is specified, the existence of any current vAMM should be checked and, if one exists, the above values also calculated for it and populated in the requisite areas of the response to allow easy comparison. 
+When a key is specified, the existence of any current vAMM should be checked and, if one exists, the above values also calculated for it and populated in the requisite areas of the response to allow easy comparison.
 
 
 ## Acceptance criteria
+
 - For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1100, 900, 2, 2, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+
  1. Loss on Commitment at Upper Bound: 8.515
  1. Loss on Commitment at Lower Bound: 9.762
  1. Position Size at Upper Bound: -0.166
@@ -110,6 +112,7 @@ When a key is specified, the existence of any current vAMM should be checked and
 
 
 - For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1300, 900, 1, 5, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+
  1. Loss on Commitment at Upper Bound: 10.948
  1. Loss on Commitment at Lower Bound: 21.289
  1. Position Size at Upper Bound: -0.069
