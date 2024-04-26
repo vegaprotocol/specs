@@ -71,6 +71,7 @@ These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is `0` at the end of the epoch for a given recurring transfer, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
+Note, trading fees paid or received on Spot markets will contribute to fee-based reward metrics.
 
 ### Average position metric
 
@@ -123,6 +124,8 @@ Let:
 
 $$m_{rr} = \frac{\sum_{i}^{n}{r_{i}}}{N}$$
 
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
+
 ### Returns volatility metric
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
@@ -134,6 +137,8 @@ Given the set:
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the variance of the set $R$.
+
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
 ### Validator ranking metric
 
@@ -176,6 +181,8 @@ Let:
 - $N$ be the window length specified in the recurring transfer.
 
 $$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
+
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
 ### Market creation reward metrics
 
@@ -1091,7 +1098,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).
 
 
-## Interim Reward Information
+### Interim Reward Information
 
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees paid, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-136" href="#0056-REWA-136">0056-REWA-136</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees received, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-137" href="#0056-REWA-137">0056-REWA-137</a>).
@@ -1110,3 +1117,22 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
+
+### Spot markets
+
+- In a spot market, trades in which a party is the buyer and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
+- In a spot market, trades in which a party is the seller and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).
+- In a spot market, trades in which a party is the buyer and is not the aggressor will contribute to the parties' maker fees received reward metric for the quote asset. (<a name="0056-REWA-154" href="#0056-REWA-154">0056-REWA-154</a>).
+- In a spot market, trades in which a party is the seller and is not the aggressor will contribute to the parties' maker fees received reward metric for the quote asset. (<a name="0056-REWA-155" href="#0056-REWA-155">0056-REWA-155</a>).
+- In a spot market, if a party receives liquidity fees at the end of the epoch, these contribute to the parties' liquidity fees received reward metric for the quote asset. (<a name="0056-REWA-156" href="#0056-REWA-156">0056-REWA-156</a>).
+- In a spot market, trades in which a party is the buyer and the aggressor will not contribute to the parties’ maker fees paid reward metric for the base asset. (<a name="0056-REWA-157" href="#0056-REWA-157">0056-REWA-157</a>).
+- In a spot market, trades in which a party is the seller and the aggressor will not contribute to the parties’ maker fees paid reward metric for the base asset. (<a name="0056-REWA-158" href="#0056-REWA-158">0056-REWA-158</a>).
+- In a spot market, trades in which a party is the buyer and is not the aggressor will not contribute to the parties' maker fees received reward metric for the base asset. (<a name="0056-REWA-159" href="#0056-REWA-159">0056-REWA-159</a>).
+- In a spot market, trades in which a party is the seller and is not the aggressor will not contribute to the parties’ maker fees received reward metric for the base asset. (<a name="0056-REWA-160" href="#0056-REWA-160">0056-REWA-160</a>).
+- In a spot market, if a party receives liquidity fees at the end of the epoch, these will not contribute to the parties' liquidity fees received reward metric for the base asset. (<a name="0056-REWA-161" href="#0056-REWA-161">0056-REWA-161</a>).
+- In a spot market, trading activity will not contribute to a parties average position reward metric for either the base or quote asset. (<a name="0056-REWA-162" href="#0056-REWA-162">0056-REWA-162</a>).
+- In a spot market, trading activity will not contribute to a parties relative return reward metric for either the base or quote asset. (<a name="0056-REWA-163" href="#0056-REWA-163">0056-REWA-163</a>).
+- In a spot market, trading activity will not contribute to a parties realised return reward metric for either the base or quote asset. (<a name="0056-REWA-164" href="#0056-REWA-164">0056-REWA-164</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees paid reward metric. (<a name="0056-REWA-165" href="#0056-REWA-165">0056-REWA-165</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees received reward metric. (<a name="0056-REWA-166" href="#0056-REWA-166">0056-REWA-166</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties received liquidity fees from the spot market will correctly contribute to their liquidity fees received reward metric. (<a name="0056-REWA-167" href="#0056-REWA-167">0056-REWA-167</a>).
