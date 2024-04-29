@@ -348,8 +348,7 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 ### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-MKTL-013" href="#0043-MKTL-013">0043-MKTL-013</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
-1. Market stays in opening auction till time passes `market.auction.maximumDuration`, the market should be cancelled.
-1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
+1. Market stays in opening auction till time passes `market.auction.maximumDuration`, then the market should be cancelled.
 1. All orders should be cancelled and holdings returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
 1. The market state is set to cancelled.
