@@ -13,7 +13,8 @@ Markets on Vega are proposed, permissionless, using the [governance mechanism](.
 Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close).
 
 All markets are proposed without any [liquidity commitment](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction).
-If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date.
+If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date. If the enactment date is passed by more than the maximum opening auction extension duration Network Parameter (`market.auction.maximumDuration`), the market should be cancelled.
+
 
 ## Market lifecycle statuses
 
@@ -329,6 +330,25 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 ### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-MKTL-007" href="#0043-MKTL-007">0043-MKTL-007</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
+1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
+1. All orders should be cancelled and holdings returned to respective parties general account for the relevant asset.
+1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
+1. The market state is set to cancelled.
+
+### Market never leaves opening auction, trading terminated triggered, market cancelled (<a name="0043-MKTL-012" href="#0043-MKTL-012">0043-MKTL-012</a>)
+
+1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
+1. Market stays in opening auction till time passes `market.auction.maximumDuration`, the market should be cancelled.
+1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
+1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
+1. After `market.liquidity.successorLaunchWindowLength` has elapsed since market cancellation, any insurance pool balance should be transferred into the global insurance pool using the same settlement asset.
+1. All data sources that are only referenced by that market are unregistered.
+1. The market state is set to cancelled.
+
+### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-MKTL-013" href="#0043-MKTL-013">0043-MKTL-013</a>)
+
+1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
+1. Market stays in opening auction till time passes `market.auction.maximumDuration`, the market should be cancelled.
 1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and holdings returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
