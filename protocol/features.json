@@ -33,7 +33,10 @@
   },
   "Market suspended/resumed before enactment": {
     "milestone": "colosseo",
-    "acs": ["0043-MKTL-011"]
+    "acs": [
+    "0043-MKTL-011", 
+    "0043-MKTL-012",
+    "0043-MKTL-013"]
   },
   "Teams": {
     "milestone": "colosseo",
