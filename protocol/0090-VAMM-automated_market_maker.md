@@ -52,8 +52,8 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
     base_price,
     lower_price,
     upper_price,
-    margin_ratio_at_upper_bound,
-    margin_ratio_at_lower_bound,
+    leverage_at_upper_bound,
+    leverage_at_lower_bound,
   }
 }
 ```
@@ -145,10 +145,10 @@ $$
 L_u = \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} ,
 $$
 
-where $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges. With this the average entry price can be calculated as
+where $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the upper range and `lower price` for the lower range). This gives the two `L` values for the two ranges. With this the average entry price can be calculated as
 
 $$
-p_a = L_u  p_u  (1 - \frac{L_u}{L_u + p_u}) ,
+p_a = L_u  \sqrt{p_u}  (1 - \frac{L_u}{L_u + \sqrt{p_u}}) ,
 $$
 
 where $p_a$ is the average execution price across the range and other values are as defined above. With this, the volumes required to trade to the bounds of the ranges are:
@@ -156,6 +156,7 @@ where $p_a$ is the average execution price across the range and other values are
 $$
 P_{v_l} = \frac{r_f b}{p_l (1 - r_f) + r_f p_a} ,
 $$
+
 $$
 P_{v_u} = \frac{r_f b}{p_u (1 + r_f) - r_f p_a} ,
 $$
@@ -173,7 +174,7 @@ where $P_v$ is the virtual position from the previous formula, $p_u$ and $p_l$ a
 From here the first step is calculating a `fair` price, which can be done by utilising the `L` value for the respective range to calculate `virtual` values for the pool balances. From here on `y` will be the cash balance of the pool and `x` the position.
 
   1. First, identify the current position, `P`. If it is `0` then the current fair price is the base price.
-  1. If `P != 0` then calculate the implied price from the current position using the virtual position $P_v$ which is equal to $P$ when $P > 0$ or $P + \frac{c}{p_u} \cdotp r_f$ where $P < 0$.
+  1. If `P != 0` then calculate the implied price from the current position using the virtual position $P_v$ which is equal to $P$ when $P > 0$ or $P + P_{v_u}$ where $P < 0$.
   1. The fair price can then be calculated as
 
 $$
@@ -195,7 +196,7 @@ First, the steps for calculating a fair price should be followed in order to obt
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_b}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_b$ is the `base price`.
      1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
   1. If `P < 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price`.
+     1. The virtual `x` of the position can be calculated as $x_v = P + P_{v_u} + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price` and $P_{v_u}$ is the theoretical volume at the upper bound.
      1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
 
 Once obtained, the price can be obtained from the fundamental requirement of the product $y \cdot x$ remaining constant. This gives the relationship
