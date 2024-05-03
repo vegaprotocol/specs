@@ -61,11 +61,11 @@ If any of the above parameters or the risk model gets modified in any way, the p
 
 #### Hard-coded
 
-- Vega allows maximum of `100` price monitoring parameter triples in `priceMonitoringParameters` per market.
+- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market.
 
 There are several reasons why this maximum is enforced.
 
-1. anything more than `100` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
+1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
 1. allowing high number of triplets could have performance impact
 1. testing everything works correctly is more manageable if the number is capped.
 
@@ -124,7 +124,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 (<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>). For product spot: (<a name="0032-PRIM-023" href="#0032-PRIM-023">0032-PRIM-023</a>)
 - The market continues in regular fashion once price protection auction period ends and price monitoring bounds get reset based on last traded price (which may come from the auction itself if it resulted in trades)  (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>). For product spot: (<a name="0032-PRIM-024" href="#0032-PRIM-024">0032-PRIM-024</a>)
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>). For product spot: (<a name="0032-PRIM-025" href="#0032-PRIM-025">0032-PRIM-025</a>)
-- A maximum of `100` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>). For product spot: (<a name="0032-PRIM-026" href="#0032-PRIM-026">0032-PRIM-026</a>)
+- A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>). For product spot: (<a name="0032-PRIM-026" href="#0032-PRIM-026">0032-PRIM-026</a>)
 - Persistent order results in an auction (1 out of 2 triggers breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds of the 2nd trigger, hence auction get extended (by extension period specified for the 2nd trigger), additional orders resulting in more trades (indicative price still outside the 2nd trigger bounds) placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>). For product spot: (<a name="0032-PRIM-027" href="#0032-PRIM-027">0032-PRIM-027</a>)
 - If the cumulative extensions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>). For product spot: (<a name="0032-PRIM-028" href="#0032-PRIM-028">0032-PRIM-028</a>)
 - Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>). For product spot: (<a name="0032-PRIM-029" href="#0032-PRIM-029">0032-PRIM-029</a>)
@@ -137,7 +137,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Specifying a non-positive auction extension results in an error. (<a name="0032-PRIM-017" href="#0032-PRIM-017">0032-PRIM-017</a>). For product spot: (<a name="0032-PRIM-036" href="#0032-PRIM-036">0032-PRIM-036</a>)
 - Settlement price outside the current price monitoring bounds does not trigger an auction (<a name="0032-PRIM-018" href="#0032-PRIM-018">0032-PRIM-018</a>)
 - A network trade (during closeout) with a price outside price monitoring bounds does not trigger an auction. (<a name="0032-PRIM-019" href="#0032-PRIM-019">0032-PRIM-019</a>)
-- 2 persistent orders with prices outside both trigger price bands triggers an auction. Initial auction duration is equal to the extension period of the first trigger. Once the initial period ends the auction gets extended by the extension period of the second trigger. No other orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-020" href="#0032-PRIM-020">0032-PRIM-020</a>). For product spot: (<a name="0032-PRIM-037" href="#0032-PRIM-037">0032-PRIM-037</a>)
+- Persistent order causing trade with the price outwith both bands triggers an auction. Initial auction duration is equal to the extension period of the first trigger. Once the initial period ends the auction gets extended by the extension period of the second trigger. No other orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-020" href="#0032-PRIM-020">0032-PRIM-020</a>). For product spot: (<a name="0032-PRIM-037" href="#0032-PRIM-037">0032-PRIM-037</a>)
 - Same as above, but more matching orders get placed during the auction extension. The volume of the trades generated by the later orders is larger than that of the original pair which triggered the auction. Hence the auction concludes generating the trades from the later orders. The overall auction duration is equal to the sum of the extension periods of the two triggers. (<a name="0032-PRIM-021" href="#0032-PRIM-021">0032-PRIM-021</a>). For product spot: (<a name="0032-PRIM-038" href="#0032-PRIM-038">0032-PRIM-038</a>)
 - For all available mark price calculation methodologies: the price history used by the price monitoring engine is in line with market's mark price history. (<a name="0032-PRIM-039" href="#0032-PRIM-039">0032-PRIM-039</a>)
 - For all available mark-price calculation methodologies: the mark price update candidate gets rejected if it violates the price monitoring engine bounds. (<a name="0032-PRIM-040" href="#0032-PRIM-040">0032-PRIM-040</a>)
