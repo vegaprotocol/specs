@@ -186,6 +186,33 @@ $$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
 
 Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
+
+### LP Performance Metric
+
+The LP performance metric, $m_{rz}$, measures the quality of the liquidity a party supplies.
+
+This metric differs from the [Liquidity Fees Received](#fee-based-reward-metrics) metric as instead of evaluating the actual liquidity fees received, the network evaluates how "virtual fees" would have been allocated and distributed. This is done to reward LPs for providing liquidity even in periods where this is reduced trading volume.
+
+The virtual fees which should be virtually allocated each fee distribution window are set at 1 quantum worth of the asset in which the fees are collected (e.g. for perpetual and future markets this is the settlement asset, for spot markets this is the quote asset).
+
+**Note: as the network must not be able to "print" funds, virtual fees should never actually be created, distributed, or transferred to an account. They must be purely "virtual" and used to evaluate LP performance.**
+
+For each market, the network must complete the following steps using the SLA parameters defined in the recurring transfer (note this is not the same as the parameters defined in the market configuration).
+
+1. Every **liquidity fee distribution window**, evaluate how the virtual fees would have been allocated as per the [SLA and liquidity score mechanisms](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees-into-lp-per-market-fee-account).
+
+2. Every **epoch**, evaluate how each LPs accumulated virtual fees would have been distributed as per the [SLA mechanisms](./0042-LIQF-setting_fees_and_rewarding_lps.md#calculating-sla-performance).
+
+3. Finally calculate each LP performance metric $m_{lp}$ as follows.
+
+Let:
+
+- $m_{lp}$ be the parties LP performance metric.
+- $v_{i}$ be the parties "virtual fees" received at the end of epoch $i$.
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{lp} = \frac{\sum_{i}^{n}{v_{i}}}{N}$$
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
