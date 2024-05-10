@@ -76,9 +76,6 @@ See spec [0041-TSTK](./0041-TSTK-target_stake.md).
 
 The market liquidity fee is calculated using the same mechanism defined in [0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-The liquidity fee is re-calculated at the start of a fee distribution epoch and is fixed for that epoch.
-Note: 1. this may later be applied universally to all products. 2. this "fee distribution epoch" is unrelated to blockchain staking and delegation epochs.
-
 ## 7. Trading
 
 Both buy and sell orders on a `Spot` market define a size (amount of the `base_asset`) to buy or sell at a given price (amount of the `quote_asset`). An orders "value for fee purposes" is always expressed in the `quote_asset`.
@@ -124,6 +121,12 @@ Price-monitoring auctions are still required and should be implemented following
 1. If a "sell" order does not trade immediately (or only trades in part), an amount of the base_asset should be transferred to a holding_account to cover the remaining size of the order for the base_asset.(<a name="0080-SPOT-009" href="#0080-SPOT-009">0080-SPOT-009</a>)
 1. If a "sell" order incurs fees through trading, the required amount of the quote_asset to cover the fees will be deducted from the total quote_asset resulting from the sale of the base_asset.(<a name="0080-SPOT-010" href="#0080-SPOT-010">0080-SPOT-010</a>)
 1. For a "buy" order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).(<a name="0080-SPOT-012" href="#0080-SPOT-012">0080-SPOT-012</a>)
+1. For a "buy" market order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).(<a name="0080-SPOT-024" href="#0080-SPOT-024">0080-SPOT-024</a>)
+1. For a "sell" market order to be considered valid during continuous trading, the party must have a sufficient amount of the `base_asset` in the `general_account` to cover the value of the trade. (<a name="0080-SPOT-025" href="#0080-SPOT-025">0080-SPOT-025</a>)
+1. amending order should be rejected when an order is amended such that would trade immediately and the party can't afford none/some of the trades(<a name="0080-SPOT-026" href="#0080-SPOT-026">0080-SPOT-026</a>)
+1. order should be rejected when submit a limit order, partly matched, party can't afford the trades.(<a name="0080-SPOT-027" href="#0080-SPOT-027">0080-SPOT-027</a>)
+1. order should be rejected when submit a limit order, no match, added to the book, party can't cover the amount that needs to be transferred to the holding account.(<a name="0080-SPOT-028" href="#0080-SPOT-028">0080-SPOT-028</a>)
+1. order should be rejected when submit a limit order, partly matched, party can afford partial trade but not what needs to be transferred to the holding account after to cover the remaining size.(<a name="0080-SPOT-029" href="#0080-SPOT-029">0080-SPOT-029</a>)
 1. If a "buy" order does not trade immediately (or only trades in part), only the necessary amount of the quote_asset to cover the remaining size of the order should be transferred to a holding_account for the quote_asset.(<a name="0080-SPOT-013" href="#0080-SPOT-013">0080-SPOT-013</a>).
 1. If the order is cancelled, funds should be released from the `holding_account` and returned to the `general_account`.(<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
 1. If the order's size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.(<a name="0080-SPOT-015" href="#0080-SPOT-015">0080-SPOT-015</a>)
@@ -133,3 +136,4 @@ Price-monitoring auctions are still required and should be implemented following
 1. If the fee rates change for any reason within an auction, when the auction exits the amount required to cover fees must be recalculated. If a party does not have enough funds to cover the increase their order should be stopped with a clear return code. (<a name="0080-SPOT-021" href="#0080-SPOT-021">0080-SPOT-021</a>).
 1. When exiting an auction, for any orders that are still open, the funds held in the parties' holding_account to cover potential fees can be released to their respective general_account, so that the remaining amount in the holding_account is only sufficient to cover the value of the order.(<a name="0080-SPOT-020" href="#0080-SPOT-020">0080-SPOT-020</a>).
 1. Spot governance proposal fails with asset error, when quote_asset and base_asset has same assets. (<a name="0080-SPOT-022" href="#0080-SPOT-022">0080-SPOT-022</a>).
+1. A `Spot` market can be created for a `quote_asset` / `base_asset` where each asset exists on a different originating chain i.e one asset is on one asset bridge and another asset is from another asset bridge. As a user I can then deposit one asset through one bridge, swap it, and withdraw the other asset through any other bridge (<a name="0080-SPOT-023" href="#0080-SPOT-023">0080-SPOT-023</a>)

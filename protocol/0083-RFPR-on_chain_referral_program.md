@@ -505,6 +505,7 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party submits a `JoinTeam` transaction and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-064" href="#0083-RFPR-064">0083-RFPR-064</a>).
 1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-065" href="#0083-RFPR-065">0083-RFPR-065</a>).
 1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-066" href="#0083-RFPR-066">0083-RFPR-066</a>).
+1. Assert that a user joining a team is not eligible for rewards until the number of epochs since joining the team as specified in the `rewards.team.minEpochsInTeam` network parameter has passed. (<a name="0083-RFPR-068" href="#0083-RFPR-068">0083-RFPR-068</a>).
 
 #### Epoch and running volumes
 

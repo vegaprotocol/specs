@@ -6,9 +6,13 @@ ABIs
 actioned
 Allowlist
 allowlisted
+AMM
+AMM's
+AMMs
 antiwhaling
 API
 APIs
+Arbitrum
 AST
 asynchrony
 atomicity
@@ -30,6 +34,7 @@ cashflows
 CCP
 ccy
 cdot
+cdotp
 ceil
 ceiled
 CFD
@@ -72,6 +77,7 @@ delegateable
 delegator
 delegators
 deterministically
+differentiator
 discoverability
 disincentivise
 DLT
@@ -92,6 +98,7 @@ ERC
 ERC-1155
 ERC-20
 ERC-721
+ERPC
 ETH
 ETH's
 ETHB
@@ -112,6 +119,7 @@ frontend
 funder
 FX
 GBP
+geq
 Geth
 Getters
 GFA
@@ -145,6 +153,8 @@ int64
 integrations
 intrablock
 IOC
+joinable
+joinable
 JSON
 keyholder
 keypair
@@ -174,6 +184,8 @@ margined
 margining
 marketID
 math
+mathbb
+mathbf
 MDPs
 mempool
 Merkle
@@ -187,6 +199,7 @@ mu
 multisig
 MultisigControl
 multisignature
+multisigs
 NFTs
 nonfungible
 OAUTH
@@ -213,6 +226,7 @@ PoS
 PoW
 PoWs
 pre
+precomputed
 pro
 protobuf
 Pseudocode
@@ -220,7 +234,10 @@ pseudorandom
 pubkey
 quant
 rata
+rebalance
+rebalancing
 rebased
+rebasing
 recollateralise
 ReferralSet
 reimplemented
@@ -234,8 +251,10 @@ RFQ
 roadmap
 Ropsten
 RPC
+rulesets
 runnable
 runtime
+rz
 scalability
 scalable
 Scholes
@@ -248,6 +267,7 @@ sharded
 siskas
 SLA
 Solana
+sqrt
 src
 SSD
 SSL
@@ -296,6 +316,8 @@ undelegations
 undeployed
 underlyings
 unencrypted
+Uniswap
+Uniswap's
 unitless
 unmarshal
 unnominated
@@ -304,6 +326,8 @@ unstake
 unstaked
 unstakes
 unstaking
+unsynchronised
+Unsynchronised
 untriggered
 unvested
 url
@@ -314,6 +338,10 @@ UTC
 validator
 validator's
 validators
+vAMM
+vAMM's
+vAMMs
+vee
 vega
 vegaprotocol
 vegatools
@@ -322,6 +350,7 @@ vegawallet
 verifiably
 verifier
 visor
+VM
 VW
 VWAP
 walkthrough
@@ -330,4 +359,3 @@ wBTC
 wei
 whitepaper
 Yubikey
-joinable

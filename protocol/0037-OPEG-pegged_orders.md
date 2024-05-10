@@ -28,14 +28,14 @@
         - `mid_price=145`
     Then:
         - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=140`.
-- Given a mid-price which is not an integer multiple of the market tick size, a buy orders pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
+- Given a mid-price which is not an integer multiple of the market tick size, a sell order pegged to the mid price should have it's price rounded down to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
     For example, given:
         - `tick_size=10`
         - `best_bid_price=100`
         - `best_ask_price=190`
         - `mid_price=145`
     Then:
-        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=150`.
+        - A pegged sell order using the mid price as the reference and `offset=10` should be inserted at `price=150`.
 
 ## Summary
 

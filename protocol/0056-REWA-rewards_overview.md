@@ -15,6 +15,10 @@ The parameter `rewards.marketCreationQuantumMultiple` will be used together with
 It is reasonable to assume that `quantum` will be set to a value around `1 USD` (though there will likely be quite significant variation from this for assets that are not well correlated with USD).
 Therefore, for example, to reward futures markets when they reach a lifetime traded notional over 1 mil USD, then this parameter should be set to around `1000000`. Any decimal value strictly greater than `0` is valid.
 
+## New network parameter for updating interim scores
+
+The parameter `rewards.updateFrequency` which is a duration string (e.g. `1m`) defines how frequency [interim scores](#publishing-interim-reward-information) are calculated and exposes for competitions.
+
 ## Reward process high level
 
 At a high level, rewards work as follows:
@@ -32,7 +36,6 @@ At the end of the epoch:
 Individual reward metrics are scoped by [`recurring transfer`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
 
 Therefore a party may be in scope for the same reward type multiple times per epoch.
-Metrics will be calculated at the end of every epoch, for every eligible party, in each market, for each recurring transfer.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset.
 
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
@@ -41,6 +44,20 @@ This is the original precision for the metric source data.
 For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#validator-ranking-metric) or the [market creation reward metric](#market-creation-reward-metrics).
 
 For reward transfers where the [scope](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is set to teams, each party must meet the minimum time in team requirement. That is, given a party has been in a team for $N$ epochs, if $N$ is strictly less than the network parameter `rewards.minimumEpochsInTeam` (an integer defaulting to `0`) their reward metric is set to `0`.
+
+## Publishing Interim Reward Information
+
+Although rewards are distributed at the end of an epoch, to give users of the protocol an understanding of what rewards they are likely to receive at the next distribution event, APIs must make interim data available throughout an epoch.
+
+For each game, each entities (individual or team) **current reward metric** and rank in the game is to be updated every `rewards.updateFrequency` seconds. Note, the actual reward metric should be updated and exposed rather than the underlying data in the current epoch, this is important for games where the window length is greater than `1`.
+
+For reward metrics which can only be calculated at the end of the epoch, e.g. [market creation](#market-creation-reward-metrics), [liquidity fees received](#fee-based-reward-metrics), and [validator ranking](#validator-ranking-metric); scores are only required to be updated and exposed at the end of the epoch.
+
+For each game, the following data for each party should also be published every update period so APIs are able to relay information to users about their eligibility and expected rewards.
+
+- Notional Time Weighted Average Position
+- Total Fees Paid
+
 
 ### Fee-based reward metrics
 
@@ -54,7 +71,7 @@ These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is `0` at the end of the epoch for a given recurring transfer, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
-Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
+Note, trading fees paid or received on Spot markets will contribute to fee-based reward metrics.
 
 ### Average position metric
 
@@ -105,7 +122,9 @@ Let:
 - $r_i$ be the parties change in pnl in the i th epoch
 - $N$ be the window length specified in the recurring transfer.
 
-$$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
+$$m_{rr} = \frac{\sum_{i}^{n}{r_{i}}}{N}$$
+
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
 ### Returns volatility metric
 
@@ -119,6 +138,8 @@ $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the variance of the set $R$.
 
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
+
 ### Validator ranking metric
 
 The validator ranking metric, $m_v$, measures the ranking score of consensus and standby validators.
@@ -130,6 +151,38 @@ $$m_v = ranking_score$$
 If a party **is not** a consensus or standby validator, their reward metric is simply:
 
 $$m_v = 0$$
+
+### Realised Returns metric
+
+The realised returns metric, $m_{rz}$, measures the returns a party has realised across a number of epochs.
+
+Let $rz_i$ be a parties realised returns in an epoch. At the start of each epoch, the network will set ${rz_i}$ to `0`.
+
+During the epoch, each parties realised returns will be incremented as follows:
+
+- a party pays or receives a funding payment
+
+$${rz_i} = {rz_i} + funding payment$$
+
+- a party **reduces** their **LONG** position
+
+$${rz_i} = {rz_i} + (trade price - average entry price) * position delta$$
+
+- a party **reduces** their **SHORT** position
+
+$${rz_i} = {rz_i} + (average entry price - trade price) * position delta$$
+
+At the end of the epoch, the average realised return metric over the last $N$ epochs is calculated as follows.
+
+Let:
+
+- $m_{rz}$ be the parties realised return reward metric
+- ${rz_i}$ be the parties realised returns in the i th epoch
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
+
+Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
 ### Market creation reward metrics
 
@@ -158,8 +211,6 @@ See the [transfers](./0057-TRAN-transfers.md) spec.
 - A flag is stored on each market for each combination of [`funder`, `market scope`, `reward asset`] that was included in the reward payout.
 This flag is used to prevent any given funder from funding a creation reward in the same reward asset more than once for any given *market scope*.
 
-Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
-
 Note this reward metric **is not** available for team rewards.
 
 ## Team reward metrics
@@ -179,7 +230,6 @@ That is, a participant might receive rewards in the settlement asset of the mark
 Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward. These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
 Recurring transfers can target groups of markets, or all markets for a settlement asset. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
-Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
 ## Reward distribution
 
@@ -188,6 +238,8 @@ All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md
 The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
+
+Any rewards which would be distributed to an AMM sub-key should instead be sent to the parent key's corresponding account. These transfers should be labelled with a field `from_key` which specifies the sub-key as the original recipient. This field should be blank for rewards earned by a standard key.
 
 ### Distributing rewards amongst entities
 
@@ -208,6 +260,8 @@ Let:
 - $r_{i}$ be the reward metric value for entity $i$
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 - $s_{i}$ be the share of the rewards for entity $i$
+
+NOTE: As reward metrics can be negative (e.g. a party has negative relative returns, all reward metrics must be offset by the lowest **negative** reward metric to ensure all metrics are positive before calculating each parties share of the rewards)
 
 $$d_{i}=r_{i} M_{i}$$
 
@@ -973,16 +1027,42 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Relative returns
 
-- If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
-- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
+- If an eligible party has zero net returns, their relative returns reward metric should be zero (<a name="0056-REWA-111" href="#0056-REWA-111">0056-REWA-111</a>).
+- If an eligible party has negative net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-113" href="#0056-REWA-113">0056-REWA-113</a>).
 - If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
-- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-087" href="#0056-REWA-087">0056-REWA-087</a>).
+- If a `window_length>1` is specified in the recurring transfer, if an eligible party has zero net returns in all epochs, their relative return metric should be zero (<a name="0056-REWA-114" href="#0056-REWA-114">0056-REWA-114</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs. Note epochs with zero returns should be included. (<a name="0056-REWA-115" href="#0056-REWA-115">0056-REWA-115</a>).
+- Given a recurring transfer is setup such that all eligible parties have a positive reward score, each parties metric is not offset and parties receive the correct rewards. (<a name="0056-REWA-116" href="#0056-REWA-116">0056-REWA-116</a>).
+- Give a recurring transfer is setup such that all eligible parties have a negative reward score, each parties metric is offset by the lowest negative score and parties receive the correct rewards. (<a name="0056-REWA-117" href="#0056-REWA-117">0056-REWA-117</a>).
 
 ### Returns volatility
 
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
 - If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
 - If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+
+### Realised returns
+
+- If an eligible party has a non-profitable long position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-118" href="#0056-REWA-118">0056-REWA-118</a>).
+- If an eligible party has a non-profitable long position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-119" href="#0056-REWA-119">0056-REWA-119</a>).
+- If an eligible party had a non-profitable long  position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-120" href="#0056-REWA-120">0056-REWA-120</a>).
+- If an eligible party had a non-profitable long position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-132" href="#0056-REWA-132">0056-REWA-132</a>).
+- If a party open and closed a long position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-121" href="#0056-REWA-121">0056-REWA-121</a>).
+- If an eligible party has a profitable long position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-122" href="#0056-REWA-122">0056-REWA-122</a>).
+- If an eligible party has a profitable long position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-123" href="#0056-REWA-123">0056-REWA-123</a>).
+- If an eligible party had a profitable long position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-124" href="#0056-REWA-124">0056-REWA-124</a>).
+- If an eligible party had a profitable long position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-133" href="#0056-REWA-133">0056-REWA-133</a>).
+
+- If an eligible party has a non-profitable short position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-125" href="#0056-REWA-125">0056-REWA-125</a>).
+- If an eligible party has a non-profitable short position which has been partly closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-126" href="#0056-REWA-126">0056-REWA-126</a>).
+- If an eligible party had a non-profitable short  position which was fully closed, they will have a negative realised returns score and should receive rewards (<a name="0056-REWA-127" href="#0056-REWA-127">0056-REWA-127</a>).
+- If an eligible party had a non-profitable short position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-134" href="#0056-REWA-134">0056-REWA-134</a>).
+- If a party open and closed a short position such that there realised returns are `0`, the will have a realised returns score and should receive rewards (<a name="0056-REWA-128" href="#0056-REWA-128">0056-REWA-128</a>).
+- If an eligible party has a profitable short position which has not been closed, they will not have a realised returns score and should receive no rewards (<a name="0056-REWA-129" href="#0056-REWA-129">0056-REWA-129</a>).
+- If an eligible party has a profitable short position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-130" href="#0056-REWA-130">0056-REWA-130</a>).
+- If an eligible party had a profitable short position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-131" href="#0056-REWA-131">0056-REWA-131</a>).
+- If an eligible party had a profitable short position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-135" href="#0056-REWA-135">0056-REWA-135</a>).
 
 ### Validator ranking metric
 
@@ -1018,3 +1098,48 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
 - If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
 - If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).
+
+
+### Interim Reward Information
+
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees paid, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-136" href="#0056-REWA-136">0056-REWA-136</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees received, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-137" href="#0056-REWA-137">0056-REWA-137</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is liquidity fees received, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-138" href="#0056-REWA-138">0056-REWA-138</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is market creation, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-139" href="#0056-REWA-139">0056-REWA-139</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is average position, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-140" href="#0056-REWA-140">0056-REWA-140</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is relative returns, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-141" href="#0056-REWA-141">0056-REWA-141</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is returns volatility, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-142" href="#0056-REWA-142">0056-REWA-142</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is validator ranking, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-143" href="#0056-REWA-143">0056-REWA-143</a>).
+
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees paid, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-144" href="#0056-REWA-144">0056-REWA-144</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees received, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-145" href="#0056-REWA-145">0056-REWA-145</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is liquidity fees received, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-146" href="#0056-REWA-146">0056-REWA-146</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is market creation, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-147" href="#0056-REWA-147">0056-REWA-147</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is average position, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-148" href="#0056-REWA-148">0056-REWA-148</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
+
+### Spot markets
+
+- In a spot market, trades in which a party is the buyer and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
+- In a spot market, trades in which a party is the seller and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).
+- In a spot market, trades in which a party is the buyer and is not the aggressor will contribute to the parties' maker fees received reward metric for the quote asset. (<a name="0056-REWA-154" href="#0056-REWA-154">0056-REWA-154</a>).
+- In a spot market, trades in which a party is the seller and is not the aggressor will contribute to the parties' maker fees received reward metric for the quote asset. (<a name="0056-REWA-155" href="#0056-REWA-155">0056-REWA-155</a>).
+- In a spot market, if a party receives liquidity fees at the end of the epoch, these contribute to the parties' liquidity fees received reward metric for the quote asset. (<a name="0056-REWA-156" href="#0056-REWA-156">0056-REWA-156</a>).
+- In a spot market, trades in which a party is the buyer and the aggressor will not contribute to the parties’ maker fees paid reward metric for the base asset. (<a name="0056-REWA-157" href="#0056-REWA-157">0056-REWA-157</a>).
+- In a spot market, trades in which a party is the seller and the aggressor will not contribute to the parties’ maker fees paid reward metric for the base asset. (<a name="0056-REWA-158" href="#0056-REWA-158">0056-REWA-158</a>).
+- In a spot market, trades in which a party is the buyer and is not the aggressor will not contribute to the parties' maker fees received reward metric for the base asset. (<a name="0056-REWA-159" href="#0056-REWA-159">0056-REWA-159</a>).
+- In a spot market, trades in which a party is the seller and is not the aggressor will not contribute to the parties’ maker fees received reward metric for the base asset. (<a name="0056-REWA-160" href="#0056-REWA-160">0056-REWA-160</a>).
+- In a spot market, if a party receives liquidity fees at the end of the epoch, these will not contribute to the parties' liquidity fees received reward metric for the base asset. (<a name="0056-REWA-161" href="#0056-REWA-161">0056-REWA-161</a>).
+- In a spot market, trading activity will not contribute to a parties average position reward metric for either the base or quote asset. (<a name="0056-REWA-162" href="#0056-REWA-162">0056-REWA-162</a>).
+- In a spot market, trading activity will not contribute to a parties relative return reward metric for either the base or quote asset. (<a name="0056-REWA-163" href="#0056-REWA-163">0056-REWA-163</a>).
+- In a spot market, trading activity will not contribute to a parties realised return reward metric for either the base or quote asset. (<a name="0056-REWA-164" href="#0056-REWA-164">0056-REWA-164</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees paid reward metric. (<a name="0056-REWA-165" href="#0056-REWA-165">0056-REWA-165</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees received reward metric. (<a name="0056-REWA-166" href="#0056-REWA-166">0056-REWA-166</a>).
+- Given a reward metric scoping both spot and leveraged markets, a parties received liquidity fees from the spot market will correctly contribute to their liquidity fees received reward metric. (<a name="0056-REWA-167" href="#0056-REWA-167">0056-REWA-167</a>).
+
+## vAMMs
+
+- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
+- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).

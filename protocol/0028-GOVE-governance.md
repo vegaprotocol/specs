@@ -91,7 +91,10 @@ In a future iteration of the governance system we may restrict proposal submissi
 ### Market change proposal
 
 Market change proposals can also be submitted by any party which has at least the minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`. Note that such a party can submit a proposal even if it doesn't hold any amount of the governance token.
+Moreover, market LPs can vote on market change proposals even if they don't have `governance.proposal.updateMarket.minVoterBalance` governance tokens.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` and no governance tokens then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` and no governance tokens then they cannot submit a market change proposal.
+
+If a party has any sub-account running [AMM strategies](./0090-VAMM-automated_market_maker.md) then the `equity-like share` of the party's votes on that market should be the sum of the `equity-like share` for the key itself and any assigned to the sub-account.
 
 ### Duration of the proposal
 
@@ -383,9 +386,7 @@ transfer_amount == min(
 
 This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance initiated transfer. Only recurring governance initiated transfers can be cancelled via governance initiated transfer cancellation proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
 
-### Checkpoint/snapshot
-
-Enacted and active transfers (i.e. scheduled one off governance initiated transfers, or recurring governance initiated transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
+### Snapshots
 
 All in memory active governance initiated transfers must be included in the snapshot of the banking engine.
 
@@ -554,7 +555,7 @@ APIs should also exist for clients to:
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
-- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
+- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>) For product spot: (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
 - A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
 - At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
 
@@ -576,8 +577,8 @@ APIs should also exist for clients to:
 - A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
 - In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
 - A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
-- A market change proposal that aims to modify the market name in any state (apart from closed/terminated) will modify the market name at the time of vote enactment. (<a name="0028-GOVE-159" href="#0028-GOVE-159">0028-GOVE-159</a>)
-- A market change proposal that aims to modify the market code in any state (apart from closed/terminated) will modify the market code at the time of vote enactment. (<a name="0028-GOVE-166" href="#0028-GOVE-166">0028-GOVE-166</a>)
+- A market change proposal that aims to modify the market name in any state (apart from closed/terminated) will modify the market name at the time of vote enactment. (<a name="0028-GOVE-159" href="#0028-GOVE-159">0028-GOVE-159</a>). For product spot (<a name="0028-GOVE-186" href="#0028-GOVE-186">0028-GOVE-186</a>).
+- A market change proposal that aims to modify the market code in any state (apart from closed/terminated) will modify the market code at the time of vote enactment. (<a name="0028-GOVE-166" href="#0028-GOVE-166">0028-GOVE-166</a>). For product spot (<a name="0028-GOVE-187" href="#0028-GOVE-187">0028-GOVE-187</a>).
 - A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
@@ -598,8 +599,10 @@ APIs should also exist for clients to:
 - Markets which have been suspended via a governance proposal can be terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-151" href="#0028-GOVE-151">0028-GOVE-151</a>)
 - Oracle data sources shared between multiple markets are not deactivated if one of the markets sharing the oracle data sources is terminated and settled using governance proposals. Now the status of the data sources should still be ACTIVE as Market2 is still using them. (<a name="0028-GOVE-152" href="#0028-GOVE-152">0028-GOVE-152</a>)
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
-- A market change proposal specifying a new tick size less than or equal to `0` gets rejected.
-- A market change proposal specifying a new tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places).
+- A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
+- At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
+- A market LP with ELS > 0 can vote on a market change proposal even if the key doesn't meet the `governance.proposal.updateMarket.minVoterBalance` for governance token.  (<a name="0028-GOVE-185" href="#0028-GOVE-185">0028-GOVE-185</a>).
+
 
 #### Network parameter change proposals
 
@@ -691,9 +694,8 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
 
 
-##### Checkpoints and Snapshots
+##### Snapshots
 
-- Active or dormant governance initiated transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
 - Active or dormant governance initiated transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)
 
 
@@ -707,8 +709,6 @@ It is NOT possible to submit a governance proposal where the source account is t
 ##### Recurring governance initiated transfers
 
 - For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
-
-- Enacted and active recurring governance initiated transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
 
 - When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 

@@ -54,7 +54,7 @@ For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](
   - An order partially crossing with an existing order on the book will be STOPPED in full with none executed.  (<a name="0068-MATC-042" href="#0068-MATC-042">0068-MATC-042</a>). For product spot: (<a name="0068-MATC-075" href="#0068-MATC-075">0068-MATC-075</a>)
 - A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>)
 - A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>). For product spot: (<a name="0068-MATC-076" href="#0068-MATC-076">0068-MATC-076</a>)
-- All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>). For product spot: (<a name="0068-MATC-077" href="#0068-MATC-077">0068-MATC-077</a>)
+- All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED if completely unfilled or PARTIALLY_FILLED if some matching occurred before the self trade. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>). For product spot: (<a name="0068-MATC-077" href="#0068-MATC-077">0068-MATC-077</a>)
 - All orders with Reduce-Only set to TRUE are rejected as invalid. (<a name="0068-MATC-054" href="#0068-MATC-054">0068-MATC-054</a>)
 
 In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
@@ -94,7 +94,7 @@ The matching engine is responsible for updating and maintaining the state of the
 
 ## Guide-level explanation
 
-The machine engine consists of an order book and the logic to handle new orders arriving into the engine. The matching engine can be in one of two possible states, continuous trading or auction trading. In continuous trading the incoming orders are processed immediately. In auction mode incoming orders are placed on the order book and are not processed for matching until we attempt to uncross.
+The matching engine consists of an order book and the logic to handle new orders arriving into the engine. The matching engine can be in one of two possible states, continuous trading or auction trading. In continuous trading the incoming orders are processed immediately. In auction mode incoming orders are placed on the order book and are not processed for matching until we attempt to uncross.
 
 ### Continuous Mode
 
@@ -117,6 +117,22 @@ Given an order book that looks like this in the market display:
 | 5  | 100 | |
 | | 90 | 10 |
 | | 80 | 15 |
+
+
+### Matching Process
+
+For all incoming active orders, the matching process will coordinate between the on- and off-book sources of liquidity. When an order comes in which may immediately trade (there are not already resting orders of the same type for the best applicable price) the following steps should be followed. If at any point the order's full volume has traded the process is immediately halted:
+
+  1. For the first applicable price level (the first valid price with no orders on the same side, implying an order could theoretically immediately trade there, one tick above best bid for an incoming buy and one tick below best ask for an incoming sell), all on-book orders should be checked. Any volume at this price level which can be met through on-book orders will then trade.
+  1. For any `remaining volume`, the AMMs will be checked. This requires an algorithm to ensure the protocol does not have to check every price level individually:
+     1. Call the current price level `current price`
+     1. Check the price level which has the next resting on-book order, set this to be the `outer price` for the check.
+     1. Check all active AMMs, querying their quote price API with the smallest trade unit on the market in the direction of trading (if the incoming order is a `buy`, query the AMM's `ask`, or vice versa). Retain those where this price < `outer price`
+     1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`.
+     1. Now, for each AMM within this range, calculate the volume of trading required to move each from the `current price` to the `outer price`. Call the sum of this volume `total volume`.
+     1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally. Each of these trades should count as a single aggressive trade with the given AMM and pay fees accordingly.
+     1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.
+     1. For all trades generated in the previous two steps, an execution price should be calculated using the AMM's API to return a price for a given volume. These prices should be rounded to the nearest valid market tick in the AMM's favour (i.e. round upwards when the AMM is selling and downwards when the AMM is buying). This process can be optimised as when splitting trades between AMMs according to their respective commitment sizes they will each end up at the same executed price, so only one AMM's price need be calculated.
 
 ## See also
 

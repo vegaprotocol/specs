@@ -22,12 +22,14 @@ When exactly the nodes must have approved or not signalled approval of the asset
 
 As detailed above, the validators will check the validity of the details supplied by the asset proposer. The validation occurs before the `validationTimestamp` provided in the `ProposalTerms`. The following checks should be applied:
 
-### ERC20 assets
+### ERC20 assets on any Ethereum VM compatible chain supporting Ethereum RPC
 
-- The contract address provided must point to an ERC20 asset on the [bridged Ethereum network](./0031-ETHB-ethereum_bridge_spec.md)
-- The contract must not already have an existing asset accepted on the Vega network (note: another _proposal_ could exist for the same asset)
+- The proposal must point to an id of an Ethereum VM compatible chain supporting Ethereum RPC that Vega network recognises
+- The contract address provided must point to an ERC20 asset on the [bridged Ethereum VM compatible chain supporting Ethereum RPC network](./0031-ETHB-ethereum_bridge_spec.md)
+- The chain id and contract pair must not already have an existing asset accepted on the Vega network (note: another _proposal_ could exist for the same asset)
 - The name must strictly match the name in the ERC20 contract (e.g. `Wrapped ether`)
 - The symbol must strictly match the symbol (e.g. `WETH`)
+
 
 ## Enabling a new asset on the bridge
 
@@ -77,7 +79,8 @@ message ERC20 {
   // contract address of an ERC20 token
   string contractAddress = 1;
   string maximumLifetimeDeposit = 2; // note that e.g: 100000 in here will be interpreted against the asset decimals
-    string withdrawalDelayThreshold = 3;  // this is will be interpreted against the asset decimals
+  string withdrawalDelayThreshold = 3;  // this is will be interpreted against the asset decimals
+  string chain_id = 4; // this is the ID of the chain the asset's contract address is from
 }
 
 message AssetSource {
@@ -163,18 +166,21 @@ This must be an integer strictly greater than `0`.
 
 ### User actions
 
-- As a user I can submit a new proposal asset to be used in vega (<a name="0027-ASSP-001" href="#0027-ASSP-001">0027-ASSP-001</a>)
+- As a user I can submit a new proposal asset to be used in vega for any EVM-ERPC asset bridge (<a name="0027-ASSP-034" href="#0027-ASSP-034">0027-ASSP-034</a>)
 - As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
-- As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset. (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>)
+- As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset on any asset bridge (<a name="0027-ASSP-035" href="#0027-ASSP-035">0027-ASSP-035</a>)
 - `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
 - If an update asset proposal passed and it changes `quantum` _only_ then this new value becomes used immediately on enactment. (<a name="0027-ASSP-025" href="#0027-ASSP-025">0027-ASSP-025</a>)
+- As a user if I submit a new proposal asset for an ERC20 asset without specifying a chain-id, the proposal is rejected (<a name="0027-ASSP-031" href="#0027-ASSP-031">0027-ASSP-031</a>)
+- As a user if I submit a new proposal asset for an ERC20 asset with a chain-id that does not correspond to any bridge, the proposal is rejected (<a name="0027-ASSP-032" href="#0027-ASSP-032">0027-ASSP-032</a>)
+- As a user if, I can see the chain-id an ERC20 asset originates on via a data node API (<a name="0027-ASSP-033" href="#0027-ASSP-033">0027-ASSP-033</a>)
 
 ### Node actions
 
-- As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
-- As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
-- As a node, I receive events from the external blockchain queue, that confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
-- As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-008" href="#0027-ASSP-008">0027-ASSP-008</a>)
+- As a node, when a new asset proposal is emitted, I can validate the asset with its chain, and send the result of the validation through the chain to the other nodes (first phase proposal) on any asset bridge  (<a name="0027-ASSP-027" href="#0027-ASSP-027">0027-ASSP-027</a>)
+- As a node, when a new asset from any EVM/ERPC bridge is accepted through governance, I can sign a payload to the user so they can whitelist the asset on the bridge contract on the appropriate chain (<a name="0027-ASSP-028" href="#0027-ASSP-028">0027-ASSP-028</a>)
+- As a node, I receive events from the external blockchain queues for all the registered EVM/ERPC chains, that confirm the asset is enabled on the relevant chain bridge contract (<a name="0027-ASSP-029" href="#0027-ASSP-029">0027-ASSP-029</a>)
+- As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the EVM/ERPC chain the asset is bridged from (<a name="0027-ASSP-030" href="#0027-ASSP-030">0027-ASSP-030</a>)
 
 ### Validation
 
@@ -201,4 +207,3 @@ This must be an integer strictly greater than `0`.
 
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-023" href="#0027-ASSP-023">0027-ASSP-023</a>)
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-024" href="#0027-ASSP-024">0027-ASSP-024</a>)
-
