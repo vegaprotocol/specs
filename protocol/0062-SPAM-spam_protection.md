@@ -115,7 +115,6 @@ For pegged orders `last traded price +/- offset` should be used in place of pric
 
 The following points apply generally to both derivative and spot markets:
 
-- Non-persistent orders are not blocked by the mechanisms described above as long as the market exists.
 - For amendments: use the same check, i.e. if the order is being amended to a smaller size or smaller price so that it would no longer pass the spam check, then the amendment is rejected.
 - For batch transactions: each order has to pass its own order spam check; if any order in the batch fails the check then reject the whole batch.
 - Checks should be completed before the gas cost calculation as rejected transactions should not get into the calculation of the gas cost.
