@@ -1093,6 +1093,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If an eligible party had a profitable short position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-131" href="#0056-REWA-131">0056-REWA-131</a>).
 - If an eligible party had a profitable short position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-135" href="#0056-REWA-135">0056-REWA-135</a>).
 
+### LP Performance Metric
+
+- An LP with a non-zero liquidity score whom meets the time on book requirement (wrt. the SLA parameters defined in the reward setup) will receive LP performance rewards even if the traded volume was zero and no actual liquidity fees were accumulated (<a name="0056-REWA-168" href="#0056-REWA-168">0056-REWA-168</a>).
+
+- An LP which accumulates no "virtual fees" throughout the epoch will not receive LP performance rewards at the end of the epoch as they would not have been distributed any "virtual fees" (<a name="0056-REWA-169" href="#0056-REWA-169">0056-REWA-169</a>).
+- An LP which accumulates "virtual fees" throughout the epoch but does not meet the time on book requirement will not receive LP performance rewards at the end of the epoch as they would not have been distributed "virtual fees" (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
+- An LP which accumulates "virtual fees" and meets the time on book requirement will receive **some** LP performance rewards at the end of the epoch as they would have been distributed "virtual fees" (<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>).
+
+- Given an LP performance reward setup with a stricter liquidity price range than that configured in the market parameters, if an LP supplies liquidity within the price range defined by the market but not within the range defined by the reward, the LP will receive any liquidity fees but will not receive any liquidity rewards (<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>).
+- Given an LP performance reward setup with a looser liquidity price range than that configured in the market parameters, if an LP supplies liquidity within the price range defined by the reward but not within the range defined by the market, the LP will receive any liquidity rewards but will not receive any liquidity fees (<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>).
+
+- Given a market with multiple LP performance rewards configured with different price ranges, each reward will be evaluated individually with respect to the SLA parameters defined int he reward setup (<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>).
+
+
 ### Validator ranking metric
 
 - If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
