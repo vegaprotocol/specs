@@ -4,7 +4,7 @@
 
 The dynamics of market price movements are such that prices don't always represent the participants' true average view of the price, but are instead artefacts of the market microstructure: sometimes low liquidity and/or a large quantity of order volume can cause the price to diverge from the true market price. It is impossible to tell at any point in time if this has happened or not.
 
-As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent. 
+As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent.
 We are going to rely on the risk model to formalise this process. Risk model can be used to obtain the probability distribution of prices at a future point in time given the current price. A price monitoring trigger can be constructed using a fixed horizon and probability level.
 To give an example: get the price distribution in an hour as implied by the risk model given the current mid price, if after the hour has passed and the actual mid price is beyond what the model implied (either too low or too high) with some chosen probability level (say 99%), then we'd characterise such market move as large.  In general we may want to use a few such triggers per market (i.e. different horizon and probability level pairs). The framework should be able to trigger a price protection auction period with any valid trading mode.
 We're also going to allow specifying triggers directly as the maximum valid moves with respect to the reference price. In that case the `maxUpMoveFactor`, `maxDownMoveFactor` can be specified for a given horizon, such that a price is considered valid as long as it's in the range `[reference_price(horizon) * maxDownMoveFactor, [reference)price(horizon) * maxUpMoveFactor]`, where `[reference_price(horizon)` is the reference price corresponding to the specified horizon - obtained in exactly the same way as in the case of a model-based trigger.
@@ -47,6 +47,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 #### Market
 
 ##### Model-based triggers
+
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
   - `probability` - probability level used in price monitoring. Must be in the [0.9,1) range.
@@ -153,4 +154,5 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - For all available mark-price calculation methodologies: the mark price update candidate gets rejected if it violates the price monitoring engine bounds. (<a name="0032-PRIM-040" href="#0032-PRIM-040">0032-PRIM-040</a>)
 - Model-free triggers can be added to the market at creation time along with regular triggers. (<a name="0032-PRIM-041" href="#0032-PRIM-041">0032-PRIM-041</a>)
 - Model-free triggers can be added to the market during market update along with regular triggers. (<a name="0032-PRIM-042" href="#0032-PRIM-042">0032-PRIM-042</a>)
-- Adding a model-free trigger with `maxUpMoveFactor = 1.1` and `maxDownMoveFactor = 0.95` results in bonds with max valid price of `110` and min valid price of `95` when a reference price is `100`. When time passes so that the reference price becomes `90` then the resulting max valid price is `99` and min valid price is `85.5`. Violating any of these bounds results in an auction. (<a name="0032-PRIM-043" href="#0032-PRIM-043">0032-PRIM-043</a>)
+- Adding a model-free trigger with `maxUpMoveFactor = 1.1` and `maxDownMoveFactor = 0.95` results in bonds with max valid price of `110` and min valid price of `95` when a reference price is `100`. When time passes so that the reference price becomes `90` then the resulting max valid price is `99` and min valid price is `85.5`. Violating any of these bounds results in an auction. (<a name="0032-PRIM-043" href="#0032-PRIM-043">0032-PRIM-043</a>
+)

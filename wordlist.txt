@@ -220,6 +220,7 @@ permissioned
 permissionless
 PERP
 perps
+piecewise
 PME
 PnL
 PoS
