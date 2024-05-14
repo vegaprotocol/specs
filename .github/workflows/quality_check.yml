@@ -10,6 +10,7 @@ name: "Quality checks"
       - cosmicelevator
       - palazzo
       - colosseo
+      - colosseo_II
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
