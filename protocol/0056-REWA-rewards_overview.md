@@ -1141,5 +1141,5 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ## vAMMs
 
-- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
-- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).
+- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-168" href="#0056-REWA-168">0056-REWA-168</a>).
+- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-169" href="#0056-REWA-169">0056-REWA-169</a>).

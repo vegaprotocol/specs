@@ -84,7 +84,7 @@ If `max_price` is specified:
 
 ## 3. Binary options
 
-Please note that selecting a future prodcut with `max_price` specified and `binary_settlement` flag set to `true` allows representing binary options markets.
+Please note that selecting a future product with `max_price` specified and `binary_settlement` flag set to `true` allows representing binary options markets.
 
 ## Acceptance Criteria
 

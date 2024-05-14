@@ -462,6 +462,6 @@ Example 1, generated with [supplementary worksheet](https://docs.google.com/spre
 
 ### vAMM behaviour
 
-- All vAMMs active on a market at the end of an epoch receive SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-063" href="#0042-LIQF-063">0042-LIQF-063</a>)
-- A vAMM active on a market during an epoch, which was cancelled prior to the end of an epoch, receives SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-064" href="#0042-LIQF-064">0042-LIQF-064</a>)
-- A vAMMs cancelled in a previous epoch does not receive anything and is not considered during SLA rebalancing at the end of an epoch(<a name="0042-LIQF-065" href="#0042-LIQF-065">0042-LIQF-065</a>)
+- All vAMMs active on a market at the end of an epoch receive SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-092" href="#0042-LIQF-092">0042-LIQF-092</a>)
+- A vAMM active on a market during an epoch, which was cancelled prior to the end of an epoch, receives SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-093" href="#0042-LIQF-093">0042-LIQF-093</a>)
+- A vAMMs cancelled in a previous epoch does not receive anything and is not considered during SLA rebalancing at the end of an epoch(<a name="0042-LIQF-094" href="#0042-LIQF-094">0042-LIQF-094</a>)

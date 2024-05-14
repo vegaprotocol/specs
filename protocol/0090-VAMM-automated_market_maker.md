@@ -312,7 +312,7 @@ At market settlement, an AMM's position will be settled alongside all others as 
 
 - When an AMM is active on a market at time of settlement with a position in a well collateralised state, the market can settle successfully and then all funds on the AMM key are transferred back to the main party's account (<a name="0090-VAMM-031" href="#0090-VAMM-031">0090-VAMM-031</a>)
 
-- When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transfeered back to the main party's account (<a name="0090-VAMM-032" href="#0090-VAMM-032">0090-VAMM-032</a>)
+- When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transferred back to the main party's account (<a name="0090-VAMM-032" href="#0090-VAMM-032">0090-VAMM-032</a>)
 
 - An AMM with base price `1000`, upper price `1100`, lower price `900` and current position `0`:
   - Quotes a volume of `8.216` units to buy to move fair price to `900`
