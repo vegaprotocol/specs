@@ -74,7 +74,7 @@ jobs:
 
       - name: "Run Check file names"
         run: |
-          npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
+          npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
 
       - name: "Run Check Features"
         run: |

@@ -111,7 +111,7 @@ When a key is specified, the existence of any current vAMM should be checked and
  1. Liquidation Price at Lower Bound: 454.545
 
 
-- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1300, 900, 1, 5, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1300, 900, 1, 5, 100) the response is (<a name="0014-NP-VAMM-004" href="#0014-NP-VAMM-004">0014-NP-VAMM-004</a>):
 
  1. Loss on Commitment at Upper Bound: 10.948
  1. Loss on Commitment at Lower Bound: 21.289
