@@ -710,6 +710,15 @@
       "0019-MCAL-159"
     ]
   },
+  "Cancelling Proposals": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0028-GOVE-188",
+      "0028-GOVE-189",
+      "0028-GOVE-190",
+      "0028-GOVE-191"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
