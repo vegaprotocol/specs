@@ -369,3 +369,9 @@ Launch a perpetual futures market which sets `internalCompositePrice` to `Nil` (
 Launch a perpetual futures market which sets `internalCompositePrice` to a configuration which uses the impact notional price from the order book. for the "vega side price" for funding calculation. Submit a market update proposal to change this `Nil` (so that mark price gets used for the vega side price). Observe that the new methodology for funding calculations is applied correctly from enactment onwards. (<a name="0053-PERP-045" href="#0053-PERP-045">0053-PERP-045</a>).
 
 Launch a perpetual futures market which uses the "Last Traded Price" for the "vega side price" for funding calculation. Submit a market update proposal to change this to a composite price with a configuration which uses the impact notional price from the order book. Observe that the new methodology for funding calculations is applied correctly from enactment onwards. (<a name="0053-PERP-046" href="#0053-PERP-046">0053-PERP-046</a>).
+
+Perps market can be created with a wrapped risk model with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb). (<a name="0053-PERP-047" href="#0053-PERP-047">0053-PERP-047</a>)
+
+Updating a risk model on a perps market with regular risk model to a wrapped risk model with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb) results in recalculation of all margin levels in line with hardcoded values and collateral search/release where appropriate. (<a name="0053-PERP-048" href="#0053-PERP-048">0053-PERP-048</a>)
+
+Updating a risk model on a perps market with a wrapped risk model with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb) to a regular risk model results in recalculation of all margin levels in line with the specified risk model (hardcoded value are no longer used) and collateral search/release where appropriate. (<a name="0053-PERP-049" href="#0053-PERP-049">0053-PERP-049</a>)
