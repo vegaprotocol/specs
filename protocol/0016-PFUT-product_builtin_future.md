@@ -64,7 +64,7 @@ cash_settled_future.settlement_data(event) {
 
 ## 2. Additional considerations around optional parameters
 
-Optional parameters allow creating capped futures (all prices including settlement price must be in the range `[0, max_price]`) or binary options (all intermediate prices must be in the range `[0, max_price]`, settlement price bust be either `0` or `max_price`) markets.
+Optional parameters allow creating capped futures (all prices including settlement price must be in the range `[0, max_price]`) or binary options (all intermediate prices must be in the range `[0, max_price]`, settlement price must be either `0` or `max_price`) markets.
 
 ### 2.1 Order price validation
 
@@ -85,6 +85,11 @@ If `max_price` is specified:
 ## 3. Binary options
 
 Please note that selecting a future product with `max_price` specified and `binary_settlement` flag set to `true` allows representing binary options markets.
+
+Validation: 
+
+- `fully-collateralised mode` is only allowed when there is a `max_price` specified
+- `binary_settlement` is only allowed when there is a `max_price` specified
 
 ## Acceptance Criteria
 
