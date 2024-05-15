@@ -477,6 +477,8 @@ Order margin is calculated as per [isolated margin mode](#placing-an-order) with
 
 Same calculation should be applied during auction (unlike in isolated margin mode).
 
+Validation: `fully-collateralised mode` can only set to `true` when `binary_settlement` is set to `true`
+
 ### Actual position margin levels
 
 1. **Maintenance margin**: the minimum margin a party must have in their margin account to avoid the position being liquidated.
