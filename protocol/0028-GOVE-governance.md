@@ -135,9 +135,9 @@ Which of these makes most sense will depend on the type of change, the timing of
 
 A proposal can be cancelled under certain conditions by, and only by, the party which created the proposal. To avoid situations where the community may have acted upon proposals they "expected" to pass, a party can only cancel their proposal before a certain "cancellation threshold" is reached.
 
-This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposalCancellationThreshold` (a duration string defaulting to `24h0m0s`).
+This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposal.cancellationThreshold` (a duration string defaulting to `24h0m0s`).
 
-i.e. Given the `governance.proposalCancellationThreshold` is `24h0m0s` a party will be able to cancel their proposal 1 day before the proposal closing time.
+i.e. Given the `governance.proposal.cancellationThreshold` is `24h0m0s` a party will be able to cancel their proposal 1 day before the proposal closing time.
 
 ### Mechanics
 
@@ -150,7 +150,7 @@ Note the following additional details:
 
 - a cancelling vote against a proposal must pass all typical vote checks and spam protections, i.e. who party who removes stake after creating a proposal and no longer meets the requirement will not be able to cancel their proposal.
 
-- if at the time of creating a proposal the closing time is within the period defined by `governance.proposalCancellationThreshold`. The proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
+- if at the time of creating a proposal the closing time is within the period defined by `governance.proposal.cancellationThreshold`. The proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
 
 ## Outcome
 
@@ -798,8 +798,8 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 
 #### Cancelling Proposals
 
-- Given a proposal with a closing time further than `governance.proposalCancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will be instantaneously rejected (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
-- Given a proposal with a closing time less than `governance.proposalCancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal meets the criteria to be accepted it will pass (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>)
-- Given a proposal with a closing time less than `governance.proposalCancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected.. At closing time, if the proposal does not meet the criteria to be accepted it will be rejected (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>)
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will be instantaneously rejected (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal meets the criteria to be accepted it will pass (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected.. At closing time, if the proposal does not meet the criteria to be accepted it will be rejected (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>)
 
-- Given a proposal with a closing time further than `governance.proposalCancellationThreshold` from the current time, if the party which did not create the proposal votes against it, the proposal will not be instantaneously rejected (<a name="0028-GOVE-191" href="#0028-GOVE-191">0028-GOVE-191</a>)
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party which did not create the proposal votes against it, the proposal will not be instantaneously rejected (<a name="0028-GOVE-191" href="#0028-GOVE-191">0028-GOVE-191</a>)
