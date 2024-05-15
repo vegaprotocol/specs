@@ -150,7 +150,7 @@ Note the following additional details:
 
 - a cancelling vote against a proposal must pass all typical vote checks and spam protections, i.e. who party who removes stake after creating a proposal and no longer meets the requirement will not be able to cancel their proposal.
 
-- if at the time of creating a proposal the closing time is within the period defined by `governance.proposalCancellationThreshold`. The proposal will still be valid and accepted by the network but the party will be not have a opportunity to cancel the proposal.
+- if at the time of creating a proposal the closing time is within the period defined by `governance.proposalCancellationThreshold`. The proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
 
 ## Outcome
 
