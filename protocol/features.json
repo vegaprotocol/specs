@@ -25,29 +25,19 @@
   },
   "Isolated margin": {
     "milestone": "colosseo",
-    "acs": [
-      "0019-MCAL-208"
-    ]
+    "acs": ["0019-MCAL-208"]
   },
   "Closeout trades and auctions": {
     "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-030"
-    ]
+    "acs": ["0012-POSR-030"]
   },
   "Market suspended/resumed before enactment": {
     "milestone": "colosseo",
-    "acs": [
-      "0043-MKTL-011",
-      "0043-MKTL-012",
-      "0043-MKTL-013"
-    ]
+    "acs": ["0043-MKTL-011", "0043-MKTL-012", "0043-MKTL-013"]
   },
   "Teams": {
     "milestone": "colosseo",
-    "acs": [
-      "0083-RFPR-068"
-    ]
+    "acs": ["0083-RFPR-068"]
   },
   "Spot": {
     "milestone": "colosseo",
@@ -542,17 +532,11 @@
   },
   "Perpetual funding rates": {
     "milestone": "colosseo",
-    "acs": [
-      "0053-PERP-036"
-    ]
+    "acs": ["0053-PERP-036"]
   },
   "Explicit liquidation range": {
     "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-031",
-      "0012-POSR-032",
-      "0012-POSR-033"
-    ]
+    "acs": ["0012-POSR-031", "0012-POSR-032", "0012-POSR-033"]
   },
   "Community Tags": {
     "milestone": "colosseo",
@@ -572,9 +556,7 @@
   },
   "LPs voting without gov token": {
     "milestone": "colosseo",
-    "acs": [
-      "0028-GOVE-185"
-    ]
+    "acs": ["0028-GOVE-185"]
   },
   "Reward Improvements": {
     "milestone": "colosseo",
@@ -715,6 +697,23 @@
       "0032-PRIM-043",
       "0042-LIQF-095",
       "0042-LIQF-096"
+    ]
+  },
+  "Transaction Ordering": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0088-TRTO-001",
+      "0088-TRTO-002",
+      "0088-TRTO-003",
+      "0088-TRTO-004",
+      "0088-TRTO-005",
+      "0088-TRTO-006",
+      "0088-TRTO-007",
+      "0088-TRTO-008",
+      "0088-TRTO-009",
+      "0088-TRTO-010",
+      "0088-TRTO-011",
+      "0088-TRTO-012"
     ]
   },
   "Unknown": {
