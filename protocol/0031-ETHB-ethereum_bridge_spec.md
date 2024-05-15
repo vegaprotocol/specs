@@ -26,8 +26,8 @@ Each bridge contains two primary functions and emits two primary events, each ta
 
 ### Block confirmations
 
-It used to be normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. With the new version of Ethereum, an additiona;l mechanism exists that assures finallity of a block
-that can be used instead, which leads to cleaner results. 
+It used to be normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. With the new version of Ethereum, an additional mechanism exists that assures finality of a block
+that can be used instead, which leads to cleaner results.
 
 We use this mechanism for all Ethereum related finality requirements. For legacy reasons ,there is still a parameter
 defining the number of confirmations previously used, but this parameter is ignored now.

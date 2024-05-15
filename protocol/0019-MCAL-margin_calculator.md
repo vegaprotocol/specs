@@ -466,7 +466,7 @@ general account from the margin account.
 
 For certain derivatives markets it may be possible to collateralise the position in full so that there's no default risk for any party.
 
-If a product specifies an upper bound on price (`max price`) (e.g. [capped future](./0093-CFUT-product_builtin_capped_future.md)) then a fully-collateralised [wrapped risk model](./0018-RSKM-quant_risk_models.ipynb) can be specified for the market. If such a risk model is chosen then, it's mandatory for all parties (it's not possible to self-select any of the above partially-collateralised margining modes).
+If a product specifies an upper bound on price (`max price`) (e.g. [capped future](./0093-CFUT-product_builtin_capped_future.md)) then a fully-collateralised mode can be specified for the market. If it is chosen then, it's mandatory for all parties (it's not possible to self-select any of the above partially-collateralised margining modes).
 
 In this mode long positions provide `position size * average entry price` in initial margin, whereas shorts provide `postion size * (max price - average entry price)`. The initial margin level is only re-evaluated when party changes their position. The [mark-to-market](./0003-MTMK-mark_to_market_settlement.md) is carried out as usual. Maintenance and initial margin levels should be set to the same value.  Margin search and release levels are set to `0` and never used.
 
