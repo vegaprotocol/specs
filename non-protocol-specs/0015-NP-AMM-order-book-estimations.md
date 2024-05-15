@@ -1,0 +1,4 @@
+
+# AMM Order Book Levels Estimator
+
+Whilst generating a limit order book shape, i.e. the prices and associated volumes available at each price, is trivially achievable by simply aggregating the various component limit orders, this is harder to achieve for the active AMMs on a market. This is due to the fact that the volumes at which they would trade each price level within their range is not immediately obtainable without some calculations. Whilst these calculations are not heavy, and are routinely performed as part of trading, expanding out the entire range of an AMM with a large range may be prohibitive both in time taken (when updating frequently) and also in storage space, as there may be a 
