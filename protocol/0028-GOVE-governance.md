@@ -137,7 +137,7 @@ A proposal can be cancelled under certain conditions by, and only by, the party 
 
 This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposal.cancellationThreshold` (a duration string defaulting to `24h0m0s`).
 
-i.e. Given the `governance.proposal.cancellationThreshold` is `24h0m0s` a party will be able to cancel their proposal 1 day before the proposal closing time.
+i.e. Given the `governance.proposal.cancellationThreshold` is `24h0m0s` a party will be able to cancel their proposal up until 1 day before the proposal closing time.
 
 ### Mechanics
 
