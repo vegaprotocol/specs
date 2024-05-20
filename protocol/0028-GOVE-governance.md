@@ -122,7 +122,7 @@ If there is `governance.proposal.asset.maxEnact` of e.g. `360h` then the propose
 
 ## Editing a proposal
 
-A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal, or submit a new proposal.
+A proposal cannot be edited once submitted to the network. The only possible actions are to cancel within the threshold, vote for or against a proposal, or submit a new proposal.
 
 If a proposal is created and later a different outcome is preferred by network participants, two courses of action are possible:
 
@@ -150,7 +150,7 @@ Note the following additional details:
 
 - a cancelling vote against a proposal must pass all typical vote checks and spam protections, i.e. who party who removes stake after creating a proposal and no longer meets the requirement will not be able to cancel their proposal.
 
-- if at the time of creating a proposal the closing time is within the period defined by `governance.proposal.cancellationThreshold`. The proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
+- if at the time of creating a proposal the closing time is within the period defined by `governance.proposal.cancellationThreshold`, the proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
 
 ## Outcome
 
@@ -798,8 +798,8 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 
 #### Cancelling Proposals
 
-- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will be instantaneously rejected (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
-- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal meets the criteria to be accepted it will pass (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>)
-- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party which created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal does not meet the criteria to be accepted it will be rejected (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>)
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will be instantaneously rejected (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal meets the criteria to be accepted it will pass (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal does not meet the criteria to be accepted it will be rejected (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>)
 
-- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party which did not create the proposal votes against it, the proposal will not be instantaneously rejected (<a name="0028-GOVE-191" href="#0028-GOVE-191">0028-GOVE-191</a>)
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if a party that did not create the proposal votes against it, the proposal will not be instantaneously rejected (<a name="0028-GOVE-191" href="#0028-GOVE-191">0028-GOVE-191</a>)
