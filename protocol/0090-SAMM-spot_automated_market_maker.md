@@ -14,7 +14,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 
 - Party funds a key which will be used by the strategy with desired token amounts.
 - Party submits a transaction containing configuration for the strategy on a given market. This will contain:
-  - Amount of funds to commit
+  - Amount of base token to commit OR Amount of quote token to commit
   - Price bounds (upper, lower)
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
 - The party can cancel the AMM at any time, with the spot balances immediately returned to their general accounts.
