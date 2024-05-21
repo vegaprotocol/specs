@@ -106,9 +106,6 @@ Therefore the trigger level of a stop order moves with the market allowing the t
 
   - In markets which allow leverage. If the trader's position size moves to zero exactly, and they have no open orders, all stop orders will be cancelled.
 
-  - In spot markets, as their is no concept of a position, the trader will need to lock the funds required to execute the wrapped order in the holding account even before the stop order is triggered. Refer to section [spot trading](./0080-SPOT-product_builtin_spot.md#7-trading) for the calculation of the required funds.
-
-
 ### Iceberg / transparent iceberg orders
 
 On centralised exchanges, icebergs are a type of order that enables a trader to make an order with a relatively small visible "display quantity" and a larger hidden total size.
@@ -429,8 +426,8 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 ## Spot
 
-- A trader submitting a stop order wrapping a buy limit order will have the funds required to execute that order locked in the relevant holding account for the quote asset. (<a name="0014-ORDT-163" href="#0014-ORDT-163">0014-ORDT-163</a>)
-- A trader submitting a stop order wrapping a sell limit order will have the funds required to execute that order locked in the relevant holding account for the base asset (<a name="0014-ORDT-164" href="#0014-ORDT-164">0014-ORDT-164</a>)
+- A wrapped buy order will be rejected when triggered if the party doesn't have enough of the required quote asset to cover the order. (<a name="0014-ORDT-163" href="#0014-ORDT-163">0014-ORDT-163</a>)
+- A wrapped sell order will be rejected when triggered if the party doesn't have enough of the required base asset to cover the order. (<a name="0014-ORDT-164" href="#0014-ORDT-164">0014-ORDT-164</a>)
 
 ### See also
 
