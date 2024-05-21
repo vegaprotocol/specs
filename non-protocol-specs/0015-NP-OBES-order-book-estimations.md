@@ -22,12 +22,12 @@ The calculation of the order book shape should combine these three values by usi
 
 ## Acceptance criteria
 
-  - With `amm_full_expansion_percentage` set to `5%`, `amm_estimate_step_percentage` set to `1%`and `amm_max_estimated_steps` set to `10`, when the mid-price is 100 then the order book expansion should return (<a name="0015-NP-OBES-001" href="#0015-NP-OBES-001">0015-NP-OBES-001</a>):
-    - Volume levels at every valid tick between `95` and `105`
-    - Volume levels outside that at every `1` increment from `106` to `115` and `94` to `85`
-    - No volume levels above `115` or below `85`
+- With `amm_full_expansion_percentage` set to `5%`, `amm_estimate_step_percentage` set to `1%`and `amm_max_estimated_steps` set to `10`, when the mid-price is 100 then the order book expansion should return (<a name="0015-NP-OBES-001" href="#0015-NP-OBES-001">0015-NP-OBES-001</a>):
+  - Volume levels at every valid tick between `95` and `105`
+  - Volume levels outside that at every `1` increment from `106` to `115` and `94` to `85`
+  - No volume levels above `115` or below `85`
   
-  - With `amm_full_expansion_percentage` set to `3%`, `amm_estimate_step_percentage` set to `5%`and `amm_max_estimated_steps` set to `2`, when the mid-price is 100 then the order book expansion should return (<a name="0015-NP-OBES-002" href="#0015-NP-OBES-002">0015-NP-OBES-002</a>):
-    - Volume levels at every valid tick between `97` and `103`
-    - Volume levels outside that at every `1` increment from `108` to `116` and `92` to `87`
-    - No volume levels above `116` or below `87`
+- With `amm_full_expansion_percentage` set to `3%`, `amm_estimate_step_percentage` set to `5%`and `amm_max_estimated_steps` set to `2`, when the mid-price is 100 then the order book expansion should return (<a name="0015-NP-OBES-002" href="#0015-NP-OBES-002">0015-NP-OBES-002</a>):
+  - Volume levels at every valid tick between `97` and `103`
+  - Volume levels outside that at every `1` increment from `108` to `116` and `92` to `87`
+  - No volume levels above `116` or below `87`
