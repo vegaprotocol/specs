@@ -51,7 +51,7 @@ Although rewards are distributed at the end of an epoch, to give users of the pr
 
 For each game, each entities (individual or team) **current reward metric** and rank in the game is to be updated every `rewards.updateFrequency` seconds. Note, the actual reward metric should be updated and exposed rather than the underlying data in the current epoch, this is important for games where the window length is greater than `1`.
 
-For reward metrics which can only be calculated at the end of the epoch, e.g. [market creation](#market-creation-reward-metrics), [liquidity fees received](#fee-based-reward-metrics), and [validator ranking](#validator-ranking-metric); scores are only required to be updated and exposed at the end of the epoch.
+For reward metrics which can only be calculated at the end of the epoch, ie. [liquidity fees received](#fee-based-reward-metrics); scores are only required to be updated and exposed at the end of the epoch. [Market creation](#market-creation-reward-metrics) and [validator ranking](#validator-ranking-metric) scores will not be published as part of the interim reward information.
 
 For each game, the following data for each party should also be published every update period so APIs are able to relay information to users about their eligibility and expected rewards.
 
@@ -1103,20 +1103,16 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees paid, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-136" href="#0056-REWA-136">0056-REWA-136</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees received, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-137" href="#0056-REWA-137">0056-REWA-137</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is liquidity fees received, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-138" href="#0056-REWA-138">0056-REWA-138</a>).
-- Given a recurring transfer where the entity scope is individuals and the dispatch metric is market creation, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-139" href="#0056-REWA-139">0056-REWA-139</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is average position, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-140" href="#0056-REWA-140">0056-REWA-140</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is relative returns, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-141" href="#0056-REWA-141">0056-REWA-141</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is returns volatility, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-142" href="#0056-REWA-142">0056-REWA-142</a>).
-- Given a recurring transfer where the entity scope is individuals and the dispatch metric is validator ranking, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-143" href="#0056-REWA-143">0056-REWA-143</a>).
 
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees paid, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-144" href="#0056-REWA-144">0056-REWA-144</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees received, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-145" href="#0056-REWA-145">0056-REWA-145</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is liquidity fees received, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-146" href="#0056-REWA-146">0056-REWA-146</a>).
-- Given a recurring transfer where the entity scope is teams and the dispatch metric is market creation, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-147" href="#0056-REWA-147">0056-REWA-147</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is average position, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-148" href="#0056-REWA-148">0056-REWA-148</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
-- Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
 
 ### Spot markets
 
