@@ -16,26 +16,28 @@
 - The order version is not updated during a repricing (<a name="0037-OPEG-012" href="#0037-OPEG-012">0037-OPEG-012</a>)
 - Pegged orders are included in the calculation of the BEST_BID, BEST_ASK and MID prices but excluded from BEST_STATIC_BID, BEST_STATIC_ASK and STATIC_MID (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
 - A parked pegged order can be amended. (<a name="0037-OPEG-014" href="#0037-OPEG-014">0037-OPEG-014</a>). For product spot: (<a name="0037-OPEG-019" href="#0037-OPEG-019">0037-OPEG-019</a>)
-- A pegged order specifying an offset which is not an integer multiple of the markets tick size should be rejected.
+- Given a market with non-zero market and asset decimals where the asset decimals are strictly less than the market decimals (yielding a negative price factor). A pegged order specifying an offset which is not an integer multiple of the markets tick size should be rejected. (<a name="0037-OPEG-022" href="#0037-OPEG-022">0037-OPEG-022</a>). For product Spot (<a name="0037-OPEG-023" href="#0037-OPEG-023">0037-OPEG-023</a>).
+- Given a market with non-zero market and asset decimals where the asset decimals are equal to the market decimals (yielding a zero price factor). A pegged order specifying an offset which is not an integer multiple of the markets tick size should be rejected. (<a name="0037-OPEG-024" href="#0037-OPEG-024">0037-OPEG-024</a>). For product Spot (<a name="0037-OPEG-025" href="#0037-OPEG-025">0037-OPEG-025</a>).
+- Given a market with non-zero market and asset decimals where the asset decimals are strictly greater than the market decimals (yielding a positive price factor). A pegged order specifying an offset which is not an integer multiple of the markets tick size should be rejected. (<a name="0037-OPEG-026" href="#0037-OPEG-026">0037-OPEG-026</a>). For product Spot (<a name="0037-OPEG-027" href="#0037-OPEG-027">0037-OPEG-027</a>).
 - A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
 - An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
 - A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-018" href="#0037-OPEG-018">0037-OPEG-018</a>)
 - Given a mid-price which is not an integer multiple of the market tick size, a buy order pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-020" href="#0037-OPEG-020">0037-OPEG-020</a>).
-    For example, given:
-        - `tick_size=10`
-        - `best_bid_price=100`
-        - `best_ask_price=190`
-        - `mid_price=145`
-    Then:
-        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=140`.
+  - For example, given:
+    - `tick_size=10`
+    - `best_bid_price=100`
+    - `best_ask_price=190`
+    - `mid_price=145`
+  - Then:
+    - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=140`.
 - Given a mid-price which is not an integer multiple of the market tick size, a sell order pegged to the mid price should have it's price rounded down to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
-    For example, given:
-        - `tick_size=10`
-        - `best_bid_price=100`
-        - `best_ask_price=190`
-        - `mid_price=145`
-    Then:
-        - A pegged sell order using the mid price as the reference and `offset=10` should be inserted at `price=150`.
+  - For example, given:
+    - `tick_size=10`
+    - `best_bid_price=100`
+    - `best_ask_price=190`
+    - `mid_price=145`
+  - Then:
+    - A pegged sell order using the mid price as the reference and `offset=10` should be inserted at `price=150`.
 
 ## Summary
 
