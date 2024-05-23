@@ -239,8 +239,7 @@ Once these are retrieved, the price / volume points should be combined with a pr
 
 As the computation of this virtual order shape may be heavy when run across a large number of passive AMMs the number of AMMs updated per block should be throttled to a fixed maximum number, updating on a rolling frequency, or when updated/first created.
 
-A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key'
-s ELS updated as normal.
+A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key's ELS updated as normal.
 
 ## Setting Fees
 
@@ -327,8 +326,8 @@ At market settlement, an AMM's position will be settled alongside all others as 
   - Quotes a price of `997.488` to sell `16.030` units
   - Does not quote a price to sell `17` units
 
-- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, but where upper and lower bounds of each are far beyond the base/fair prices, triggers a trade between the two vAMMs, after which they both have the same fair price and the book is not crossed.
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, but where upper and lower bounds of each are far beyond the base/fair prices, triggers a trade between the two vAMMs, after which they both have the same fair price and the book is not crossed. (<a name="0090-VAMM-033" href="#0090-VAMM-033">0090-VAMM-033</a>)
 
-- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, with upper and lower bounds set such that the entire structure is separate to the existing vAMM (e.g. the incoming vAMM's lower price is greater than the existing vAMM's upper price), a trade occurs between the two AMMs leaving at least one of them at the extreme edge of their quoting range.
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, with upper and lower bounds set such that the entire structure is separate to the existing vAMM (e.g. the incoming vAMM's lower price is greater than the existing vAMM's upper price), a trade occurs between the two AMMs leaving at least one of them at the extreme edge of their quoting range. (<a name="0090-VAMM-034" href="#0090-VAMM-034">0090-VAMM-034</a>)
 
-- With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread.
+- With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread. (<a name="0090-VAMM-035" href="#0090-VAMM-035">0090-VAMM-035</a>)

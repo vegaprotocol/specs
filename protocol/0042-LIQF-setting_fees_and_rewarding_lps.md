@@ -469,6 +469,12 @@ Example 1, generated with [supplementary worksheet](https://docs.google.com/spre
 - A vAMM active on a market during an epoch, which was cancelled prior to the end of an epoch, receives SLA bonus rebalancing payments with `0` penalty fraction. (<a name="0042-LIQF-093" href="#0042-LIQF-093">0042-LIQF-093</a>)
 - A vAMMs cancelled in a previous epoch does not receive anything and is not considered during SLA rebalancing at the end of an epoch(<a name="0042-LIQF-094" href="#0042-LIQF-094">0042-LIQF-094</a>)
 
+- a vAMM which was active on the market throughout the epoch but with an active range which never overlapped with the SLA range is counted with an implied commitment of `0`. (<a name="0042-LIQF-107" href="#0042-LIQF-107">0042-LIQF-107</a>)
+- A vAMM which was active on the market with an average of `10000` liquidity units (`price * volume`) provided across the epoch, and where the `market.liquidity.stakeToCcyVolume` value is `100`, will have an implied commitment of `100`. (<a name="0042-LIQF-108" href="#0042-LIQF-108">0042-LIQF-108</a>)
+- A vAMM which was active on the market with an average of `10000` liquidity units (`price * volume`) provided for half the epoch, and then `0` for the second half of the epoch (as the price was out of the vAMM's configured range), and where the `market.liquidity.stakeToCcyVolume` value is `100`, will have an implied commitment of `50`. (<a name="0042-LIQF-109" href="#0042-LIQF-109">0042-LIQF-109</a>)
+- A vAMM which was active on the market with an average of `10000` liquidity units (`price * volume`) provided for half the epoch, and then is cancelled for the second half of the epoch, and where the `market.liquidity.stakeToCcyVolume` value is `100`, will have an implied commitment of `50`. (<a name="0042-LIQF-110" href="#0042-LIQF-110">0042-LIQF-110</a>)
+- A vAMM which was active on the market with an average of `10000` liquidity units (`price * volume`) provided for half the epoch, and then `5000` for the second half of the epoch (as the price was out of the vAMM's configured range), and where the `market.liquidity.stakeToCcyVolume` value is `100`, will have an implied commitment of `75`. (<a name="0042-LIQF-111" href="#0042-LIQF-111">0042-LIQF-111</a>)
+
 ### Explicit instantaneous liquidity scoring function
 
 When market is setup with [explicit instantaneous liquidity scoring function](./0091-ILSF-instantaneous_liquidity_scoring_funcion.md) as follows:
