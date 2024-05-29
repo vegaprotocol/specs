@@ -54,7 +54,7 @@ For example:
 - And has created an AMM which has accumulated the following rewards
     - locked_quantum_amount = 200
     - vesting_quantum_amount = 300
-    - vested_quantum_amount = 1500
+    - vested_quantum_amount = 500
 
 Their total reward balance should be (20+30+50) + (200+300+500) = (100) + (1000) = 1100
 ```
@@ -150,5 +150,5 @@ Must expose the following:
 - Given a party owns the relevant sub-key, attempting to transfer funds from the sub-key's vested account to any account other than the parties general account will be rejected. (<a name="0085-RVST-025" href="#0085-RVST-025">0085-RVST-025</a>)
 
 - Given a non-zero transfer fee factor, a party redeeming funds from an appropriate sub-key's vested account will incur no fees. (<a name="0085-RVST-026" href="#0085-RVST-026">0085-RVST-026</a>)
-- A party redeeming funds will not be subject to the minimum transfer requirement if transferring the full balance. The transfer should be accepted. (<a name="0085-RVST-027" href="#0085-RVST-027">0085-RVST-027</a>)
-- A party redeeming funds will be subject to the minimum transfer requirement if transferring less than the full balance. The transfer should be rejected. (<a name="0085-RVST-028" href="#0085-RVST-028">0085-RVST-028</a>)
+- A party redeeming funds from a sub-key's vested account will not be subject to the minimum transfer requirement if transferring the full balance. The transfer should be accepted. (<a name="0085-RVST-027" href="#0085-RVST-027">0085-RVST-027</a>)
+- A party redeeming funds from a sub-key's vested account will be subject to the minimum transfer requirement if transferring less than the full balance. The transfer should be rejected. (<a name="0085-RVST-028" href="#0085-RVST-028">0085-RVST-028</a>)
