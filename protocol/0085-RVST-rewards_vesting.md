@@ -59,7 +59,7 @@ For example:
 Their total reward balance should be (20+30+50) + (200+300+500) = (100) + (1000) = 1100
 ```
 
-A party will be able to rewards earned by an AMM sub-key by submitting a transfer transaction signed with their primary key. This transfer must be from the sub-keys vested account and to the primary keys general account. As with the mechanics for redeeming rewards normally from a primary key's general account, these transfers will not incur any fees and if transferring the full balance will not be subject to the minimum quantum transfer amount requirement.
+A party will be able to redeem rewards earned by an AMM sub-key by submitting a transfer transaction signed with their primary key. This transfer must be from the sub-keys vested account and to the primary keys general account. As with the mechanics for redeeming rewards normally from a primary key's general account, these transfers will not incur any fees and if transferring the full balance will not be subject to the minimum quantum transfer amount requirement.
 
 Note, as with normal redemptions, once the rewards are transferred from the sub-keys vested account, the funds will no longer contribute to the total reward balance.
 
