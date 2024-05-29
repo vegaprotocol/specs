@@ -135,13 +135,17 @@ Which of these makes most sense will depend on the type of change, the timing of
 
 A proposal can be cancelled under certain conditions by, and only by, the party which created the proposal. To avoid situations where the community may have acted upon proposals they "expected" to pass, a party can only cancel their proposal before a certain "cancellation threshold" is reached.
 
-This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposal.cancellationThreshold` (a duration string defaulting to `24h0m0s`).
+This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposal.cancellationThreshold` (a duration string defaulting to `23h0m0s`).
 
+<<<<<<< Updated upstream
 i.e. Given the `governance.proposal.cancellationThreshold` is `24h0m0s` a party will be able to cancel their proposal up until 1 day before the proposal closing time.
+=======
+i.e. Given the `governance.proposal.cancellationThreshold` is `23h0m0s` a party will be able to cancel their proposal 23 hours before the proposal closing time.
+>>>>>>> Stashed changes
 
 ### Mechanics
 
-A party can cancel their proposal by simply voting against it with any vote value.
+A party can cancel their proposal by simply voting against it with a no vote.
 
 - If the current time is before the cancellation threshold, the proposal is instantly rejected.
 - If the current time is after the cancellation threshold, the vote is treated normally as a vote against a proposal.
