@@ -61,7 +61,7 @@ Their total reward balance should be (20+30+50) + (200+300+500) = (100) + (1000)
 
 A party will be able to redeem rewards earned by an AMM sub-key by submitting a transfer transaction signed with their primary key. This transfer must be from the sub-keys vested account and to the primary keys general account. As with the mechanics for redeeming rewards normally from a primary key's general account, these transfers will not incur any fees and if transferring the full balance will not be subject to the minimum quantum transfer amount requirement.
 
-Note, as with normal redemptions, once the rewards are transferred from the sub-keys vested account, the funds will no longer contribute to the total reward balance.
+Note, as with redeeming rewards from primary vesting accounts, once the rewards are transferred from the sub-keys vested account, the funds will no longer contribute to the total reward balance.
 
 ### Determining the rewards bonus multiplier
 
@@ -132,15 +132,15 @@ Must expose the following:
 
 ### Contributions from AMM sub-keys
 
-- Given a party with multiple AMM subkeys, each of the subkeys locked rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-015" href="#0085-RVST-015">0085-RVST-015</a>)
-- Given a party with multiple AMM subkeys, each of the subkeys vesting rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-016" href="#0085-RVST-016">0085-RVST-016</a>)
-- Given a party with multiple AMM subkeys, each of the subkeys vested rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-017" href="#0085-RVST-017">0085-RVST-017</a>)
-- Given a party with multiple AMM subkeys, redeemed rewards should not contribute to the parties total quantum balance. (<a name="0085-RVST-018" href="#0085-RVST-018">0085-RVST-018</a>)
-- Given a party with multiple AMM subkeys each earning rewards in assets using different quantums, contributions from each subkey should be scaled correctly by the assets quantum. (<a name="0085-RVST-019" href="#0085-RVST-019">0085-RVST-019</a>)
+- Given a party with multiple AMM sub-keys, each of the sub-keys locked rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-015" href="#0085-RVST-015">0085-RVST-015</a>)
+- Given a party with multiple AMM sub-keys, each of the sub-keys vesting rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-016" href="#0085-RVST-016">0085-RVST-016</a>)
+- Given a party with multiple AMM sub-keys, each of the sub-keys vested rewards should contribute to the parties total quantum balance. (<a name="0085-RVST-017" href="#0085-RVST-017">0085-RVST-017</a>)
+- Given a party with multiple AMM sub-keys, redeemed rewards should not contribute to the parties total quantum balance. (<a name="0085-RVST-018" href="#0085-RVST-018">0085-RVST-018</a>)
+- Given a party with multiple AMM sub-keys each earning rewards in assets using different quantum values, contributions from each sub-key should be scaled correctly by the assets quantum. (<a name="0085-RVST-019" href="#0085-RVST-019">0085-RVST-019</a>)
 
-- Given a party with multiple AMM subkeys, the parties `reward_distribution_bonus_multiplier` should be set equal to the value in the highest tier where they fulfil the `minimum_quantum_balance` required. This multiplier must also be given to each of the parties subkeys and applied for future rewards. (<a name="0085-RVST-020" href="#0085-RVST-020">0085-RVST-020</a>)
+- Given a party with multiple AMM sub-keys, the parties `reward_distribution_bonus_multiplier` should be set equal to the value in the highest tier where they fulfil the `minimum_quantum_balance` required. This multiplier must also be given to each of the parties sub-keys and applied for future rewards. (<a name="0085-RVST-020" href="#0085-RVST-020">0085-RVST-020</a>)
 
-### Redemptions from AMM sub-keys
+### Redeeming rewards from AMM sub-keys
 
 - A party attempting to transfer funds from an AMM sub-key's vested account will be rejected if the party does not own the sub-key. (<a name="0085-RVST-021" href="#0085-RVST-021">0085-RVST-021</a>)
 - A party attempting to transfer funds from an AMM sub-key's vested account will be accepted if the party owns the sub-key. (<a name="0085-RVST-022" href="#0085-RVST-022">0085-RVST-022</a>)
