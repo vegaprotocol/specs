@@ -31,7 +31,7 @@ Each main Vega key will have one associated sub account for a given market, on w
 
 All AMM configurations should implement two key interfaces:
 
-- One taking simply the current state (`position` and `total funds`) and a trade (`volume`, `side`) and returning a quote price. This should also handle a trade of `volume = 0` to return a notional `fair price`
+- One taking simply the current state (`position` and `total funds`) and a trade (`volume`, `side`) and returning a quote price. This should also handle a trade of `volume = 0` to return a notional `fair price` (for a spot AMM this being the ratio of virtual balances of the two tokens.)
 - The second taking (`position`, `total funds`, `side`, `start price`, `end price`) should return the full volume the AMM would trade between the two prices (inclusive).
 
 ## AMM Configurations
@@ -59,8 +59,8 @@ The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style 
 
 The concentrated liquidity market maker consists of a liquidity curve of prices specified by a given `upper price` at which the market maker will be fully in the `quote` currency and a `lower price` at which the market maker will be fully in the `base` currency. This is configured through a number of parameters:
 
-- **Upper Price**: The base price is the central price for the market maker. When trading at this level the market maker will have a position fully in the `quote` currency. Volumes for prices below this level will be taken from the curve and no volumes will be offered above it.
-- **Lower Price**: The maximum price bound for market making. Prices between the `upper price` and this price will have volume placed, with no orders below this price.
+- **Upper Price**: The maximum price bound for market making. Prices between the `lower price` and this price will have volume placed, with no orders above this price. At this price the AMM will be fully in the `quote` currency.
+- **Lower Price**: The minimum price bound for market making. Prices between the `upper price` and this price will have volume placed, with no orders below this price. At this price the AMM will be fully in the `base` currency.
 - **Reference Price**: The price at which the specified commitment amount is the account's balance of that token (e.g. if this is the current market price, the commitment amount specified is exactly what will be taken). Note that by design if this price is above the `upper price` a non-zero base commitment specification is invalid, as is a non-zero quote commitment specification if this is below the `lower price`.
 - One of:
   - **Commitment Base**: This is the initial volume of base token to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail. If specified, the amount of quote token to transfer is implied from current market conditions.
@@ -187,21 +187,21 @@ Thus giving a final execution price to return of $\frac{\Delta y}{\Delta x}$.
 
 For the second interface one needs to calculate the volume which would be posted to the book between two price levels. In order to calculate this for an AMM one is ultimately asking the question "what volume of swap would cause the fair price to move from price A to price B?"
 
-To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price` $p_u$ and the `L`. At `P = 0` use the values for the range which the volume change will cause the position to move into.
+To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price` $p_u$ and the `L`. At `Q = 0` (a position of `0` in the quote asset `Q`) use the values for the range which the volume change will cause the position to move into.
 
 First, calculate the implied position at `starting price` and `ending price` and return the difference.
 
-For a given price $p$ calculate implied position $P_i$ with
+For a given price $p$ calculate implied position in the quote asset $Q_i$ with
 
 $$
-P_i = L \cdot \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}} ,
+Q_i = L \cdot \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}} ,
 $$
 
-Then simply return the absolute difference between these two prices.
+Then simply return the absolute difference between these two values.
 
 ## Determining Liquidity Contribution
 
-Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0089-SAMM](./0089-SAMM-automated_market_maker.md)
+Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0090-SAMM](./0090-SAMM-automated_market_maker.md)
 
 ## Setting Fees
 
@@ -221,3 +221,6 @@ At market settlement, an AMM's position will be settled alongside all others as 
 
 - When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` is able to create an AMM with commitment `1 ETH`, lower price `80`, upper price `100`, reference price `100`. (<a name="0092-SAMM-005" href="#0092-SAMM-005">0092-SAMM-005</a>)
 - When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` is unable to create an AMM with commitment `1 ETH`, lower price `80`, upper price `100`, reference price `80`. (<a name="0092-SAMM-006" href="#0092-SAMM-006">0092-SAMM-006</a>)
+
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` and `100 USDT` is able to create an AMM with commitment `1 ETH`, lower price `80`, upper price `130`, reference price `100`. (<a name="0092-SAMM-007" href="#0092-SAMM-007">0092-SAMM-007</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `ETH/USDT` is `100`, a user with `1 ETH` and `99 USDT` is unable to create an AMM with commitment `1 ETH`, lower price `80`, upper price `130`, reference price `100`. (<a name="0092-SAMM-008" href="#0092-SAMM-008">0092-SAMM-008</a>)
