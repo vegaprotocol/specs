@@ -42,5 +42,5 @@ Batch transactions, as they contain different order types, must be handled sligh
   - Non post-only limit orders (<a name="0092-TRTO-010" href="#0092-TRTO-010">0092-TRTO-010</a>)
   - Order Amends (<a name="0092-TRTO-011" href="#0092-TRTO-011">0092-TRTO-011</a>)
 - An expedited batch transaction is executed after cancellations but before standalone post-only creations (<a name="0092-TRTO-012" href="#0092-TRTO-012">0092-TRTO-012</a>)
-- The transaction ordering functionality can be enabled/disabled on a per-market level (<a name="0092-TRTO-013" href="#0092-TRTO-013">0092-TRTO-013</a>)
+- The transaction ordering functionality can be enabled/disabled on a per-market level (<a name="0092-TRTO-015" href="#0092-TRTO-015">0092-TRTO-015</a>)
 - With two active markets, with one having transaction ordering enabled and one disabled, transactions are correctly sorted/delayed on the market with it enabled whilst the other has transactions executed in arrival order. (<a name="0092-TRTO-014" href="#0092-TRTO-014">0092-TRTO-014</a>)
