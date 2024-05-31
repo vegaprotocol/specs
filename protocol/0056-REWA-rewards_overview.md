@@ -130,13 +130,15 @@ Note, as a position can not be created on a Spot market. Trading activity on a S
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs, call this variance $\sigma^2$.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the variance of the set $R$.
+The reward metric $m_{rv}$ is the reciprocal of the variance of the set $R$.
+
+$$m_{rv} = \frac{1}{\sigma^2}$$
 
 Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
@@ -1039,8 +1041,8 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ### Returns volatility
 
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the reciprocal of the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the reciprocal of the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
 
 ### Realised returns
 
