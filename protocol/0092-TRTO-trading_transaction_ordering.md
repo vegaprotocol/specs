@@ -8,7 +8,7 @@ Trading transactions (those which create, update or remove orders of any type on
 
 Chiefly, when enabled all transactions which would cancel an order or create post-only orders should be executed first before transactions which could create trades, within which all cancellations should be executed prior to post-only orders. The ordering of the transactions in this way means that, at the time of each block being created, all parties who are contributing to creating an order book have an opportunity to update their prices prior to anyone who would capitalise on temporary stale prices, regardless of which transaction reached the validator's pre-block transaction pool first. This ordering can still be seen to be a "fair" transaction ordering, as parties cannot take actions which would cause a trade, but only take action to avoid trading at a price they no longer desire (or indeed to improve a price prior to trade-creating transactions' arrival).
 
-Furthermore, transactions which can cause a trade by acting aggressively, such as non-post-only orders and amends, will be delayed by one block prior to execution. This results in the pattern where:
+Furthermore, transactions which can cause a trade by acting aggressively, such as non-post-only orders and amends, will be delayed by a number of blocks, governed by a network parameter `market.aggressiveOrderBlockDelay`, prior to execution. This results in the pattern where:
 
  1. Prior to block N, post only order A and market order B arrive to the chain, these are both included in block N.
  1. When block N is executed, order A takes effect.
@@ -44,3 +44,4 @@ Batch transactions, as they contain different order types, must be handled sligh
 - An expedited batch transaction is executed after cancellations but before standalone post-only creations (<a name="0092-TRTO-012" href="#0092-TRTO-012">0092-TRTO-012</a>)
 - The transaction ordering functionality can be enabled/disabled on a per-market level (<a name="0092-TRTO-015" href="#0092-TRTO-015">0092-TRTO-015</a>)
 - With two active markets, with one having transaction ordering enabled and one disabled, transactions are correctly sorted/delayed on the market with it enabled whilst the other has transactions executed in arrival order. (<a name="0092-TRTO-014" href="#0092-TRTO-014">0092-TRTO-014</a>)
+- When `market.aggressiveOrderBlockDelay` is set to `1` aggressive orders are delayed by a single block on eligible markets. If it is amended via governance to `5` then all aggressive orders after enactment of this change will be delayed by `5` blocks instead. (<a name="0092-TRTO-016" href="#0092-TRTO-016">0092-TRTO-016</a>)
