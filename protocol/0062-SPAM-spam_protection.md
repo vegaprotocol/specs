@@ -115,7 +115,7 @@ For pegged orders `last traded price +/- offset` should be used in place of pric
 
 The following points apply generally to both derivative and spot markets:
 
-- For amendments: use the same check, i.e. if the order is being amended to a smaller size or smaller price so that it would no longer pass the spam check, then the amendment is rejected.
+- For amendments and cancellations: Check that the party has at least `spam.order.minimalMarginQuantumMultiple` margin within the margin account on the market of the order, implying they have active orders or positions on the market. If they do not then reject the transaction.
 - For batch transactions: each order has to pass its own order spam check; if any order in the batch fails the check then reject the whole batch.
 - Checks should be completed before the gas cost calculation as rejected transactions should not get into the calculation of the gas cost.
 
