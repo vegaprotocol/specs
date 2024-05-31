@@ -4,7 +4,7 @@ In order for an exchange to offer competitive prices for parties arriving and wi
 
 ## Execution Ordering
 
-Trading transactions (those which create, update or remove orders of any type on any market) should be executed in a specific way once included in a block. This ordering is per-market (inter-market ordering is unspecified).
+Trading transactions (those which create, update or remove orders of any type on any market) should be executed in a specific way once included in a block. This ordering is per-market (inter-market ordering is unspecified). The functionality can be enabled/disabled at a per-market level through market governance. When disabled for a given market, all transactions are sorted as normal with no delays applied.
 
 Chiefly, when enabled all transactions which would cancel an order or create post-only orders should be executed first before transactions which could create trades, within which all cancellations should be executed prior to post-only orders. The ordering of the transactions in this way means that, at the time of each block being created, all parties who are contributing to creating an order book have an opportunity to update their prices prior to anyone who would capitalise on temporary stale prices, regardless of which transaction reached the validator's pre-block transaction pool first. This ordering can still be seen to be a "fair" transaction ordering, as parties cannot take actions which would cause a trade, but only take action to avoid trading at a price they no longer desire (or indeed to improve a price prior to trade-creating transactions' arrival).
 
@@ -42,3 +42,5 @@ Batch transactions, as they contain different order types, must be handled sligh
   - Non post-only limit orders (<a name="0092-TRTO-010" href="#0092-TRTO-010">0092-TRTO-010</a>)
   - Order Amends (<a name="0092-TRTO-011" href="#0092-TRTO-011">0092-TRTO-011</a>)
 - An expedited batch transaction is executed after cancellations but before standalone post-only creations (<a name="0092-TRTO-012" href="#0092-TRTO-012">0092-TRTO-012</a>)
+- The transaction ordering functionality can be enabled/disabled on a per-market level (<a name="0092-TRTO-013" href="#0092-TRTO-013">0092-TRTO-013</a>)
+- With two active markets, with one having transaction ordering enabled and one disabled, transactions are correctly sorted/delayed on the market with it enabled whilst the other has transactions executed in arrival order. (<a name="0092-TRTO-014" href="#0092-TRTO-014">0092-TRTO-014</a>)
