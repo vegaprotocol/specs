@@ -557,7 +557,7 @@
     "acs": ["0028-GOVE-185"]
   },
   "Order spam": {
-    "milestone": "colosseo",
+    "milestone": "colosseo_II",
     "acs": [
       "0062-SPAM-043",
       "0062-SPAM-044",
