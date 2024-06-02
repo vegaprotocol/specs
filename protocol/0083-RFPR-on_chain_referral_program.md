@@ -34,6 +34,14 @@ Note, if a referee wants to compete as a member of a different team, they are ab
 - `referralProgram.maxReferralRewardProportion` - limits the proportion (`referee_reward_factor` * `referee_reward_multiplier`) of referee taker fees which can be given to the referrer.
 - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the notional volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits referral code generation to parties staking at least this number of tokens
+- `governance.proposal.referralProgram.minClose` - minimum time till closing time
+- `governance.proposal.referralProgram.maxClose` - maximum time till closing time
+- `governance.proposal.referralProgram.minEnact` - minimum time till enactment time
+- `governance.proposal.referralProgram.maxEnact` - maximum time till enactment time
+- `governance.proposal.referralProgram.requiredParticipation` - required proportion of stakers who must participate in the vote
+- `governance.proposal.referralProgram.requiredMajority` - required majority for vote to pass
+- `governance.proposal.referralProgram.minProposerBalance` - minimum stake required to create a referral program proposal
+- `governance.proposal.referralProgram.minVoterBalance` - minimum stake required to vote on a referral program proposal
 
 Note, if any of the above mentioned network parameters are updated whilst a referral program is active, the active program will not be affected in any way even if the active program breaches the new network parameter value. The new network parameter value however will be checked on any future [referral program proposals](#governance-proposals).
 
