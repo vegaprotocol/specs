@@ -171,10 +171,18 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
+1. Referee discounts with differing discounts across the three factorsare correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-034" href="#0029-FEES-034">0029-FEES-034</a>)
+    - `infrastructure_referral_fee_discount`
+    - `liquidity_fee_referral_discount`
+    - `maker_fee_referral_discount`
 1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
     - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
 1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
+    - `infrastructure_fee_referral_reward`
+    - `liquidity_fee_referral_reward`
+    - `maker_fee_referral_reward`
+1. Referrer rewards with differing reward factors are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-035" href="#0029-FEES-035">0029-FEES-035</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
     - `maker_fee_referral_reward`

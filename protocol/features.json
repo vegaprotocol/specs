@@ -719,7 +719,7 @@
   },
   "Volume Discount Factor Customisation": {
     "milestone": "colosseo_II",
-    "acs": ["0084-VDPR-015"]
+    "acs": ["0084-VDPR-015", "0029-FEES-034", "0029-FEES-035"]
   },
   "Unknown": {
     "milestone": "unknown",
