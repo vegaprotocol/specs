@@ -17,7 +17,10 @@ Enabling or changing the terms of the volume discount program can be proposed vi
 
 - `benefit_tiers`: a list of dictionaries with the following fields
   - `minimum_party_running_notional_taker_volume`: the required `party_running_notional_taker_volume` in quantum units for a party to access this tier
-  - `volume_discount_factor`: the proportion of the referees taker fees to be rewarded to the referrer
+  - `volume_discount_factors`: a dictionary with the following fields
+    - `maker_volume_discount_factor`: the factor to discount the maker fee component of any fees paid
+    - `infrastructure_volume_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
+    - `lp_volume_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
 - `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the program will become inactive and benefits will be disabled. If this field is empty, the program runs indefinitely.
 - `window_length`:  the number of epochs over which to evaluate a parties notional running volume
 
@@ -27,15 +30,27 @@ message UpdateVolumeDiscountProgram{
         benefit_tiers: [
             {
                 "minimum_party_running_notional_taker_volume": 1000,
-                "volume_discount_factor": 0.001,
+                "volume_discount_factors": {
+                    "maker_volume_discount_factor": 0.001,
+                    "infrastructure_volume_discount_factor": 0.001,
+                    "lp_volume_discount_factor": 0.001
+                }
             },
             {
                 "minimum_party_running_notional_taker_volume": 20000,
-                "volume_discount_factor": 0.002,
+                "volume_discount_factors": {
+                    "maker_volume_discount_factor": 0.002,
+                    "infrastructure_volume_discount_factor": 0.002,
+                    "lp_volume_discount_factor": 0.002
+                }
             },
             {
                 "minimum_party_running_notional_taker_volume": 30000,
-                "volume_discount_factor": 0.003,
+                "volume_discount_factors": {
+                    "maker_volume_discount_factor": 0.003,
+                    "infrastructure_volume_discount_factor": 0.003,
+                    "lp_volume_discount_factor": 0.003
+                }
             },
         ],
         end_of_program_timestamp: 123456789,
@@ -49,7 +64,7 @@ When submitting a volume discount program proposal through governance the follow
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers`.
 - all `minimum_party_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
-- all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor`.
+- all `volume_discount_factors` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
 The volume discount program will start the epoch after the `enactment_timestamp` is reached.
@@ -78,15 +93,27 @@ Given:
     benefit_tiers=[
         {
             "minimum_party_running_notional_taker_volume": 10000,
-            "volume_discount_factor": 0.001,
+            "volume_discount_factors": {
+                "maker_volume_discount_factor": 0.001,
+                "infrastructure_volume_discount_factor": 0.001,
+                "lp_volume_discount_factor": 0.001
+            }
         },
         {
             "minimum_party_running_notional_taker_volume": 20000,
-            "volume_discount_factor": 0.005,
+            "volume_discount_factors": {
+                "maker_volume_discount_factor": 0.005,
+                "infrastructure_volume_discount_factor": 0.005,
+                "lp_volume_discount_factor": 0.005
+            }
         },
         {
             "minimum_party_running_notional_taker_volume": 30000,
-            "volume_discount_factor": 0.010,
+            "volume_discount_factors": {
+                "maker_volume_discount_factor": 0.05,
+                "infrastructure_volume_discount_factor": 0.05,
+                "lp_volume_discount_factor": 0.05
+            }
         },
     ]
 
@@ -94,7 +121,9 @@ And:
     party_running_notional_taker_volume=22353
 
 Then:
-    volume_discount_factor=0.005
+    maker_volume_discount_factor=0.005
+    infrastructure_volume_discount_factor=0.005
+    lp_volume_discount_factor=0.005
 ```
 
 This benefit factor is then fixed for the duration of the next epoch.
@@ -109,7 +138,7 @@ The Parties API should expose the following information:
 
 - a list of all **parties** (by `id`) and the following metrics:
   - current `party_running_notional_taker_volume` (value at the start of the epoch)
-  - current `volume_discount_factor` applied to fees
+  - current `volume_discount_factors` applied to fees
   - the total amount discounted for the party
 
 The Trades API should now also expose the following additional information for every trade:
@@ -127,7 +156,7 @@ The Trades API should now also expose the following additional information for e
     - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0084-VDPR-001" href="#0084-VDPR-001">0084-VDPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-002" href="#0084-VDPR-002">0084-VDPR-002</a>).
     - all `minimum_party_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0084-VDPR-017" href="#0084-VDPR-017">0084-VDPR-017</a>).
-    - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
+    - all `volume_discount_factors` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0084-VDPR-004" href="#0084-VDPR-004">0084-VDPR-004</a>).
 1. A volume discount program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0084-VDPR-005" href="#0084-VDPR-005">0084-VDPR-005</a>).
 1. A volume discount program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0084-VDPR-006" href="#0084-VDPR-006">0084-VDPR-006</a>).
@@ -143,6 +172,7 @@ The Trades API should now also expose the following additional information for e
 
 ### Setting benefit factors
 
-1. At the start of an epoch, each parties `volume_discount_factor` is reevaluated and fixed for the epoch (<a name="0084-VDPR-012" href="#0084-VDPR-012">0084-VDPR-012</a>).
+1. At the start of an epoch, each parties `volume_discount_factors` are reevaluated and fixed for the epoch (<a name="0084-VDPR-012" href="#0084-VDPR-012">0084-VDPR-012</a>).
 1. A parties `volume_discount_factor`  is set equal to the factors in the highest benefit tier they qualify for (<a name="0084-VDPR-013" href="#0084-VDPR-013">0084-VDPR-013</a>).
 1. If a party does not qualify for the lowest tier, their `volume_discount_factor`is set to `0` (<a name="0084-VDPR-014" href="#0084-VDPR-014">0084-VDPR-014</a>).
+1. A `volume_discount_factors` tier with differing factors across the three options has each factor set correctly (<a name="0084-VDPR-015" href="#0084-VDPR-015">0084-VDPR-015</a>).
