@@ -46,8 +46,14 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 - `benefit_tiers`: a list of dictionaries (with the below fields) defining the reward and discount factors from referrals
   - `minimum_running_notional_taker_volume`: the required [`referral_set_running_notional_taker_volume`](#referral-set-volumes) in quantum units for parties to access this tier
   - `minimum_epochs`: the required number of epochs a referee must have been in a referral set to access this tier
-  - `referral_reward_factor`: the proportion of the referee's taker fees to be rewarded to the referrer
-  - `referral_discount_factor`: the proportion of the referee's taker fees to be discounted
+  - `referral_reward_factors`: the proportions of the referee's taker fees to be rewarded to the referrer
+    - `maker_volume_reward_factor`: the factor to reward the referrer from the maker fee component of any fees paid
+    - `infrastructure_volume_reward_factor`: the factor to reward the referrer from the infrastructure fee component of any fees paid
+    - `lp_volume_reward_factor`: the factor to reward the referrer from the liquidity provider fee component of any fees paid
+  - `referral_discount_factors`: the proportions of the referee's taker fees to be discounted
+    - `maker_volume_discount_factor`: the factor to discount the maker fee component of any fees paid
+    - `infrastructure_volume_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
+    - `lp_volume_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
 - `staking_tiers`: a list of dictionaries (with the below fields) defining the multipliers from staking
   - `minimum_staked_tokens`: the required number of governance tokens ($VEGA) a referrer must be staking to receive the multiplier
   - `referral_reward_multiplier`: the multiplier applied to the referral_reward_factor when calculating referral rewards due to the referrer.
@@ -61,20 +67,44 @@ message UpdateReferralProgram{
             {
                 "minimum_running_notional_taker_volume": 10000,
                 "minimum_epochs": 1,
-                "referral_reward_factor": 0.001,
-                "referral_discount_factor": 0.001,
+                "referral_reward_factors": {
+                    "maker_volume_discount_factor": 0.001,
+                    "infrastructure_volume_discount_factor": 0.001,
+                    "lp_volume_discount_factor": 0.001
+                },
+                "referral_discount_factors": {
+                    "maker_volume_discount_factor": 0.001,
+                    "infrastructure_volume_discount_factor": 0.001,
+                    "lp_volume_discount_factor": 0.001
+                }
             },
             {
                 "minimum_running_notional_taker_volume": 20000,
                 "minimum_epochs": 7,
-                "referral_reward_factor": 0.005,
-                "referral_discount_factor": 0.005,
+                "referral_reward_factors": {
+                    "maker_volume_discount_factor": 0.005,
+                    "infrastructure_volume_discount_factor": 0.005,
+                    "lp_volume_discount_factor": 0.005
+                },
+                "referral_discount_factors": {
+                    "maker_volume_discount_factor": 0.005,
+                    "infrastructure_volume_discount_factor": 0.005,
+                    "lp_volume_discount_factor": 0.005
+                },
             },
             {
                 "minimum_running_notional_taker_volume": 30000,
                 "minimum_epochs": 31,
-                "referral_reward_factor": 0.010,
-                "referral_discount_factor": 0.010,
+                "referral_reward_factors": {
+                    "maker_volume_discount_factor": 0.01,
+                    "infrastructure_volume_discount_factor": 0.01,
+                    "lp_volume_discount_factor": 0.01
+                },
+                "referral_discount_factors": {
+                    "maker_volume_discount_factor": 0.01,
+                    "infrastructure_volume_discount_factor": 0.01,
+                    "lp_volume_discount_factor": 0.01
+                },
             },
         ],
         staking_tiers: [
@@ -103,11 +133,11 @@ When submitting a referral program proposal through governance the following con
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
-- all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
+- all `referral_reward_factors` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_staked_tokens` values must be an integer value strictly greater than `0`.
 - all `referral_reward_multiplier` values must be a float value greater than or equal to `1`.
-- all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
+- all `referral_discount_factors` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
 The referral program will start the epoch after the `enactment_timestamp` is reached.
@@ -286,28 +316,28 @@ The network can then calculate the set's `referral_set_running_notional_taker_vo
 
 ### Setting benefit factors and reward multipliers
 
-Whilst a referral program is active, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
+Whilst a referral program is active, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factors` and `referral_discount_factors` for each referee.
 
 Note, when setting a referee's benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referee's original referral set.
 
 #### Setting the referral reward factor
 
-The `referral_reward_factor` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
+The `referral_reward_factors` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
 
 - `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tier's `minimum_running_notional_taker_volume`.
 
-The referee's `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
+The referee's `referral_reward_factors` are then set to the `referral_reward_factors` defined in the selected benefit tier.
 
 Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
 #### Setting the referral discount factor
 
-The `referral_discount_factor` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
+The `referral_discount_factors` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
 
 - `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tier's `minimum_running_notional_taker_volume`.
 - the referee has been a associated with the referral set for at least the tier's `minimum_epochs`.
 
-The referee's `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
+The referee's `referral_discount_factors` are then set to the `referral_discount_factors` defined in the selected benefit tier.
 
 Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
@@ -329,20 +359,44 @@ Given:
         {
             "minimum_running_notional_taker_volume": 10000,
             "minimum_epochs": 0,
-            "referral_reward_factor": 0.001,
-            "referral_discount_factor": 0.001,
+            "referral_reward_factor": {
+                "maker_volume_discount_factor": 0.001,
+                "infrastructure_volume_discount_factor": 0.001,
+                "lp_volume_discount_factor": 0.001
+            },
+            "referral_discount_factor": {
+                "maker_volume_discount_factor": 0.001,
+                "infrastructure_volume_discount_factor": 0.001,
+                "lp_volume_discount_factor": 0.001
+            },
         },
         {
             "minimum_running_notional_taker_volume": 20000,
             "minimum_epochs": 7,
-            "referral_reward_factor": 0.005,
-            "referral_discount_factor": 0.005,
+            "referral_reward_factor": {
+                "maker_volume_discount_factor": 0.005,
+                "infrastructure_volume_discount_factor": 0.005,
+                "lp_volume_discount_factor": 0.005
+            },
+            "referral_discount_factor": {
+                "maker_volume_discount_factor": 0.005,
+                "infrastructure_volume_discount_factor": 0.005,
+                "lp_volume_discount_factor": 0.005
+            },
         },
         {
             "minimum_running_notional_taker_volume": 30000,
             "minimum_epochs": 31,
-            "referral_reward_factor": 0.010,
-            "referral_discount_factor": 0.010,
+            "referral_reward_factor": {
+                "maker_volume_discount_factor": 0.01,
+                "infrastructure_volume_discount_factor": 0.01,
+                "lp_volume_discount_factor": 0. 01
+            },
+            "referral_discount_factor": {
+                "maker_volume_discount_factor": 0.01,
+                "infrastructure_volume_discount_factor": 0.01,
+                "lp_volume_discount_factor": 0.01
+            },
         },
     ]
         staking_tiers: [

@@ -715,12 +715,11 @@
   },
   "Cancelling Proposals": {
     "milestone": "colosseo_II",
-    "acs": [
-      "0028-GOVE-188",
-      "0028-GOVE-189",
-      "0028-GOVE-190",
-      "0028-GOVE-191"
-    ]
+    "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
+  },
+  "Volume Discount Factor Customisation": {
+    "milestone": "colosseo_II",
+    "acs": ["0084-VDPR-015"]
   },
   "Unknown": {
     "milestone": "unknown",
