@@ -558,6 +558,8 @@ APIs should also exist for clients to:
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>) For product spot: (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
 - A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
 - At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
+- At enactment, a market with `Transaction Prioritisation` enabled will have transactions re-prioritised as defined in [transaction prioritisation](./0092-TRTO-trading_transaction_ordering.md) (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>).
+- At enactment, a market with `Transaction Prioritisation` disabled will not have transactions re-prioritised (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>).
 
 #### Market change proposals
 
@@ -602,6 +604,7 @@ APIs should also exist for clients to:
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
 - At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
 - A market LP with ELS > 0 can vote on a market change proposal even if the key doesn't meet the `governance.proposal.updateMarket.minVoterBalance` for governance token.  (<a name="0028-GOVE-185" href="#0028-GOVE-185">0028-GOVE-185</a>).
+- A market amended to enable or disable `Transaction Prioritisation` will have that take effect immediately upon enactment. (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
 
 
 #### Network parameter change proposals
