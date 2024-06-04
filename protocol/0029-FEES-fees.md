@@ -30,9 +30,9 @@ Note, discounts are calculated and applied one after the other and **before** re
 1. Calculate any referral discounts due to the party.
 
     ```pseudo
-    infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_discount_factor)
-    liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_discount_factor)
-    maker_fee_referral_discount = floor(original_maker_fee * referral_discount_factor)
+    infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_infrastructure_discount_factor)
+    liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_liquidity_discount_factor)
+    maker_fee_referral_discount = floor(original_maker_fee * referral_maker_discount_factor)
     ```
 
 1. Apply referral discounts to the original fee.
@@ -46,9 +46,9 @@ Note, discounts are calculated and applied one after the other and **before** re
 1. Calculate any volume discounts due to the party.
 
     ```pseudo
-    infrastructure_fee_volume_discount = floor(infrastructure_fee_after_referral_discount * volume_discount_factor)
-    liquidity_fee_volume_discount = floor(liquidity_fee_after_referral_discount * volume_discount_factor)
-    maker_fee_volume_discount = floor(maker_fee_after_referral_discount * volume_discount_factor)
+    infrastructure_fee_volume_discount = floor(infrastructure_fee_after_referral_discount * volume_infrastructure_discount_factor)
+    liquidity_fee_volume_discount = floor(liquidity_fee_after_referral_discount * volume_liquidity_discount_factor)
+    maker_fee_volume_discount = floor(maker_fee_after_referral_discount * volume_maker_discount_factor)
     ```
 
 1. Apply any volume discounts to the fee after referral discounts.
@@ -62,9 +62,9 @@ Note, discounts are calculated and applied one after the other and **before** re
 1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 4 and the `referralProgram.maxReferralRewardProportion` is the network parameter described in the [referral program spec](./0083-RFPR-on_chain_referral_program.md#network-parameters))
 
     ```pseudo
-    infrastructure_fee_referral_reward = floor(infrastructure_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
-    liquidity_fee_referral_reward = floor(liquidity_fee * min(liquidity_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
-    maker_fee_referral_reward = floor(maker_fee * min(maker_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    infrastructure_fee_referral_reward = floor(infrastructure_fee_after_volume_discount * min(referral_infrastructure_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    liquidity_fee_referral_reward = floor(liquidity_fee * min(liquidity_fee_after_volume_discount * min(referral_liquidity_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    maker_fee_referral_reward = floor(maker_fee * min(maker_fee_after_volume_discount * min(referral_maker_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
     ```
 
 1. Finally, update the fee components by applying the rewards.
