@@ -48,7 +48,7 @@ The endpoint request contains additional optional argument `scale_liquidation_pr
 
 ### Price cap
 
-When a price cap is specified it should be assumed that the estimate is to be provided for a [capped futures](./../protocol/0016-PFUT-product_builtin_future.md#1-product-parameters) market. The liquidation price estimate should not be returned in that case and margin levels as well collateral increase estimate should be as per fully-collateralised margin [spec](./../protocol/0019-MCAL-margin_calculator.md#fully-collateralised).
+When a price cap is specified it should be assumed that the estimate is to be provided for a [capped futures](./../protocol/0016-PFUT-product_builtin_future.md#1-product-parameters) market. Margin levels as well collateral increase estimate should be as per fully-collateralised margin [spec](./../protocol/0019-MCAL-margin_calculator.md#fully-collateralised). If in addition to a price cap the `fully_collateralised` flag is set to `true` then the liquidation price estimate should be `nil`.
 
 ## Acceptance criteria
 
