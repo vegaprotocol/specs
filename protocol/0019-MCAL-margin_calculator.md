@@ -439,7 +439,7 @@ Assume a [capped future](./0093-CFUT-product_builtin_capped_future.md) market wi
 
 ## Acceptance Criteria (Hardcoded risk factors)
 
-- When a wrapped model with hardcoded risk factors is used then margin calculations depend entire on the hardcoded values and updating the nested risk model has no effect on margins (<a name="0019-MCAL-159" href="#0019-MCAL-159">0019-MCAL-159</a>)
+- When a risk model with hardcoded risk factors is used on a regular (NOT fully-collateralised) market then margin calculations depend entirely on the hardcoded values and updating other risk model parameters has no effect on margins (<a name="0019-MCAL-159" href="#0019-MCAL-159">0019-MCAL-159</a>)
 
 ## Summary
 
