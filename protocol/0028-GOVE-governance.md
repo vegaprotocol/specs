@@ -625,7 +625,7 @@ APIs should also exist for clients to:
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
 - At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
 - A market LP with ELS > 0 can vote on a market change proposal even if the key doesn't meet the `governance.proposal.updateMarket.minVoterBalance` for governance token.  (<a name="0028-GOVE-185" href="#0028-GOVE-185">0028-GOVE-185</a>).
-- An amendment to a market to enable or disable `Transaction Prioritisation` will have that effect immediately upon enactment. (<a name="0028-GOVE-194" href="#0028-GOVE-194">0028-GOVE-188</a>)
+- An amendment to a market to enable or disable `Transaction Prioritisation` will have that effect immediately upon enactment. (<a name="0028-GOVE-194" href="#0028-GOVE-194">0028-GOVE-194</a>)
 
 
 #### Network parameter change proposals
