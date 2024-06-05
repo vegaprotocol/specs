@@ -723,12 +723,7 @@
   },
   "Cancelling Proposals": {
     "milestone": "colosseo_II",
-    "acs": [
-      "0028-GOVE-188",
-      "0028-GOVE-189",
-      "0028-GOVE-190",
-      "0028-GOVE-191"
-    ]
+    "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
   },
   "Transaction Ordering": {
     "milestone": "colosseo_II",
@@ -748,7 +743,9 @@
       "0092-TRTO-013",
       "0092-TRTO-014",
       "0092-TRTO-015",
-      "0092-TRTO-016"
+      "0092-TRTO-016",
+      "0028-GOVE-192",
+      "0028-GOVE-193"
     ]
   },
   "Unknown": {
