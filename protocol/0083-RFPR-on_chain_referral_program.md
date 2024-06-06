@@ -47,13 +47,13 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
   - `minimum_running_notional_taker_volume`: the required [`referral_set_running_notional_taker_volume`](#referral-set-volumes) in quantum units for parties to access this tier
   - `minimum_epochs`: the required number of epochs a referee must have been in a referral set to access this tier
   - `referral_reward_factors`: the proportions of the referee's taker fees to be rewarded to the referrer
-    - `maker_volume_reward_factor`: the factor to reward the referrer from the maker fee component of any fees paid
-    - `infrastructure_volume_reward_factor`: the factor to reward the referrer from the infrastructure fee component of any fees paid
-    - `lp_volume_reward_factor`: the factor to reward the referrer from the liquidity provider fee component of any fees paid
+    - `referral_maker_reward_factor`: the factor to reward the referrer from the maker fee component of any fees paid
+    - `referral_infrastructure_reward_factor`: the factor to reward the referrer from the infrastructure fee component of any fees paid
+    - `referral_liquidity_reward_factor`: the factor to reward the referrer from the liquidity provider fee component of any fees paid
   - `referral_discount_factors`: the proportions of the referee's taker fees to be discounted
-    - `maker_volume_discount_factor`: the factor to discount the maker fee component of any fees paid
-    - `infrastructure_volume_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
-    - `lp_volume_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
+    - `referral_maker_discount_factor`: the factor to discount the maker fee component of any fees paid
+    - `referral_infrastructure_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
+    - `referral_liquidity_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
 - `staking_tiers`: a list of dictionaries (with the below fields) defining the multipliers from staking
   - `minimum_staked_tokens`: the required number of governance tokens ($VEGA) a referrer must be staking to receive the multiplier
   - `referral_reward_multiplier`: the multiplier applied to the referral_reward_factor when calculating referral rewards due to the referrer.
@@ -68,42 +68,42 @@ message UpdateReferralProgram{
                 "minimum_running_notional_taker_volume": 10000,
                 "minimum_epochs": 1,
                 "referral_reward_factors": {
-                    "maker_volume_discount_factor": 0.001,
-                    "infrastructure_volume_discount_factor": 0.001,
-                    "lp_volume_discount_factor": 0.001
+                    "referral_maker_reward_factor": 0.001,
+                    "referral_infrastructure_reward_factor": 0.001,
+                    "referral_liquidity_reward_factor": 0.001
                 },
                 "referral_discount_factors": {
-                    "maker_volume_discount_factor": 0.001,
-                    "infrastructure_volume_discount_factor": 0.001,
-                    "lp_volume_discount_factor": 0.001
+                    "referral_maker_discount_factor": 0.001,
+                    "referral_infrastructure_discount_factor": 0.001,
+                    "referral_liquidity_discount_factor": 0.001
                 }
             },
             {
                 "minimum_running_notional_taker_volume": 20000,
                 "minimum_epochs": 7,
                 "referral_reward_factors": {
-                    "maker_volume_discount_factor": 0.005,
-                    "infrastructure_volume_discount_factor": 0.005,
-                    "lp_volume_discount_factor": 0.005
+                    "referral_maker_reward_factor": 0.005,
+                    "referral_infrastructure_reward_factor": 0.005,
+                    "referral_liquidity_reward_factor": 0.005
                 },
                 "referral_discount_factors": {
-                    "maker_volume_discount_factor": 0.005,
-                    "infrastructure_volume_discount_factor": 0.005,
-                    "lp_volume_discount_factor": 0.005
+                    "referral_maker_discount_factor": 0.005,
+                    "referral_infrastructure_discount_factor": 0.005,
+                    "referral_liquidity_discount_factor": 0.005
                 },
             },
             {
                 "minimum_running_notional_taker_volume": 30000,
                 "minimum_epochs": 31,
                 "referral_reward_factors": {
-                    "maker_volume_discount_factor": 0.01,
-                    "infrastructure_volume_discount_factor": 0.01,
-                    "lp_volume_discount_factor": 0.01
+                    "referral_maker_reward_factor": 0.01,
+                    "referral_infrastructure_reward_factor": 0.01,
+                    "referral_liquidity_reward_factor": 0.01
                 },
                 "referral_discount_factors": {
-                    "maker_volume_discount_factor": 0.01,
-                    "infrastructure_volume_discount_factor": 0.01,
-                    "lp_volume_discount_factor": 0.01
+                    "referral_maker_discount_factor": 0.01,
+                    "referral_infrastructure_discount_factor": 0.01,
+                    "referral_liquidity_discount_factor": 0.01
                 },
             },
         ],
@@ -360,42 +360,42 @@ Given:
             "minimum_running_notional_taker_volume": 10000,
             "minimum_epochs": 0,
             "referral_reward_factor": {
-                "maker_volume_discount_factor": 0.001,
-                "infrastructure_volume_discount_factor": 0.001,
-                "lp_volume_discount_factor": 0.001
+                "referral_maker_reward_factor": 0.001,
+                "referral_infrastructure_reward_factor": 0.001,
+                "referral_liquidity_reward_factor": 0.001
             },
             "referral_discount_factor": {
-                "maker_volume_discount_factor": 0.001,
-                "infrastructure_volume_discount_factor": 0.001,
-                "lp_volume_discount_factor": 0.001
+                "referral_maker_discount_factor": 0.001,
+                "referral_infrastructure_discount_factor": 0.001,
+                "referral_liquidity_discount_factor": 0.001
             },
         },
         {
             "minimum_running_notional_taker_volume": 20000,
             "minimum_epochs": 7,
             "referral_reward_factor": {
-                "maker_volume_discount_factor": 0.005,
-                "infrastructure_volume_discount_factor": 0.005,
-                "lp_volume_discount_factor": 0.005
+                "referral_maker_reward_factor": 0.005,
+                "referral_infrastructure_reward_factor": 0.005,
+                "referral_liquidity_reward_factor": 0.005
             },
             "referral_discount_factor": {
-                "maker_volume_discount_factor": 0.005,
-                "infrastructure_volume_discount_factor": 0.005,
-                "lp_volume_discount_factor": 0.005
+                "referral_maker_discount_factor": 0.005,
+                "referral_infrastructure_discount_factor": 0.005,
+                "referral_liquidity_discount_factor": 0.005
             },
         },
         {
             "minimum_running_notional_taker_volume": 30000,
             "minimum_epochs": 31,
             "referral_reward_factor": {
-                "maker_volume_discount_factor": 0.01,
-                "infrastructure_volume_discount_factor": 0.01,
-                "lp_volume_discount_factor": 0. 01
+                "referral_maker_reward_factor": 0.01,
+                "referral_infrastructure_reward_factor": 0.01,
+                "referral_liquidity_reward_factor": 0. 01
             },
             "referral_discount_factor": {
-                "maker_volume_discount_factor": 0.01,
-                "infrastructure_volume_discount_factor": 0.01,
-                "lp_volume_discount_factor": 0.01
+                "referral_maker_discount_factor": 0.01,
+                "referral_infrastructure_discount_factor": 0.01,
+                "referral_liquidity_discount_factor": 0.01
             },
         },
     ]
