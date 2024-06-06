@@ -175,4 +175,4 @@ The Trades API should now also expose the following additional information for e
 1. At the start of an epoch, each parties `volume_discount_factors` are reevaluated and fixed for the epoch (<a name="0084-VDPR-012" href="#0084-VDPR-012">0084-VDPR-012</a>).
 1. A parties `volume_discount_factor`  is set equal to the factors in the highest benefit tier they qualify for (<a name="0084-VDPR-013" href="#0084-VDPR-013">0084-VDPR-013</a>).
 1. If a party does not qualify for the lowest tier, their `volume_discount_factor`is set to `0` (<a name="0084-VDPR-014" href="#0084-VDPR-014">0084-VDPR-014</a>).
-1. A `volume_discount_factors` tier with differing factors across the three options has each factor set correctly (<a name="0084-VDPR-017" href="#0084-VDPR-017">0084-VDPR-017</a>).
+1. A `volume_discount_factors` tier with differing factors across the three options has each factor set correctly (<a name="0084-VDPR-018" href="#0084-VDPR-018">0084-VDPR-018</a>).
