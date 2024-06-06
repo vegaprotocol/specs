@@ -171,7 +171,7 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
-1. Referee discounts with differing discounts across the three factorsare correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-034" href="#0029-FEES-034">0029-FEES-034</a>)
+1. Referee discounts with differing discounts across the three factors are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-034" href="#0029-FEES-034">0029-FEES-034</a>)
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
