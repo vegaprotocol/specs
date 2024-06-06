@@ -46,6 +46,10 @@ The position estimate request has an additional `include_collateral_increase_in_
 
 The endpoint request contains additional optional argument `scale_liquidation_price_to_market_decimals`. When set to `false` the liquidation price estimates are scaled to asset decimal places, when set to `true` these estimates are scaled to market decimal places.
 
+### Price cap
+
+When a price cap is specified it should be assumed that the estimate is to be provided for a [capped futures](./../protocol/0016-PFUT-product_builtin_future.md#1-product-parameters) market. Margin levels as well collateral increase estimate should be as per fully-collateralised margin [spec](./../protocol/0019-MCAL-margin_calculator.md#fully-collateralised). If in addition to a price cap the `fully_collateralised` flag is set to `true` then the liquidation price estimate should be `nil`.
+
 ## Acceptance criteria
 
 1. In isolated margin mode the request with `0` open volume and one or more limit orders specified results in a non-zero order margin in the margin level estimate and margin mode correctly representing isolated margin mode. (<a name="0013-NP-POSE-001" href="#0013-NP-POSE-001">0013-NP-POSE-001</a>)

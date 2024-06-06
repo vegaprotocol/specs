@@ -241,7 +241,7 @@ The entire reward account balance is paid out every epoch unless the total value
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
-Any rewards which would be distributed to an AMM sub-key should instead be sent to the parent key's corresponding account. These transfers should be labelled with a field `from_key` which specifies the sub-key as the original recipient. This field should be blank for rewards earned by a standard key.
+Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
 
 ### Distributing rewards amongst entities
 
@@ -1143,5 +1143,4 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ## vAMMs
 
-- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-168" href="#0056-REWA-168">0056-REWA-168</a>).
-- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-169" href="#0056-REWA-169">0056-REWA-169</a>).
+- If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
