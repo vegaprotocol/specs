@@ -727,7 +727,7 @@
   },
   "Volume Discount Factor Customisation": {
     "milestone": "colosseo_II",
-    "acs": ["0084-VDPR-017", "0029-FEES-034", "0029-FEES-035"]
+    "acs": ["0084-VDPR-018", "0029-FEES-034", "0029-FEES-035"]
   },
   "Spot AMM": {
     "milestone": "genbu_temple",
