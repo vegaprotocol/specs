@@ -46,7 +46,7 @@ $$
 where $p_u$ is the price at the upper end of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the corresponding lower price for the range. With this, the average entry price can be found to be
 
 $$
-p_a = L_u  p_u  (1 - \frac{L_u}{L_u + p_u}) ,
+p_a = L_u  \sqrt{p_u}  (1 - \frac{L_u}{L_u + p_u}) ,
 $$
 
 where $p_a$ is the average execution price across the range and other values are as defined above. Finally, the risk factor which will be used for calculating leverage at bounds
