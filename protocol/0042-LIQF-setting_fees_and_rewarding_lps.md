@@ -56,7 +56,7 @@ In the example below there are 3 liquidity providers all bidding for their chose
 
 ### Stake-weighted-average method for setting the liquidity fee factor
 
-The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
+The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider.
 
 #### Example for fee setting mechanism using the Stake-weighted-average method
 
@@ -215,13 +215,12 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
+
 ### Calculating the instantaneous liquidity score
 
 At every vega time change calculate the liquidity score for each committed LP.
 This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0044-LIME-lp_mechanics.md) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantaneous liquidity score.
-
 For orders outside the tightest price monitoring bounds set probability of trading to 0. For orders which have less than 10% [probability of trading], we set the probability to 0 when calculating liquidity score.
-
 Note that parked [pegged orders](./0037-OPEG-pegged_orders.md) and not-yet-triggered [stop orders](./0014-ORDT-order_types.md) are not included.
 
 Now calculate the total of the instantaneous liquidity scores obtained for each committed LP:
@@ -346,20 +345,21 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 ### CALCULATING LIQUIDITY FEE FACTOR TESTS
 
 - The examples provided result in the given outcomes (<a name="0042-LIQF-001" href="#0042-LIQF-001">0042-LIQF-001</a>)
-- The resulting liquidity-fee-factor is always equal to one of the liquidity provider's individually nominated fee factors (<a name="0042-LIQF-002" href="#0042-LIQF-002">0042-LIQF-002</a>)
+- The resulting liquidity-fee-factor is always equal to one of the liquidity provider's individually nominated fee factors (<a name="0042-LIQF-002" href="#0042-LIQF-002">0042-LIQF-002</a>) For product spot: (<a name="0042-LIQF-063" href="#0042-LIQF-063">0042-LIQF-063</a>).
 - The resulting liquidity-fee-factor is never less than zero (<a name="0042-LIQF-003" href="#0042-LIQF-003">0042-LIQF-003</a>)
 - Liquidity fee factors are recalculated every time a liquidity provider nominates a new fee factor (using the commit liquidity network transaction). (<a name="0042-LIQF-004" href="#0042-LIQF-004">0042-LIQF-004</a>)
-- Liquidity fee factors are recalculated every time the liquidity demand estimate changes. (<a name="0042-LIQF-005" href="#0042-LIQF-005">0042-LIQF-005</a>)
+- Liquidity fee factors are recalculated every time the liquidity demand estimate changes. (<a name="0042-LIQF-005" href="#0042-LIQF-005">0042-LIQF-005</a>). For product spot: (<a name="0042-LIQF-064" href="#0042-LIQF-064">0042-LIQF-064</a>).
 - If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
-- If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
+- If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>). For product spot: (<a name="0042-LIQF-065" href="#0042-LIQF-065">0042-LIQF-065</a>).
 - A market can be proposed with a choice of liquidity fee settings. These settings can be updated by a subsequent market update proposal. Moreover, the correct fee value and liquidity fee setting method can be read from the data node APIs. Upon proposal enactment the new liquidity method is applied to recalculate the liquidity fee. The tests should be carried out with the following methods:
-  - Weighted average (<a name="0042-LIQF-056" href="#0042-LIQF-056">0042-LIQF-056</a>)
-  - Constant fee (<a name="0042-LIQF-061" href="#0042-LIQF-061">0042-LIQF-061</a>)
-  - Marginal cost (<a name="0042-LIQF-062" href="#0042-LIQF-062">0042-LIQF-062</a>)
-- The above example for the liquidity fee when the method is weighted-average results in a fee-factor of 1.5% (<a name="0042-LIQF-057" href="#0042-LIQF-057">0042-LIQF-057</a>)
-- The above example for the liquidity fee when the method is constant-fee results in a fee-factor of 0.8% (<a name="0042-LIQF-058" href="#0042-LIQF-058">0042-LIQF-058</a>)
-- The above example for the liquidity fee when the method is marginal cost results in a fee-factor of `3.75%` (<a name="0042-LIQF-059" href="#0042-LIQF-059">0042-LIQF-059</a>)
-- For the constant-fee method validate that the fee factor can only be between 0 and 1 inclusive (<a name="0042-LIQF-060" href="#0042-LIQF-060">0042-LIQF-060</a>)
+  - Weighted average (<a name="0042-LIQF-056" href="#0042-LIQF-056">0042-LIQF-056</a>). For product spot: (<a name="0042-LIQF-066" href="#0042-LIQF-066">0042-LIQF-066</a>).
+  - Constant fee (<a name="0042-LIQF-061" href="#0042-LIQF-061">0042-LIQF-061</a>). For product spot: (<a name="0042-LIQF-067" href="#0042-LIQF-067">0042-LIQF-067</a>).
+  - Marginal cost (<a name="0042-LIQF-062" href="#0042-LIQF-062">0042-LIQF-062</a>). For product spot: (<a name="0042-LIQF-068" href="#0042-LIQF-068">0042-LIQF-068</a>).
+- The above example for the liquidity fee when the method is weighted-average results in a fee-factor of 1.5% (<a name="0042-LIQF-057" href="#0042-LIQF-057">0042-LIQF-057</a>). For product spot: (<a name="0042-LIQF-069" href="#0042-LIQF-069">0042-LIQF-069</a>).
+- The above example for the liquidity fee when the method is constant-fee results in a fee-factor of 0.8% (<a name="0042-LIQF-058" href="#0042-LIQF-058">0042-LIQF-058</a>). For product spot: (<a name="0042-LIQF-070" href="#0042-LIQF-070">0042-LIQF-070</a>).
+- The above example for the liquidity fee when the method is marginal cost results in a fee-factor of `3.75%` (<a name="0042-LIQF-059" href="#0042-LIQF-059">0042-LIQF-059</a>). For product spot: (<a name="0042-LIQF-071" href="#0042-LIQF-071">0042-LIQF-071</a>).
+- For the constant-fee method validate that the fee factor can only be between 0 and 1 inclusive (<a name="0042-LIQF-060" href="#0042-LIQF-060">0042-LIQF-060</a>). For product spot: (<a name="0042-LIQF-072" href="#0042-LIQF-072">0042-LIQF-072</a>).
+
 
 ### CHANGE OF NETWORK PARAMETERS TESTS
 
@@ -376,18 +376,29 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 - All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 - After fee distribution, if there is a remainder in the liquidity fee account and the market is not being settled, it should be left in the liquidity fee account and carried over to the next distribution window. (<a name="0042-LIQF-032" href="#0042-LIQF-032">0042-LIQF-032</a>)
 
+
 ### LP JOINING AND LEAVING MARKETS
 
 - An LP joining a market that is below the target stake with a higher fee bid than the current fee: their fee is used (<a name="0042-LIQF-019" href="#0042-LIQF-019">0042-LIQF-019</a>)
+- Given the fee setting method is marginal cost. An LP joining a spot market that is below the target stake with a higher fee bid than the current fee: their fee is used when the fee is next recalculated (<a name="0042-LIQF-073" href="#0042-LIQF-073">0042-LIQF-073</a>)
 - An LP joining a market that is below the target stake with a lower fee bid than the current fee: fee doesn't change (<a name="0042-LIQF-020" href="#0042-LIQF-020">0042-LIQF-020</a>)
+- Given the fee setting method is marginal cost. An LP joining a market that is below the target stake with a lower fee bid than the current fee: fee doesn't change (<a name="0042-LIQF-074" href="#0042-LIQF-074">0042-LIQF-074</a>)
 - An LP joining a market that is above the target stake with a sufficiently large commitment to push ALL higher bids above the target stake and a lower fee bid than the current fee: their fee is used (<a name="0042-LIQF-029" href="#0042-LIQF-029">0042-LIQF-029</a>)
+- Given the fee setting method is marginal cost. An LP joining a spot market that is above the target stake with a sufficiently large commitment to push ALL higher bids above the target stake and a lower fee bid than the current fee: their fee is used when the fee is next recalculated (<a name="0042-LIQF-075" href="#0042-LIQF-075">0042-LIQF-075</a>)
 - An LP joining a market that is above the target stake with a commitment not large enough to push any higher bids above the target stake, and a lower fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-030" href="#0042-LIQF-030">0042-LIQF-030</a>)
+- Given the fee setting method is marginal cost. An LP joining a spot market that is above the target stake with a commitment not large enough to push any higher bids above the target stake, and a lower fee bid than the current fee: the fee doesn't change when the fee is next recalculated (<a name="0042-LIQF-076" href="#0042-LIQF-076">0042-LIQF-076</a>)
 - An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a lower fee bid than the current fee: the fee changes to the other lower bid (<a name="0042-LIQF-023" href="#0042-LIQF-023">0042-LIQF-023</a>)
+- Given the fee setting method is marginal cost. An LP joining a spot market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a lower fee bid than the current fee: the fee changes to the other lower bid when the fee is next recalculated (<a name="0042-LIQF-077" href="#0042-LIQF-077">0042-LIQF-077</a>)
 - An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a higher fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-024" href="#0042-LIQF-024">0042-LIQF-024</a>)
+- Given the fee setting method is marginal cost. An LP joining a spot market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a higher fee bid than the current fee: the fee doesn't change when the fee is next recalculated (<a name="0042-LIQF-078" href="#0042-LIQF-078">0042-LIQF-078</a>)
 - An LP leaves a market that is above target stake when their fee bid is currently being used: fee changes to fee bid by the LP who takes their place in the bidding order (<a name="0042-LIQF-025" href="#0042-LIQF-025">0042-LIQF-025</a>)
+- Given the fee setting method is marginal cost. An LP leaves a market that is above target stake when their fee bid is currently being used: fee changes to fee bid by the LP who takes their place in the bidding order when the fee is next recalculated (<a name="0042-LIQF-079" href="#0042-LIQF-079">0042-LIQF-079</a>)
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake (<a name="0042-LIQF-026" href="#0042-LIQF-026">0042-LIQF-026</a>)
+- Given the fee setting method is marginal cost. An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake when the fee is next recalculated (<a name="0042-LIQF-080" href="#0042-LIQF-080">0042-LIQF-080</a>)
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used. The loss of their commitment doesn't change which LP meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
+- Given the fee setting method is marginal cost. An LP leaves a spot market that is above target stake when their fee bid is lower than the one currently being used. The loss of their commitment doesn't change which LP meets the target stake: fee doesn't change when the fee is next recalculated (<a name="0042-LIQF-081" href="#0042-LIQF-081">0042-LIQF-081</a>)
 - An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
+- Given the fee setting method is marginal cost. An LP leaves a spot market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-106" href="#0042-LIQF-106">0042-LIQF-106</a>)
 
 ### API
 
@@ -411,36 +422,36 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 
 - If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 1`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.5`. This will be true whether:
 
-  - Their liquidity is all provided at the start of the epoch and then none is provided for the second half (<a name="0042-LIQF-037" href="#0042-LIQF-037">0042-LIQF-037</a>)
-  - Their liquidity is provided scattered throughout the epoch (<a name="0042-LIQF-038" href="#0042-LIQF-038">0042-LIQF-038</a>)
+  - Their liquidity is all provided at the start of the epoch and then none is provided for the second half (<a name="0042-LIQF-037" href="#0042-LIQF-037">0042-LIQF-037</a>). For spot (<a name="0042-LIQF-082" href="#0042-LIQF-082">0042-LIQF-082</a>)
+  - Their liquidity is provided scattered throughout the epoch (<a name="0042-LIQF-038" href="#0042-LIQF-038">0042-LIQF-038</a>). For spot (<a name="0042-LIQF-083" href="#0042-LIQF-083">0042-LIQF-083</a>)
 
-- If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0`. (<a name="0042-LIQF-041" href="#0042-LIQF-041">0042-LIQF-041</a>)
-- If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0.5`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.25`. (<a name="0042-LIQF-042" href="#0042-LIQF-042">0042-LIQF-042</a>)
+- If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0`. (<a name="0042-LIQF-041" href="#0042-LIQF-041">0042-LIQF-041</a>). For spot (<a name="0042-LIQF-084" href="#0042-LIQF-084">0042-LIQF-084</a>)
+- If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0.5`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.25`. (<a name="0042-LIQF-042" href="#0042-LIQF-042">0042-LIQF-042</a>). For spot (<a name="0042-LIQF-085" href="#0042-LIQF-085">0042-LIQF-085</a>)
 
 - When `market.liquidity.performanceHysteresisEpochs = 1`:
 
-  - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` and no penalty will be applied to their liquidity fee payments at the end of the epoch (<a name="0042-LIQF-035" href="#0042-LIQF-035">0042-LIQF-035</a>)
-  - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch meets their liquidity provision requirements less than `market.liquidity.commitmentMinTimeFraction` fraction of the time then they will have a full penalty and will receive `0` liquidity fee payments at the end of the epoch (<a name="0042-LIQF-049" href="#0042-LIQF-049">0042-LIQF-049</a>)
-  - An LP has an active liquidity provision at the start of an epoch. The penalty rate for said LP over the previous `2` epochs is `0.75`. During the epoch `market.liquidity.performanceHysteresisEpochs` is set to `3`. Throughout the current epoch the LP meets their liquidity provision requirements so they will have `fraction_of_time_on_book == 1`. The penalty applied to fee distribution at epoch end will be `0` and will not consider the previous epochs. (<a name="0042-LIQF-053" href="#0042-LIQF-053">0042-LIQF-053</a>)
+  - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` and no penalty will be applied to their liquidity fee payments at the end of the epoch (<a name="0042-LIQF-035" href="#0042-LIQF-035">0042-LIQF-035</a>). For spot (<a name="0042-LIQF-086" href="#0042-LIQF-086">0042-LIQF-086</a>)
+  - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch meets their liquidity provision requirements less than `market.liquidity.commitmentMinTimeFraction` fraction of the time then they will have a full penalty and will receive `0` liquidity fee payments at the end of the epoch (<a name="0042-LIQF-049" href="#0042-LIQF-049">0042-LIQF-049</a>). For spot (<a name="0042-LIQF-087" href="#0042-LIQF-087">0042-LIQF-087</a>)
+  - An LP has an active liquidity provision at the start of an epoch. The penalty rate for said LP over the previous `2` epochs is `0.75`. During the epoch `market.liquidity.performanceHysteresisEpochs` is set to `3`. Throughout the current epoch the LP meets their liquidity provision requirements so they will have `fraction_of_time_on_book == 1`. The penalty applied to fee distribution at epoch end will be `0` and will not consider the previous epochs. (<a name="0042-LIQF-053" href="#0042-LIQF-053">0042-LIQF-053</a>). For spot (<a name="0042-LIQF-088" href="#0042-LIQF-088">0042-LIQF-088</a>)
 
 - When `market.liquidity.performanceHysteresisEpochs > 1`:
 
-  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.75` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.75` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-047" href="#0042-LIQF-047">0042-LIQF-047</a>)
-  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.5` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-039" href="#0042-LIQF-039">0042-LIQF-039</a>)
-  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they never meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 0` for the latest epoch a penalty rate of `1` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-040" href="#0042-LIQF-040">0042-LIQF-040</a>)
-  - If an LP has an active liquidity provision at the start of an epoch and no previous performance penalties and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` then no penalty will be applied to their liquidity fee payments at the end of the epoch. (<a name="0042-LIQF-054" href="#0042-LIQF-054">0042-LIQF-054</a>)
+  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.75` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.75` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-047" href="#0042-LIQF-047">0042-LIQF-047</a>). For spot (<a name="0042-LIQF-089" href="#0042-LIQF-089">0042-LIQF-089</a>)
+  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.5` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-039" href="#0042-LIQF-039">0042-LIQF-039</a>). For spot (<a name="0042-LIQF-090" href="#0042-LIQF-090">0042-LIQF-090</a>)
+  - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they never meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 0` for the latest epoch a penalty rate of `1` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-040" href="#0042-LIQF-040">0042-LIQF-040</a>). For spot (<a name="0042-LIQF-091" href="#0042-LIQF-091">0042-LIQF-091</a>)
+  - If an LP has an active liquidity provision at the start of an epoch and no previous performance penalties and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` then no penalty will be applied to their liquidity fee payments at the end of the epoch. (<a name="0042-LIQF-054" href="#0042-LIQF-054">0042-LIQF-054</a>). For spot (<a name="0042-LIQF-100" href="#0042-LIQF-100">0042-LIQF-100</a>)
 
 
 ### SLA Performance bonus transfers
 
-- The net inflow and outflow into and out of the market's aggregate LP fee account should be zero as a result of penalty collection and bonus distribution. (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
-- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
-- With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
-- With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
+- The net inflow and outflow into and out of the market's aggregate LP fee account should be zero as a result of penalty collection and bonus distribution. (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>). For spot (<a name="0042-LIQF-101" href="#0042-LIQF-101">0042-LIQF-101</a>)
+- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>). For spot (<a name="0042-LIQF-102" href="#0042-LIQF-102">0042-LIQF-102</a>)
+- With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>). For spot (<a name="0042-LIQF-103" href="#0042-LIQF-103">0042-LIQF-103</a>)
+- With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>). For spot (<a name="0042-LIQF-104" href="#0042-LIQF-104">0042-LIQF-104</a>)
 
 ### Transfers example
 
-Example 1, generated with [supplementary worksheet](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY) [internal only]. Values should match up to rounding used by `core` (<a name="0042-LIQF-055" href="#0042-LIQF-055">0042-LIQF-055</a>):
+Example 1, generated with [supplementary worksheet](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY) [internal only]. Values should match up to rounding used by `core` (<a name="0042-LIQF-055" href="#0042-LIQF-055">0042-LIQF-055</a>). For spot (<a name="0042-LIQF-105" href="#0042-LIQF-105">0042-LIQF-105</a>):
 | LP    |   penalty fraction | LP-per-market fee accounts balance | 1st transfer amt |  2nd (bonus) transfer amt |
 |   --- |   --------------   | --------------                       | --------------      | --------------           |
 |   LP1 |   0                  | 1000                                 | 1000                |   24673.94095              |

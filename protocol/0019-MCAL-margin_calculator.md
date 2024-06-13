@@ -8,16 +8,6 @@
 
 - Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
 
-- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to infinity and hence the slippage cap is used as the slippage component of the margin calculation. (<a name="0019-MCAL-014" href="#0019-MCAL-014">0019-MCAL-014</a>)
-
-- If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to infinity.  (<a name="0019-MCAL-015" href="#0019-MCAL-015">0019-MCAL-015</a>)
-
-- If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < abs(riskiest short)`, the `exit price` is equal to infinity. (<a name="0019-MCAL-016" href="#0019-MCAL-016">0019-MCAL-016</a>)
-
-- If `riskiest long > 0 &&  riskiest long < *sum of volume of order book bids*`, the `exit price` is equal to the *volume weighted price of the order book bids* with cumulative volume equal to the riskiest long, starting from best bid.  (<a name="0019-MCAL-017" href="#0019-MCAL-017">0019-MCAL-017</a>)
-
-- If `riskiest short < 0 && 0 abs(riskiest short) == *sum of absolute volume of order book offers* <`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-018" href="#0019-MCAL-018">0019-MCAL-018</a>)
-
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
 
 - For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
@@ -34,9 +24,9 @@
     sell 10 @ 100 100
     ```
 
-    then the maintenance margin for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. (<a name="0019-MCAL-024" href="#0019-MCAL-024">0019-MCAL-024</a>)
+    then the maintenance margin for the party is `15900 x 0.25 x 1 + 0.1 x 1 x 15900 = 5565`. (<a name="0019-MCAL-210" href="#0019-MCAL-210">0019-MCAL-210</a>)
 
-- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `min(1 x (100000-15900), 15900 x 100 x 1) + 0.1 x 1 x 15900 = 85690`. (<a name="0019-MCAL-025" href="#0019-MCAL-025">0019-MCAL-025</a>)
+- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `15900 x 100 x 1 + 0.1 x 1 x 15900 = 85690`. (<a name="0019-MCAL-211" href="#0019-MCAL-211">0019-MCAL-211</a>)
 
 - If the `market.linearSlippageFactor` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
@@ -51,7 +41,7 @@
     sell 10 @ 100 100
     ```
 
-    then the dated future maintenance margin component for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
+    then the dated future maintenance margin component for the party is `15900 x 0.25 x 1 + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
 
     ```book
     delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
@@ -81,6 +71,8 @@
       - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1700`, `funding_payment = 1700 + 1600 * (-0.05 - 1) = 20`
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * 1) = 605` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * -1) = 595`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
+
+    - When placing an order to buy `10` at a price of `3` on a market in an opening auction with an indicative uncrossing price of `100` and a long risk factor of `0.1`, the resulting margin is `100` (<a name="0019-MCAL-234" href="#0019-MCAL-234">0019-MCAL-234</a>)
 
 ## Acceptance Criteria (Isolated-margin)
 
@@ -286,11 +278,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
   sell 10 @ 100 100
   ```
 
-  the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
-
-  for this market the party switches to isolated margin with `margin factor=0.9` then the party will have margin account balance of
-  `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
-  the difference topped up from the party’s general account(<a name="0019-MCAL-233" href="#0019-MCAL-233">0019-MCAL-233</a>)
+  the maintenance margin for the party is `159 00 x 0.25 x 1 + 0.1 x 1 x 159 00 = 5565` for this market the party switches to isolated margin with `margin factor=0.9` then the party will have margin account balance of `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325` the difference topped up from the party’s general account(<a name="0019-MCAL-233" href="#0019-MCAL-233">0019-MCAL-233</a>)
 
 - In isolated margin mode, a party `short 1@15 900`, `margin factor=0.9` and order book is
 
@@ -304,7 +292,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
   the margin account will hold `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
 
-  for this market the party switches to cross margin and the market has `market.linearSlippageFactor = 0.25`, `RF short = 0.1` then the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
+  for this market the party switches to cross margin and the market has `market.linearSlippageFactor = 0.25`, `RF short = 0.1` then the maintenance margin for the party is `159 00 x 0.25 x 1 + 0.1 x 1 x 159 00 = 5565`
   but if `5565 < collatoral release level` the maintenance margin will remain unchanged at `6325`
 
   the difference topped up from the party’s general account(<a name="0019-MCAL-232" href="#0019-MCAL-232">0019-MCAL-232</a>)
@@ -324,6 +312,10 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - switch to cross margin with position and with orders successful in continuous mode(<a name="0019-MCAL-140" href="#0019-MCAL-140">0019-MCAL-140</a>)
 
 - switch to cross margin with position and with orders successful in auction(<a name="0019-MCAL-141" href="#0019-MCAL-141">0019-MCAL-141</a>)
+
+- when switch to isolated margin mode, valid value of the margin factor must be greater than 0, and also greater than `max(risk factor long, risk factor short) + linear slippage factor`(<a name="0019-MCAL-208" href="#0019-MCAL-208">0019-MCAL-208</a>)
+
+- when amend margin factor during isolated margin mode, margin factor greater than 1 should be not rejected (<a name="0019-MCAL-209" href="#0019-MCAL-209">0019-MCAL-209</a>)
 
 **Check order margin:**
 
@@ -367,7 +359,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party has position -1 and order -3, and new long orders with size 3 will be offset(<a name="0019-MCAL-231" href="#0019-MCAL-231">0019-MCAL-231</a>)
 
-
 **Check decimals:**
 
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-090" href="#0019-MCAL-090">0019-MCAL-090</a>)
@@ -397,7 +388,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
     sell 10 @ 100 100
     ```
 
-    then the dated future maintenance margin component for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
+    then the dated future maintenance margin component for the party is `15900 x 0.25 x 1 + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
 
     ```book
     delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
@@ -433,48 +424,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - All order margin balances are restored after a protocol upgrade (<a name="0019-MCAL-152" href="#0019-MCAL-152">0019-MCAL-152</a>).
 - The `margin mode` and `margin factor` of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
-
-- For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:
-  - If a party is long `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF long = 0.1` and order book is
-
-    ```book
-    buy 1 @ 15 000
-    buy 10 @ 14 900
-    and
-    sell 1 @ 100 000
-    sell 10 @ 100 100
-    ```
-
-    then the dated future maintenance margin component for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. The current accrued funding payment for the perpetual component is calculated using
-
-    ```book
-    delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
-    funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap))
-    ```
-
-    Where `f_twap` represents the internal mark price TWAP and `s_twap` represents the TWAP from the external oracle feed. When clamp bounds are large we use:
-
-    ```book
-    funding_payment = f_twap - s_twap + (1 + delta_t * interest_rate)*s_twap-f_twap
-                    = s_twap * delta_t * interest_rate
-    ```
-
-    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
-      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * 0.16 * 1 = 9540.08` (<a name="0019-MCAL-019" href="#0019-MCAL-019">0019-MCAL-019</a>)
-
-    - If instead
-      - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
-      - `funding payment = f_twap - s_twap + clamp_upper_bound*s_twap = f_twap + s_twap * (clamp_upper_bound - 1)`.
-      - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (0.05 - 1) = 1590 - 1520 = 70`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * 70 * 1 = 9575` (<a name="0019-MCAL-020" href="#0019-MCAL-020">0019-MCAL-020</a>)
-      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * max(0, 70 * -1) = 9540`(<a name="0019-MCAL-021" href="#0019-MCAL-021">0019-MCAL-021</a>)
-
-    - If instead
-      - `clamp_upper_bound*s_twap > clamp_lower_bound*s_twap > (1 + delta_t * interest_rate)*s_twap-f_twap)`
-      - `funding payment = f_twap - s_twap + clamp_lower_bound*s_twap = f_twap + s_twap * (clamp_lower_bound - 1)`.
-      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * max(0, -90 * 1) = 9540` (<a name="0019-MCAL-022" href="#0019-MCAL-022">0019-MCAL-022</a>)
-      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * max(0, -90 * -1) = 9585`(<a name="0019-MCAL-023" href="#0019-MCAL-023">0019-MCAL-023</a>)
 
 ## Summary
 
@@ -522,7 +471,7 @@ In future there can be multiple margin calculator implementations that would be 
 ## Isolated margin mode
 
 When in isolated margin mode, the position on the market has an associated margin factor.
-The margin factor must be greater than 0 and less than or equal to 1, and also greater than `max(risk factor long, risk factor short)`.
+The margin factor must be greater than 0, and also greater than `max(risk factor long, risk factor short) + linear slippage factor`.
 
 Isolated margin mode can be enabled by placing an *update margin mode* transaction.
 The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.
@@ -674,35 +623,15 @@ with
 
 ```formula
 maintenance_margin_long
-    = max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.linearSlippageFactor)), 0)
-    +  max(open_volume, 0) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
+    = max(product.value(market_observable) * riskiest_long * market.linearSlippageFactor, 0)
+    +  max(open_volume, 0) * [quantitative_model.risk_factors_long] * [Product.value(market_observable)] + buy_orders * [ quantitative_model.risk_factors_long ] * [ Product.value(market_observable)]`,
 ```
-
-where
-
-`slippage_volume =  max( open_volume, 0 )`,
-
-and
-
-if `open_volume > 0` then
-
-`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`,
-
-else `slippage_per_unit = 0`.
 
 where
 
 `market_observable` = `settlement_mark_price` if in continuous trading, refer to [auction subsection](#margin-calculation-for-auctions) for details of the auction behaviour.
 
 `settlement_mark_price` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
-
-`exit_price` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
-
-- **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
-
-- **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
-
-If there is zero or insufficient order book volume on the relevant side of the order book to calculate the `exit_price`, then take `slippage_per_unit = +Infinity` which means that `min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.linearSlippageFactor)) = mark_price * (slippage_volume * market.linearSlippageFactor)` above.
 
 ### **Step 2**
 
@@ -712,35 +641,27 @@ Else
 
 ```formula
 maintenance_margin_short
-    = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.linearSlippageFactor),  0)
-    + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
+    = max(product.value(market_observable) * abs(riskiest short) * market.linearSlippageFactor, 0)
+    + abs(min(open_volume, 0)) * [quantitative_model.risk_factors_short] * [Product.value(market_observable)] + abs
+    (sell_orders) * [quantitative_model.risk_factors_short] * [Product.value(market_observable)]`
 ```
 
-where meanings of terms in Step 1 apply except for:
-
-`slippage_per_unit = max(0, Product.value(exit_price)-Product.value(market_observable))`
+where meanings of terms in Step 1 apply
 
 ### **Step 3**
 
 If `open_volume > 0`:
 
-`maintenance_margin = max(min(open_volume * slippage_per_unit, product.value(market_observable)  * (open_volume * market.maxSlippageFraction[1] + open_volume^2 * market.maxSlippageFraction[2])), 0)
-    +  open_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`
-where
-
-`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`
+`maintenance_margin = max(product.value(market_observable) * (open_volume * market.linearSlippageFactor), 0)
+    +  open_volume * [quantitative_model.risk_factors_long] * [Product.value(market_observable) ]`
 
 If `open_volume < 0`:
 
 ```formula
 maintenance_margin
-    = max(min(abs(open_volume) * slippage_per_unit, mark_price * (abs(open_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0)
-    + abs(open_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
+    = max(product.value(market_observable) * (abs(open_volume) * market.linearSlippageFactor), 0)
+    + abs(open_volume) * [quantitative_model.risk_factors_short] * [Product.value(market_observable) ]`
 ```
-
-where
-
-`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`
 
 If `open_volume == 0`:
 
@@ -762,9 +683,7 @@ We are assuming that:
 
 Use the same calculation as above with the following re-defined:
 
-- For the orders part of the margin: use `market_observable` =  volume weighted average price of the party's long / short orders.
-
-Note that because the order book is empty during auctions we will always end up with the slippage value implied by the the slippage cap.
+- For the orders part of the margin: use `market_observable` = max(volume weighted average price of the party's long / short orders, sum of volumes of party's long / short orders * auction price), where `auction price` = max(mark price, indicative uncrossing price). If any of the values is unavailable at the time of calculation assume it's equal to `0`
 
 ## Scaling other margin levels
 
@@ -823,16 +742,9 @@ riskiest_short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 # Step 1
 
-## exit price considers what selling the open position (10) on the order book would achieve.
-
-slippage_per_unit =  max(0, Product.value(previous_mark_price) - Product.value(exit_price)) = max(0, Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10)) = max(0, 144 - 110)  = 34
-
-
-maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.linearSlippageFactor)), 0)
- + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
-
-
-=  max(min(14 * 34, 144*(14 * 0.25), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
+maintenance_margin_long =max(product.value(market_observable)  * (riskiest_long * market.linearSlippageFactor), 0)
+ + max(open_volume, 0 ) * [quantitative_model.risk_factors_long] . [Product.value(market_observable)] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+=  max(144*(14 * 0.25), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 705.6
 
 # Step 2
 
@@ -842,20 +754,20 @@ Since riskiest short == 0 then maintenance_margin_short = 0
 
 Since open_volume == 10
 
-maintenance_margin = max(min(open_volume * slippage_per_unit, product.value(market_observable)  * (open_volume * market.maxSlippageFraction[1] + open_volume^2 * market.maxSlippageFraction[2])), 0)
+maintenance_margin = max(product.value(market_observable) * (open_volume * market.maxSlippageFraction[1]), 0)
     +  open_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
- =  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 = 620
+ =  max(144*(14 * 0.25), 0) + 10 * 0.1 * 144 = 648
 
 # Step 4
 
-maintenance_margin_with_orders = max ( 677.6, 0) = 677.6
-order_margin = 677.6 - 620 = 57.6
+maintenance_margin_with_orders = max (705.6, 0) = 677.6
+order_margin = 705.6 - 648 = 47.6
 
 # Step 5
 
-collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
-initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
-search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
+collateral_release_level = 705.6 * collateral_release_scaling_factor = 705.6 * 1.1
+initial_margin = 705.6 * initial_margin_scaling_factor = 705.6 * 1.2
+search_level = 705.6 * search_level_scaling_factor = 705.6 * 1.3
 
 ```
 
@@ -890,3 +802,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+
