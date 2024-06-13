@@ -64,7 +64,40 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 - Change of `market.stake.target.scalingFactor` will immediately change the scaling between liquidity demand estimate based on open interest and target stake, hence immediately change the target stake. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
 - Change of `market.stake.target.timeWindow` will immediately change the length of time window over which open interest is measured, hence will immediately change the value of `max_oi`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)
 
+## Target stake for spot markets
+
+See [spot market spec](0080-SPOT-product_builtin_spot.md).
+
+The target stake of a market is calculated as a fraction of the maximum `total_stake` over a rolling time window. The fraction is controlled by the parameter `scaling_factor` and the length of the window is controlled by the parameter `time_window`.
+
+```pseudo
+e.g.
+
+Given: the following total_stake values
+
+    [time, total_stake] = [[17:59, 12000], [18:01, 11000], [18:30, 9000], [18:59, 10000]]
+
+If: the time value and market parameters are
+
+    current_time = 19:00
+
+    time_window = 3600s
+    target_stake_factor = 0.25
+
+Then: the target stake value is
+
+    target_stake = 0.25 * 11000 = 2750 DAI
+```
+
+The above design ensures the `target_stake` of a market is unable to fluctuate dramatically over the window. Controlling the `target_stake` impacts the `total_stake` as reducing the commitment beyond `maximum_reduction_amount` means the LPs will be charged a penalty for doing so.
 
 ### Acceptance criteria
 
-Too be decided.
+- For a spot market, given a `scaling_factor=1` and zero asset decimals. The target stake should be set to the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-106" href="#0041-TSTK-106">0041-TSTK-106</a>)
+- For a spot market, given a `scaling_factor=1` and non-zero asset decimals. The target stake should be set to the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-107" href="#0041-TSTK-107">0041-TSTK-107</a>)
+- For a spot market, given a `scaling_factor<1` The target stake should be set to the product of the `scaling_factor` and the maximum total supplied stake over the previous `time_window`. (<a name="0041-TSTK-108" href="#0041-TSTK-108">0041-TSTK-108</a>)
+- For a spot market, given a LP increases their commitment, the target stake should increase to reflect that change. (<a name="0041-TSTK-109" href="#0041-TSTK-109">0041-TSTK-109</a>)
+- For a spot market, given a LP decreases their commitment, the target stake will not decrease to reflect that change until end of the epoch when the reduction is processed and the rolling time window no longer includes the total stake prior to the commitment change.(<a name="0041-TSTK-110" href="#0041-TSTK-110">0041-TSTK-110</a>)
+- For a spot market, change of `market.stake.target.scalingFactor` will immediately change the target stake. (<a name="0041-TSTK-111" href="#0041-TSTK-111">0041-TSTK-111</a>)
+- For a spot market, an increase of `time_window` will immediately change the length of time window over which total stake is measured however new records will not be added hence the target stake will not immediately change (<a name="0041-TSTK-112" href="#0041-TSTK-112">0041-TSTK-112</a>)
+- For a spot market, a decrease of `time_window` will immediately change the length of time window over which the total stake is measured and old records will be dropped hence the target stake will immediately change (<a name="0041-TSTK-113" href="#0041-TSTK-113">0041-TSTK-113</a>)

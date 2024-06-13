@@ -84,29 +84,57 @@ Basic vega chain liveness criteria is covered in their [performance score](./006
 
 ## Verifying Ethereum (and later other chain) integration
 
-In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md).
-A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times.
+In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their reliability in forwarding [Chain events](./0036-BRIE-event_queue.md).
+A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times. An ersatz node will have to forward this number of events for each bridge.
 
 ## Multisig updates (and multisig weight updates if those are used)
 
-Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on multisig.
+Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on the multisig on every registered EVM/ERPC chain.
 
-Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing.
-Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using.
+Once (if) the multisig contracts supports validator weights the vega node will watch for Ethereum events announcing the weight changing.
+Thus for each validator that is on each multisig contract it will know the validator score (weight) the multisig is using.
 
-We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change.
+We will have `network.validators.multisig.numberOfSigners` represented on each multisig.
 Note that `network.validators.multisig.numberOfSigners` must always be less than or equal to `network.validators.tendermint.number`.
 
-In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on the multisig contract.
+In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, chain_1_multisig_weight, ..., chain_n_multisig_weight)`, with `n` representing the number of registered EVM/ERPC chains for assets, when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *missing* from the  multisig contract on any of the `n` registered asset chains.
 
-Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well.
+Thus a validator who is not there but should be has incentive to pay gas to update each multisig. Moreover a validator who's score has gone up substantially will want to do so as well.
 
-As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. They will not get any rewards.
+As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) for each bridge, then at the end of the epoch their score will be `0`. They will not get any rewards.
 
-In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
+In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators and the community to remove the demoted member from all Multisig contracts. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed from each bridge.
 Bear in mind that currently in this situation the unpaid rewards stay in the reward pool and eventually everything gets distributed at the end of any epoch where the multisig is updated.
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions.
+
+
+## Issuing signatures bundles to update Multisig contracts
+
+When a nodes is promoted or demoted from the tendermint validator set the multisig control contracts on each bridge should be updated to reflect the new set. To be able to update the signers on the multisig control contract a signature bundle authorising the addition or removal of a signer is required containing a quorum of signatures from those already on the multisig control contract.
+
+As rewards are withheld from all parties who have staked and delegated to the Vega network, any party is allowed to request a signature bundle to resolve the multisig contract and continue receiving rewards. This can be done by sending in a transaction to the network containing the following information:
+
+```json
+{
+    "submitter": "abc",   # the Ethereum address that will submit the transaction to the multisig contract
+    "node_id": "xyz",     # the node ID who needs to be added or removed
+    "type": "add/remove", # whether the node needs to be added or removed
+    "chain_id": "1",      # the ID of the EVM chain the signature bundle is for
+}
+```
+
+Then result from a successful submission will be the generation of a signature bundle made available via a data node.
+
+A transaction to issue signatures must fail if:
+
+- the request *does not* correspond to a validator the needs adding/removing from the contract
+- the given chain-id does not belong to any bridge
+
+Once a validator who needs adding/removing from the contract has been added/removed (or no longer needs to be added or removed) it must not be possible to request more signature bundles for it.
+
+All signature bundles for a particular adding/removal event *must* use the same nonce. For example if validator `v` is promoted and needs to be added to the contract, when three different parties submit transactions to issue signatures, each of their bundles should use the same nonce. This necessary so that ones one bundle has been used, the other 2 are now defunct.
+
 
 ## Ersatz/Standby validators
 
@@ -137,16 +165,8 @@ is a out-of-the ordinary event and should be logged.
 
 ### Multisig for Ersatz validators
 
-At this point, Ersatz validators are not part of the Multisig.
+At this point, Ersatz validators are not part of any Multisig.
 
-## Restarts from LNL checkpoint
-
-See [limited network life spec](./0073-LIMN-limited_network_life.md).
-
-1. At each checkpoint we include node IDs of validators and their scores (meaning all the ones participating in consensus and those who submitted a transaction to become a validator and thus are eligible to be a validator or ersatz validator).
-1. When initiating the restart all the nodes participating have the same Tendermint weight in genesis (or whatever they set / agree). This is used until the LNL file has finished processing.
-1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
-1. If the validators arising from LNL weight updates are missing from the chain because they haven't started nodes then the chain will stop. The restart needs better coordination so the relevant nodes are present.
 
 ## Network Parameters
 
@@ -158,6 +178,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 |`network.validators.multisig.numberOfSigners`              | String (integer) |       9       | Currently set to the number of validators on the network. In future will be used to scale multisig Validator participation.  |
 |`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      | Scales down [the rewards](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz validators relative to actual validators  |
 |`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz Validators that will earn rewards |
+|`spam.protection.minMultisigUpdates`                       | String (integer) |       5       | Minimum number of staked tokens a party must have to be able to submit a transaction to issue signatures |
+|`spam.protection.max.MultisigUpdates`                      | String (integer) |       5       | Maximum number of times per epoch a party can submit a transaction to issue signatures |
 
 ## Acceptance criteria
 
@@ -199,9 +221,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
 1. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>):
     - Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. Call the one without enough self-delegation Bob.
-    - Announce a new node (Alice) and self-delegate to them, allow some time to replace the validator with no self-delegation (Bob) as a Tendermint validator by Alice. Note: At this point the signature of Bob IS still on the multisig contract.
+    - Announce a new node (Alice) and self-delegate to them, allow some time to replace the validator with no self-delegation (Bob) as a Tendermint validator by Alice. Note: At this point the signature of Bob IS still on all the multisig contracts.
     - Transfer 1000 tokens to the VEGA reward account.
-    - Verify that at the end of the epoch all of the Tendermint validators should have a multisig score = 0 since Bob is still on the contract.
+    - Verify that at the end of the epoch all of the Tendermint validators should have a multisig score = 0 since Bob is still on all contracts.
 1. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>):
     - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators network parameter set to 5.
     - **Additional setup:** ensure that the network parameter `network.validators.multisig.numberOfSigners` is set to **5**.
@@ -229,8 +251,21 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that the joining validator would have a multisig score of 1 and therefore gets a reward.
 1. One of the top validators is not registered with the multisig contract (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>):
     - Run a Vega network where a validator joins and gets a lot delegated in order for it to become one of the top `network.validators.multisig.numberOfSigners`
-    - Ensure its ethereum key is **NOT** put on the multisig contract.
+    - Ensure its ethereum key is **NOT** put on any of the multisig contract.
     - Verify the validator has 0 for their multisig score and receives no staking reward.
+1. All multisig contracts must be updated for non-zero multisig scores (<a name="0069-VCBS-092" href="#0069-VCBS-092">0069-VCBS-092</a>)
+    - Arrange a network with N validators and 1 ersatz validator.
+    - Set `network.validators.multisig.numberOfSigners` = N.
+    - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
+    - Assert that since the demoted validator is still on the multisigs, all tendermint validators should have a multisig score of `0`
+    - Remove the demoted validator from only one multisig contracts
+    - Assert that all tendermint validators have a multisig score of `0`
+    - Remove the demoted validator the remaining multisig contracts
+    - Assert that all tendermint validators *except the promoted validator* should have a multisig score of `1`
+    - Add the promoted validator to only one of the multisig contracts
+    - Assert that the promoted validator still has a multisig score of `0`
+    - Add the promoted validator to all of the multisig contracts
+    - Assert that the promoted validator now has a multisig score of `1`
 
 #### Validator Score
 
@@ -508,7 +543,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Verify that all Validators round it the same way, and that there are three Ersatz validators
 
 1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
-1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-VCBS-080" href="#0069-VCBS-080">0069-VCBS-080</a>)), all validator nodes are still correct.
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>).
 1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
 ### Announce Node
@@ -520,66 +555,23 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 1. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>):
     - Should be rejected
 
-### Checkpoints
-
-1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>):
-    - Setup a network with 5 Tendermint validators
-    - Take a checkpoint
-    - Restore from checkpoint with the 5 same validators, which should pass.
-    - Verify that after the network is restarted, the validators have voting power as per the checkpoint until the end of the epoch.
-1. Base + ersatz (<a name="0069-VCBS-047" href="#0069-VCBS-047">0069-VCBS-047</a>):
-    - Setup a network with 5 Tendermint validators (where 5 is also the number of allowed Tendermint validators)
-    - Announce 2 new nodes and wait for them to become ersatz validators (set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0).
-    - Take a checkpoint and verify it includes the ersatz validators.
-    - Restore from the checkpoint (all nodes are running)
-    - Verify that the validators have the voting power as per the checkpoint and that the ersatz validators are shown on data node having status ersatz.
-1. Missing validators (<a name="0069-VCBS-048" href="#0069-VCBS-048">0069-VCBS-048</a>):
-    - Setup a network with 5 validators such that 3 of them have 70% of the voting power. Note: this is done by delegating 70% of the total stake to them.
-    - Take a checkpoint
-    - Restore from the checkpoint – starting only the 3 nodes with the 70% stake.
-    - Verify that after the restore the network should be able to proceed generating blocks although with slower pace.
-1. Missing validators stop the network (<a name="0069-VCBS-049" href="#0069-VCBS-049">0069-VCBS-049</a>):
-    - Setup a network with 5 validators with equal delegation to them.
-    - Verify before the checkpoint that the voting power of all of them is equal.
-    - Take a checkpoint.
-    - Restart the network starting only 3 of the validators.
-    - Restore from the checkpoint.
-    - Verify the network is not able to produce blocks.
-1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>):
-    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
-    - Stop and relegate one of the original validators (v1) such that v6 is promoted to tendermint validator, and v7 is promoted to ersatz.
-    - Restart v1 and announce to pending.
-    - Take a checkpoint.
-    - Restart the network
-    - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
-    - Verify that all stakes and delegations are correct for each node.
-1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>):
-    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
-    - Take a checkpoint.
-    - Wait until the current epoch will have expired.
-    - Restart the network. (This will result in a 1-block epoch)
-    - Verify that v1-v5 are tendermint validators, v6 is ersatz and v7 is pending.
-    - Verify that all tendermint validators have non-zero performance scores, which will reflect the data that was collected pre-checkpoint to calculate scores at the end of the last epoch.
-    - Verify that ersatz and pending validators have non-zero performance scores.
-
 ### Multisig update
 
 1. Can update multisig for new validator, and expect rewards (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
-    - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
+    - Update the multisig contract on all bridges by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
 1. No rewards paid out if multisig not updated. Rewards continued when fixed. (<a name="0069-VCBS-067" href="#0069-VCBS-067">0069-VCBS-067</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
-
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
     - Verify that no rewards are paid out on the first epoch.
-    - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
+    - Update all multisig contracts by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
-1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
-1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)
+1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` can submit a request to the vega network to obtain the signature bundle that would update the multisig signers to be the keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted `spam.protection.max.MultisigUpdates` times per epoch per vega key per registered EVM/ERPC asset chain (alternatively the request will provide the update bundles for all the chains). Once multisig uses weights it will also include the correct weights for all multisig contracts. (<a name="0069-VCBS-094" href="#0069-VCBS-094">0069-VCBS-094</a>)
+1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if all multisigs are updated to match the new validator. (<a name="0069-VCBS-091" href="#0069-VCBS-091">0069-VCBS-091</a>)
 
 ### Re-Issuing Signature Bundles by non Validators
 
@@ -603,3 +595,12 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
 (<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)
+
+1. After a node has been promoted, issue a request for a signature to add it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
+(<a name="0069-VCBS-089" href="#0069-VCBS-089">0069-VCBS-089</a>)
+
+1. After a node has been demoted, issue a request for a signature to remove it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
+(<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-090</a>)
+
+1. After a successful transaction to issue signatures, the data node API containing the signature bundles also includes the chain-id for the multisig contract it corresponds to.
+(<a name="0069-VCBS-093" href="#0069-VCBS-093">0069-VCBS-093</a>)

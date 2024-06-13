@@ -70,9 +70,9 @@ A recurring transfers needs to contain this specific information:
 
 The amount paid at the end of each epoch is calculated using the following formula:
 
-```math
-amount = start amount x factor ^ (current epoch - start epoch)
-```
+$$
+\text{amount} = \text{start amount} \cdot \text{factor}^{(\text{current epoch} - \text{start epoch})}
+$$
 
 If insufficient funds are present in the source account at the time a transfer is initiated by the network, the whole recurring transfer is cancelled.
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled.
@@ -108,7 +108,10 @@ To support entity scoping, the transaction include the following fields:
 A party should be able to configure the distribution of rewards by specifying the following fields:
 
 - `window_length` - the number of epochs over which to evaluate the reward metric. The value should be limited to 100 epochs.
+- `transfer_interval` - number of epochs between transfers, i.e. when 4, funds will be transferred every 4 epochs with the first transfer occurring 4 epochs after the transaction is processed. Must be an integer strictly greater than `0` and less than `100` (this ceiling is for performance reasons and matches the limit on the `window_length` field).
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
+- `cap_reward_fee_multiple` [optional] - if set, the actual amount of reward transferred to each public key during distribution for this transfer will be `min(calculated_reward_in_quantum, cap_reward_fee_multiple × feed_paid_since_last_payout)` (fees paid since last payout is akin to checking the total fees paid over the last `transfer_interval` epochs). When calculating how much of the reward each one is getting, if some is left from the applied cap, we recalculate on the remaining balance only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10. If all keys are capped (i.e. the total amount of the transfer cannot be be sent to eligible keys without breaching the cap) then the remaining balance must be left in the reward pool and included in the distribution in future epochs. If this occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made.
+Here, `feed_paid_since_last_payout` are the total trading fees paid by a party (arising from `infrastructure_fee` paid, `maker_fee` paid plus `liquidity_fee` paid, since the last payout and expressed in quantum units).
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
   - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
   - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
@@ -260,6 +263,7 @@ message CancelTransfer {
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
+  - for accounts created in a spot market, bond and holding (<a name="0057-TRAN-063" href="#0057-TRAN-063">0057-TRAN-063</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount x transfer.fee.factor <= transfer.fee.maxQuantumAmount x quantum`). (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - The fee cost is correctly calculated using the network parameters listed above.
   - If I have enough funds to pay transfer and fees, the transfer happens.
@@ -385,3 +389,24 @@ If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified,
 
 If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum < cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `calculated_reward_in_quantum`(<a name="0057-TRAN-070" href="#0057-TRAN-070">0057-TRAN-070</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum`(<a name="0057-TRAN-071" href="#0057-TRAN-071">0057-TRAN-071</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set, and if some reward is left from the applied cap, the remaining balance should be recalculated only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10
+(<a name="0057-TRAN-072" href="#0057-TRAN-072">0057-TRAN-072</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch is not spent due to the cap, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
+
+Given a recurring transfer which is distributed every epoch (i.e. `transfer_interval=1`), if the parameter of each transfer `cap_reward_fee_multiple` is set to be `<=0`, then it should be rejected. (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
+
+If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they do not have enough funds to cover the next payout, the transaction will be rejected. (<a name="0057-TRAN-076" href="#0057-TRAN-076">0057-TRAN-076</a>)
+
+If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they have enough funds to cover the next payout, the network will lock these funds and they will be unavailable for other purposes. (<a name="0057-TRAN-077" href="#0057-TRAN-077">0057-TRAN-077</a>)
+
+If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they cancel the recurring transfer the locked funds will not be released and the next payout event will happen regardless. (<a name="0057-TRAN-078" href="#0057-TRAN-078">0057-TRAN-078</a>)
+
+If a party sets up a recurring transfer with a transfer interval strictly greater than `1` and specifies a `cap_reward_fee_multiple`. If `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum`(<a name="0057-TRAN-079" href="#0057-TRAN-079">0057-TRAN-079</a>)

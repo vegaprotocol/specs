@@ -273,7 +273,6 @@ In both cases the estimates are for a hypothetical position of size 1.
 1. For the ongoing period the following data is available via the API: funding period start time, estimate time, funding rate estimate, funding payment estimate, external (spot) price TWAP to-date, internal (mark) price TWAP to-date. (<a name="0053-PERP-019" href="#0053-PERP-019">0053-PERP-019</a>)
 1. For each of the fully completed past funding periods the following data is available (subject to data-node's retention settings): funding period start time, funding period end time, funding rate, funding payment, external (spot) price TWAP, internal (mark) price TWAP. (<a name="0053-PERP-020" href="#0053-PERP-020">0053-PERP-020</a>)
 1. A perpetual market which is active and has open orders, continues to function after protocol upgrade, and preserves all market settings and statistics. (<a name="0053-PERP-021" href="#0053-PERP-021">0053-PERP-021</a>)
-1. A perpetual market which is active and has open orders, after checkpoint restart, is in opening auction. All margin accounts are transferred to general accounts. (<a name="0053-PERP-022" href="#0053-PERP-022">0053-PERP-022</a>)
 1. A perpetual market which is active and has open orders. Wait for a new network history snapshot to be created. Load a new data node from network history. All market data is preserved. (<a name="0053-PERP-023" href="#0053-PERP-023">0053-PERP-023</a>)
 1. When the funding payment does not coincide with mark to market settlement time, a party has insufficient funds to fully cover their funding payment such that the shortfall amount if $x$ and the balance of market's insurance pool is $\frac{x}{3}$, then the entire insurance pool balance gets used to cover the shortfall and the remaining missing amount $\frac{2x}{3}$ gets dealt with using loss socialisation. (<a name="0053-PERP-024" href="#0053-PERP-024">0053-PERP-024</a>)
 
@@ -281,7 +280,7 @@ In both cases the estimates are for a hypothetical position of size 1.
 
 1. Assume the market has been in a long auction so that a funding period has started and ended while the market never went back into continuous trading. In that case the funding payment should be equal to 0 and no transfers should be exchanged. (<a name="0053-PERP-026" href="#0053-PERP-026">0053-PERP-026</a>)
 
-- It is possible to obtain a time series for the price used for “vega side price” of the funding twap from the data node from the time of the market proposal enactment onwards (subject to data node retention policies).(<a name="0053-PERP-043" href="#0053-PERP-043">0053-PERP-043</a>)
+1. It is possible to obtain a time series for the price used for “vega side price” of the funding twap from the data node from the time of the market proposal enactment onwards (subject to data node retention policies). (<a name="0053-PERP-043 " href="#0053-PERP-043">0053-PERP-043</a>)
 
 1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market.
 

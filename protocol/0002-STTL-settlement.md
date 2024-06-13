@@ -127,3 +127,4 @@ All of that happens while processing the trading terminated transaction.
 1. The [market's insurance pool](./0015-INSR-market_insurance_pool_collateral.md) balance is transferred into the global insurance pool using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
+

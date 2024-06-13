@@ -21,7 +21,7 @@ where `key_number` is the sequence number of the derived key to prevent replay a
 
 1. The node operator sends a transaction to the network saying they’re changing their hot key.
 1. From `target_block` onwards the other validators no longer recognise the *old* hot key as valid.
-1. The node operator restarts the node and catches up by replaying the chain or using a full checkpoint (when checkpoints become available). Or the whole network is restarted but due to the transaction other validators have the new hot key.
+1. The node operator restarts the node and catches up by replaying the chain or using a [snapshot](./0077-SNAP-snapshots.md) file. Or the whole network is restarted but due to the transaction other validators have the new hot key.
 1. The hot key switch is complete.
 
 ## Ethereum side for staking bridge purposes
