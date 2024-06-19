@@ -749,6 +749,19 @@
       "0028-GOVE-193"
     ]
   },
+  "Spot AMM": {
+    "milestone": "genbu_temple",
+    "acs": [
+      "0092-SAMM-001",
+      "0092-SAMM-002",
+      "0092-SAMM-003",
+      "0092-SAMM-004",
+      "0092-SAMM-005",
+      "0092-SAMM-006",
+      "0092-SAMM-007",
+      "0092-SAMM-008"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []

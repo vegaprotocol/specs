@@ -6,7 +6,7 @@ The automated market maker (AMM) framework is designed to allow for the provisio
 
 An automated market maker is configured at a per-key level, and is enabled by submitting a transaction with the requisite parameters. At this point in time the protocol will move committed funds to a sub-account which will be used to manage margin for the AMM. Once enabled, the configuration will be added to the pool of available AMMs to be utilised by the matching engine.
 
-Each party may have only one AMM configuration per market.
+Each party may have only one AMM configuration per market, and both Spot and Futures markets are eligible, with the behaviour differing slightly for each.
 
 ## Process Overview
 
@@ -28,7 +28,8 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
-- Cancellation: When the vAMM is cancelled the strategy specified will be followed. Either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
+- Cancellation: When the vAMM is cancelled the strategy specified will be followed:
+  - For futures, either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
 - Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface
@@ -58,7 +59,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
 }
 ```
 
-### Concentrated Liquidity
+### Concentrated Liquidity - Futures
 
 The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style pricing curve for managing price based upon current market price. This allows for the market maker to automatically provide a pricing curve for any prices within some configurable range, alongside offering the capability to control risk by only trading within certain price bounds and out to known position limits.
 
@@ -80,6 +81,8 @@ Additionally, as all commitments require some processing overhead on the core, t
 
 #### Creation
 
+##### Futures
+
 A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the vAMM in line with where it "should" be the vAMM will determine whether the order book is currently able to synchronise the vAMM and reject the transaction if not
 
   1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active vAMMs) it is marked as created and enters normal quoting with no trade necessary.
@@ -100,12 +103,15 @@ A `Concentrated Liquidity` AMM has an inherent linkage between position and impl
 
 #### Amendment
 
+##### Futures
+
 A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter an aggressive trade to synchronise. In general, the behaviour above will be followed. As the vAMM may be currently holding a position, the existing position should be compared to that required at both sides (best bid/ask) of the order book to determine whether buying or selling is necessary. If the current position is between that required at best bid and best ask the amendment succeeds without requiring a trade.
 
 If reducing the `commitment amount` then only funds contained within the AMMs `general` account are eligible for removal. If the deduction is less than the `general` account's balance then the reduced funds will be removed immediately and the AMM will enter `single-sided` mode as specified above to reduce the position. If a deduction of greater than the `general` account is requested then the transaction is rejected and no changes are made.
 
-
 #### Cancellation
+
+##### Futures
 
 In addition to amending to reduce the size a user may also cancel their AMM entirely. In order to do this they must submit a transaction containing only a field `Reduction Strategy` which can take two values:
 
