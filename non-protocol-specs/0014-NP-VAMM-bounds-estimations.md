@@ -14,6 +14,7 @@ The API should take a pool's specification parameters and output various metrics
  1. Leverage At Upper Price
  1. Leverage At Lower Price
  1. Commitment Amount
+ 1. Market ID
  1. Optional: Party Key
 
 And then return the metrics:
@@ -55,7 +56,7 @@ $$
 r_f = \min(l_b, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
 $$
 
-where $l_b$ is the sided value `leverage_at_bounds` (`upper ratio` if the upper band is being considered and `lower ratio` if the lower band is), $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+where $l_b$ is the sided value `leverage_at_bounds` (`upper ratio` if the upper band is being considered and `lower ratio` if the lower band is), $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor. This will result in two separate values to use for $r_f$, one for the lower range and one for the upper range.
 
 
 ### Position at Bounds
@@ -69,7 +70,7 @@ $$
 P_{v_u} = \frac{r_f b}{p_u (1 + r_f) - r_f p_a} ,
 $$
 
-where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the current total balance of the vAMM across all accounts, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound.
+where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the current total balance of the vAMM across all accounts, $p_u$ and $p_l$ are as defined above, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound.
 
 
 ### Loss on Commitment at Bound
@@ -77,7 +78,7 @@ where $r_f$ is the `short` factor for the upper range and the `long` factor for 
 For the loss on commitment at bound, one needs to use the average entry price, bound price and the position at the bounds
 
 $$
-l_c = |p_a - p_b| \cdot P_b ,
+l_c = |(p_a - p_b) \cdot P_b |,
 $$
 
 where $P_b$ is the position at bounds (Either $P_{v_l}$ or $P_{v_u}$), $p_a$ is the average entry price and $p_b$ is the price at the corresponding outer bound. Note that this is an absolute value of loss, so outstanding balance at bounds would be `initial balance - $L_c$`.
@@ -88,10 +89,10 @@ where $P_b$ is the position at bounds (Either $P_{v_l}$ or $P_{v_u}$), $p_a$ is 
 Using a similar methodology to the standard estimations for liquidation price and the above calculated values, an estimate for liquidation prices above and below the range can be obtained with
 
 $$
-p_{liq} = \frac{b - l_c - P_b \cdot p_b}{\abs{P_b} \cdot m_r - P_b} ,
+p_{liq} = \frac{b - l_c - P_b \cdot p_b}{|P_b| \cdot (f_l + m_r) - P_b} ,
 $$
 
-where $p_{liq}$ is the liquidation price (above or below the specified ranges), $b$ is the original commitment balance, $l_c$ is the loss on commitment at the relevant bound, $P_b$ is the position at the relevant bound, $p_b$ is the price at the bound and $m_r$ is the market's long or short risk factor (short for the upper price bound as the position will be negative and long for the lower).
+where $p_{liq}$ is the liquidation price (above or below the specified ranges), $b$ is the original commitment balance, $l_c$ is the loss on commitment at the relevant bound, $P_b$ is the position at the relevant bound, $p_b$ is the price at the bound, $f_l$ is the linear slippage factor for the market and $m_r$ is the market's long or short risk factor (short for the upper price bound as the position will be negative and long for the lower).
 
 
 ## Specified Key
@@ -101,7 +102,7 @@ When a key is specified, the existence of any current vAMM should be checked and
 
 ## Acceptance criteria
 
-- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1100, 900, 2, 2, 100) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
+- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment, short risk factor, long risk factor, market slippage factor) as (1000, 1100, 900, 2, 2, 100, 0.01, 0.01, 0) the response is (<a name="0014-NP-VAMM-001" href="#0014-NP-VAMM-001">0014-NP-VAMM-001</a>):
 
  1. Loss on Commitment at Upper Bound: 8.515
  1. Loss on Commitment at Lower Bound: 9.762
@@ -111,7 +112,7 @@ When a key is specified, the existence of any current vAMM should be checked and
  1. Liquidation Price at Lower Bound: 454.545
 
 
-- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment) as (1000, 1300, 900, 1, 5, 100) the response is (<a name="0014-NP-VAMM-004" href="#0014-NP-VAMM-004">0014-NP-VAMM-004</a>):
+- For a request specifying (base, upper, lower, leverage_upper, leverage_lower, commitment, short risk factor, long risk factor, market slippage factor) as (1000, 1300, 900, 1, 5, 100, 0.01, 0.01, 0) the response is (<a name="0014-NP-VAMM-004" href="#0014-NP-VAMM-004">0014-NP-VAMM-004</a>):
 
  1. Loss on Commitment at Upper Bound: 10.948
  1. Loss on Commitment at Lower Bound: 21.289
