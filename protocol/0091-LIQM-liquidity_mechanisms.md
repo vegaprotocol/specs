@@ -50,7 +50,7 @@ A party will only be able to receive liquidity fees or earn liquidity rewards pr
 
 A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidityProvider.proportionRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
 
-$$\frac{V_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
+$$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
 
 Where:
 
