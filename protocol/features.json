@@ -725,6 +725,30 @@
     "milestone": "colosseo_II",
     "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
   },
+  "Transaction Ordering": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0093-TRTO-001",
+      "0093-TRTO-002",
+      "0093-TRTO-003",
+      "0093-TRTO-004",
+      "0093-TRTO-005",
+      "0093-TRTO-006",
+      "0093-TRTO-007",
+      "0093-TRTO-008",
+      "0093-TRTO-009",
+      "0093-TRTO-010",
+      "0093-TRTO-011",
+      "0093-TRTO-012",
+      "0093-TRTO-013",
+      "0093-TRTO-014",
+      "0093-TRTO-015",
+      "0093-TRTO-016",
+      "0028-GOVE-192",
+      "0028-GOVE-194",
+      "0028-GOVE-193"
+    ]
+  },
   "Spot AMM": {
     "milestone": "genbu_temple",
     "acs": [
