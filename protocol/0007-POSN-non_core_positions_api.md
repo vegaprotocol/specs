@@ -45,9 +45,16 @@ The API is expected to expose:
 ### Position
 
 - Open volume (this is a core API)
-- Unrealised P&L (method = averaged)
-- Realised P&L (method = averaged)
 - Open volume average entry price (method = averaged)
+- Unrealised P&L (method = averaged)
+- Realised P&L for the market for the key (method = averaged)
+- Realised P&L for the market for the key since the position last changed from 0 (method = averaged)
+- Taker fees paid for the market for the key.
+- Taker fees paid for the market for the key since position last changed from 0.
+- Maker fees received for the market for the key.
+- Maker fees received for the market for the key since position last changed from 0.
+- Funding total for the market for the key.
+- Funding total for the market for the key since position last changed from 0.
 
 ### Trade
 
