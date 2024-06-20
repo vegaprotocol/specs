@@ -120,9 +120,9 @@ Note that this is validation is in units of time from current time i.e. if the p
 at e.g. `09:00:00 on 1st Jan 2021` and `governance.proposal.asset.minEnact` is `72h` then the proposal must contain enactment date/time that after `09:00:00 on 4th Jan 2021`.
 If there is `governance.proposal.asset.maxEnact` of e.g. `360h` then the proposed enactment date / time must be before `09:00:00 on 16th Jan 2021`.
 
-## Editing and/or cancelling a proposal is not possible
+## Editing a proposal
 
-A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal, or submit a new proposal.
+A proposal cannot be edited once submitted to the network. The only possible actions are to cancel within the threshold, vote for or against a proposal, or submit a new proposal.
 
 If a proposal is created and later a different outcome is preferred by network participants, two courses of action are possible:
 
@@ -130,6 +130,27 @@ If a proposal is created and later a different outcome is preferred by network p
 1. Vote for or against the proposal and create a new proposal for the additional change
 
 Which of these makes most sense will depend on the type of change, the timing of the events, and how the rest of the community votes for the initial proposal.
+
+## Cancelling a proposal
+
+A proposal can be cancelled under certain conditions by, and only by, the party which created the proposal. To avoid situations where the community may have acted upon proposals they "expected" to pass, a party can only cancel their proposal before a certain "cancellation threshold" is reached.
+
+This cancellation threshold is a fixed point before the proposal closing time. The duration of the period in which a proposal cannot be cancelled is defined by the network parameter `governance.proposal.cancellationThreshold` (a duration string defaulting to `23h0m0s`).
+
+i.e. Given the `governance.proposal.cancellationThreshold` is `23h0m0s` a party will be able to cancel their proposal 23 hours before the proposal closing time.
+
+### Mechanics
+
+A party can cancel their proposal by simply voting against it with a no vote.
+
+- If the current time is before the cancellation threshold, the proposal is instantly rejected.
+- If the current time is after the cancellation threshold, the vote is treated normally as a vote against a proposal.
+
+Note the following additional details:
+
+- a cancelling vote against a proposal must pass all typical vote checks and spam protections, i.e. who party who removes stake after creating a proposal and no longer meets the requirement will not be able to cancel their proposal.
+
+- if at the time of creating a proposal the closing time is within the period defined by `governance.proposal.cancellationThreshold`, the proposal will still be valid and accepted by the network but the party will not have an opportunity to cancel the proposal.
 
 ## Outcome
 
@@ -558,6 +579,8 @@ APIs should also exist for clients to:
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>) For product spot: (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
 - A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
 - At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
+- At enactment, a market with `Transaction Prioritisation` enabled will have transactions re-prioritised as defined in [transaction prioritisation](./0092-TRTO-trading_transaction_ordering.md) (<a name="0028-GOVE-192" href="#0028-GOVE-192">0028-GOVE-192</a>).
+- At enactment, a market with `Transaction Prioritisation` disabled will not have transactions re-prioritised (<a name="0028-GOVE-193" href="#0028-GOVE-193">0028-GOVE-193</a>).
 
 #### Market change proposals
 
@@ -602,6 +625,7 @@ APIs should also exist for clients to:
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
 - At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
 - A market LP with ELS > 0 can vote on a market change proposal even if the key doesn't meet the `governance.proposal.updateMarket.minVoterBalance` for governance token.  (<a name="0028-GOVE-185" href="#0028-GOVE-185">0028-GOVE-185</a>).
+- An amendment to a market to enable or disable `Transaction Prioritisation` will have that effect immediately upon enactment. (<a name="0028-GOVE-194" href="#0028-GOVE-194">0028-GOVE-194</a>)
 
 
 #### Network parameter change proposals
@@ -774,3 +798,11 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 - A voter's equity-like share does not give them any additional voting weight when voting on a market community tags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
 - A proposal to add community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
 - A proposal to remove community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
+
+#### Cancelling Proposals
+
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will be instantaneously rejected (<a name="0028-GOVE-188" href="#0028-GOVE-188">0028-GOVE-188</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal meets the criteria to be accepted it will pass (<a name="0028-GOVE-189" href="#0028-GOVE-189">0028-GOVE-189</a>)
+- Given a proposal with a closing time less than `governance.proposal.cancellationThreshold` from the current time, if the party that created the proposal votes against it, the proposal will not be instantaneously rejected. At closing time, if the proposal does not meet the criteria to be accepted it will be rejected (<a name="0028-GOVE-190" href="#0028-GOVE-190">0028-GOVE-190</a>)
+
+- Given a proposal with a closing time further than `governance.proposal.cancellationThreshold` from the current time, if a party that did not create the proposal votes against it, the proposal will not be instantaneously rejected (<a name="0028-GOVE-191" href="#0028-GOVE-191">0028-GOVE-191</a>)

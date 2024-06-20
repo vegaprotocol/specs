@@ -25,29 +25,19 @@
   },
   "Isolated margin": {
     "milestone": "colosseo",
-    "acs": [
-      "0019-MCAL-208"
-    ]
+    "acs": ["0019-MCAL-208"]
   },
   "Closeout trades and auctions": {
     "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-030"
-    ]
+    "acs": ["0012-POSR-030"]
   },
   "Market suspended/resumed before enactment": {
     "milestone": "colosseo",
-    "acs": [
-      "0043-MKTL-011",
-      "0043-MKTL-012",
-      "0043-MKTL-013"
-    ]
+    "acs": ["0043-MKTL-011", "0043-MKTL-012", "0043-MKTL-013"]
   },
   "Teams": {
     "milestone": "colosseo",
-    "acs": [
-      "0083-RFPR-068"
-    ]
+    "acs": ["0083-RFPR-068"]
   },
   "Spot": {
     "milestone": "colosseo",
@@ -363,9 +353,7 @@
       "0056-REWA-164",
       "0056-REWA-165",
       "0056-REWA-166",
-      "0056-REWA-167",
-      "0056-REWA-168",
-      "0056-REWA-169"
+      "0056-REWA-167"
     ]
   },
   "Spot stretch": {
@@ -486,8 +474,8 @@
       "0004-AMND-038",
       "0004-AMND-039",
       "0004-AMND-040",
-      "0004-AMND-041",
       "0004-AMND-042",
+      "0004-AMND-041",
       "0004-AMND-043",
       "0004-AMND-044",
       "0004-AMND-045",
@@ -542,17 +530,11 @@
   },
   "Perpetual funding rates": {
     "milestone": "colosseo",
-    "acs": [
-      "0053-PERP-036"
-    ]
+    "acs": ["0053-PERP-036"]
   },
   "Explicit liquidation range": {
     "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-031",
-      "0012-POSR-032",
-      "0012-POSR-033"
-    ]
+    "acs": ["0012-POSR-031", "0012-POSR-032", "0012-POSR-033"]
   },
   "Community Tags": {
     "milestone": "colosseo",
@@ -572,9 +554,7 @@
   },
   "LPs voting without gov token": {
     "milestone": "colosseo",
-    "acs": [
-      "0028-GOVE-185"
-    ]
+    "acs": ["0028-GOVE-185"]
   },
   "Reward Improvements": {
     "milestone": "colosseo",
@@ -664,9 +644,10 @@
       "0090-VAMM-030",
       "0090-VAMM-031",
       "0090-VAMM-032",
+      "0090-VAMM-033",
+      "0090-VAMM-034",
+      "0090-VAMM-035",
       "0057-TRAN-070",
-      "0056-REWA-111",
-      "0056-REWA-112",
       "0026-AUCT-033",
       "0026-AUCT-034",
       "0026-AUCT-035",
@@ -675,7 +656,26 @@
       "0014-NP-VAMM-001",
       "0014-NP-VAMM-002",
       "0014-NP-VAMM-003",
-      "0014-NP-VAMM-004"
+      "0014-NP-VAMM-004",
+      "0015-NP-OBES-001",
+      "0015-NP-OBES-002",
+      "0042-LIQF-107",
+      "0042-LIQF-108",
+      "0042-LIQF-109",
+      "0042-LIQF-110",
+      "0042-LIQF-111",
+      "0056-REWA-170",
+      "0085-RVST-015",
+      "0085-RVST-016",
+      "0085-RVST-017",
+      "0085-RVST-018",
+      "0085-RVST-019",
+      "0085-RVST-020",
+      "0085-RVST-021",
+      "0085-RVST-022",
+      "0085-RVST-023",
+      "0085-RVST-024",
+      "0085-RVST-025"
     ]
   },
   "Capped Futures": {
@@ -719,6 +719,47 @@
       "0042-LIQF-095",
       "0042-LIQF-096",
       "0019-MCAL-159"
+    ]
+  },
+  "Cancelling Proposals": {
+    "milestone": "colosseo_II",
+    "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
+  },
+  "Transaction Ordering": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0093-TRTO-001",
+      "0093-TRTO-002",
+      "0093-TRTO-003",
+      "0093-TRTO-004",
+      "0093-TRTO-005",
+      "0093-TRTO-006",
+      "0093-TRTO-007",
+      "0093-TRTO-008",
+      "0093-TRTO-009",
+      "0093-TRTO-010",
+      "0093-TRTO-011",
+      "0093-TRTO-012",
+      "0093-TRTO-013",
+      "0093-TRTO-014",
+      "0093-TRTO-015",
+      "0093-TRTO-016",
+      "0028-GOVE-192",
+      "0028-GOVE-194",
+      "0028-GOVE-193"
+    ]
+  },
+  "Spot AMM": {
+    "milestone": "genbu_temple",
+    "acs": [
+      "0092-SAMM-001",
+      "0092-SAMM-002",
+      "0092-SAMM-003",
+      "0092-SAMM-004",
+      "0092-SAMM-005",
+      "0092-SAMM-006",
+      "0092-SAMM-007",
+      "0092-SAMM-008"
     ]
   },
   "Unknown": {
