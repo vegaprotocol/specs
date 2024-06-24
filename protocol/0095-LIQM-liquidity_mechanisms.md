@@ -71,7 +71,7 @@ Each LPs `volume of notional` is defined as, the maximum notional volume that th
 The range and required proportion of the epoch are controlled though market configurable SLA parameters:
 
 - `lp_price_range`: a number in the range $[0, 100]$ which defines the range in which an LPs orders will contribute towards their volume of notional, refer to section [instantaneous volume-of-notional](#instantaneous volume of notional) for more details.
-- `minimum_time_fraction`: a number in the range $[0, 1]$ which defines the minimum proportion of an epoch an LP must have provided an amount of volume for in order fot that amount to be set as their volume of notional, refer to section [calculating the volume of notional](#calculating-the-volume-of-notional) for more details.
+- `minimum_time_fraction`: a number in the range $[0, 1]$ which defines the minimum proportion of an epoch an LP must have provided an amount of volume for in order for that amount to be set as their volume of notional, refer to section [calculating the volume of notional](#calculating-the-volume-of-notional) for more details.
 
 
 ### Instantaneous Volume of Notional
