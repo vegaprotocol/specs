@@ -186,6 +186,33 @@ $$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
 
 Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
+
+### LP Performance Metric
+
+The LP performance metric, $m_{rz}$, measures the quality of the liquidity a party supplies.
+
+This metric differs from the [Liquidity Fees Received](#fee-based-reward-metrics) metric as instead of evaluating the actual liquidity fees received, the network evaluates how "virtual fees" would have been allocated and distributed. This is done to reward LPs for providing liquidity even in periods where there is reduced trading volume.
+
+The virtual fees which should be virtually allocated each fee distribution window are set at 1 quantum worth of the asset in which the fees are collected (e.g. for perpetual and future markets this is the settlement asset, for spot markets this is the quote asset).
+
+**Note: as the network must not be able to "print" funds, virtual fees should never actually be created, distributed, or transferred to an account. They must be purely "virtual" and used to evaluate LP performance.**
+
+For each market, the network must complete the following steps using the SLA parameters defined in the recurring transfer (note this is not the same as the parameters defined in the market configuration).
+
+1. Every **liquidity fee distribution window**, evaluate how the virtual fees would have been allocated as per the [SLA and liquidity score mechanisms](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees-into-lp-per-market-fee-account).
+
+2. Every **epoch**, evaluate how each LPs accumulated virtual fees would have been distributed as per the [SLA mechanisms](./0042-LIQF-setting_fees_and_rewarding_lps.md#calculating-sla-performance).
+
+3. Finally calculate each LP performance metric $m_{lp}$ as follows.
+
+Let:
+
+- $m_{lp}$ be the parties LP performance metric.
+- $v_{i}$ be the parties "virtual fees" received at the end of epoch $i$.
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{lp} = \frac{\sum_{i}^{n}{v_{i}}}{N}$$
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
@@ -1065,6 +1092,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If an eligible party has a profitable short position which has been partly closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-130" href="#0056-REWA-130">0056-REWA-130</a>).
 - If an eligible party had a profitable short position which was fully closed, they will have a positive realised returns score and should receive rewards (<a name="0056-REWA-131" href="#0056-REWA-131">0056-REWA-131</a>).
 - If an eligible party had a profitable short position which was fully closed with an order changing the side of the position, only the closed volume will contribute to the parties realised returns, and they will have a positive realised returns score and therefore receive rewards (<a name="0056-REWA-135" href="#0056-REWA-135">0056-REWA-135</a>).
+
+### LP Performance Metric
+
+- An LP with a non-zero liquidity score who meets the time on book requirement (with respect to the SLA parameters defined in the reward setup) will receive LP performance rewards even if the traded volume was zero and no actual liquidity fees were accumulated (<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>).
+
+- An LP which accumulates no "virtual fees" throughout the epoch will not receive LP performance rewards at the end of the epoch as they would not have been distributed any "virtual fees" (<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>).
+- An LP which accumulates "virtual fees" throughout the epoch but does not meet the time on book requirement will not receive LP performance rewards at the end of the epoch as they would not have been distributed "virtual fees" (<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>).
+- An LP which accumulates "virtual fees" and meets the time on book requirement will receive **some** LP performance rewards at the end of the epoch as they would have been distributed "virtual fees" (<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>).
+
+- Given an LP performance reward setup with a stricter liquidity price range than that configured in the market parameters, if an LP supplies liquidity within the price range defined by the market but not within the range defined by the reward, the LP will receive any liquidity fees but will not receive any liquidity rewards (<a name="0056-REWA-175" href="#0056-REWA-175">0056-REWA-175</a>).
+- Given an LP performance reward setup with a looser liquidity price range than that configured in the market parameters, if an LP supplies liquidity within the price range defined by the reward but not within the range defined by the market, the LP will receive any liquidity rewards but will not receive any liquidity fees (<a name="0056-REWA-176" href="#0056-REWA-176">0056-REWA-176</a>).
+
+- Given a market with multiple LP performance rewards configured with different price ranges, each reward will be evaluated individually with respect to the SLA parameters defined int he reward setup (<a name="0056-REWA-177" href="#0056-REWA-177">0056-REWA-177</a>).
+
 
 ### Validator ranking metric
 
