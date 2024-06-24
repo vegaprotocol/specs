@@ -27,6 +27,17 @@ Network-wide auctions put all of the markets running on a given network into auc
 Block time auctions get triggered when the block time exceeds one of the predefined thresholds expressed in seconds. This should be done as soon as the time since the beginning of the last known block is more than any of the specified thresholds. Once such conditions get detected no more transactions relating to markets get processed before all the markets get put into auction mode. The duration of such an auction should be fixed and related to the block length.
 The allowed thresholds and resulting auction periods should be implemented as a lookup-up table, sorted in the ascending order of the threshold and checked backwards. The resulting auction periods should not be summed - the auction period associated with the largest allowed threshold less than the detected block time should be used as the resulting auction duration.
 
+The default settings should be:
+
+  | Threshold | Network-wide auction duration |
+  | --------- | ----------------------------- |
+  | `10s`     | `1min`                        |
+  | `1min`    | `5min`                        |
+  | `10min`   | `1h`                          |
+  | `1h`      | `1h`                          |
+  | `6h`      | `3h`                         |
+  | `24h`     | `6h`                         |
+
 ## Acceptance criteria
 
 - When the network resumes after a crash (irrespective of how that was achieved) no trades get generated. All markets go into an auction of the same duration. Trades may only be generated in any market once the network-wide auction ends. (<a name="0094-PRAC-001" href="#0094-PRAC-001">0094-PRAC-001</a>)
