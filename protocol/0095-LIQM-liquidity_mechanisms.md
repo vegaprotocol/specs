@@ -6,7 +6,7 @@ The aim of the on-chain liquidity mechanisms are to reward parties for supplying
 
 - parties [accrue](#accruing-els-points) ELS points over time proportional to their maker fees earned.
 - parties are [designated](#designating-liquidity-providers) as LPs on an epoch by epoch basis if they receive above a specified proportion of the markets maker fees.
-- parties [receive](#distributing-liquidity-fees) a proportion of the liquidity fees accumulated in an epoch relative to their [accrued](#accruing-els-points) ELS points and [implied commitment amount](#implied-commitment-amount) (but only when designated as an LP).
+- parties [receive](#distributing-liquidity-fees) a proportion of the liquidity fees accumulated in an epoch relative to their [accrued](#accruing-els-points) ELS points and [volume of notional](#volume-of-notional) (but only when designated as an LP).
 
 With the above mechanisms the protocol incentives the following desirable behaviour.
 
@@ -25,7 +25,7 @@ The mechanisms also enable the following features:
 
 A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker fees a party must receive in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
 
-Updates to this parameter will be used the next time LPs are designated, i.e. updating the network parameter will not result in LPs instantly being redesignated.
+Updates to this parameter will be used the next time LPs are designated, i.e. updating the network parameter will not result in LPs instantly being re-designated.
 
 ## Accruing ELS Points
 
@@ -39,7 +39,7 @@ Where:
 
 - $ELS_{j}$ is the ELS points accrued by party $j$ in epoch $i$
 - $V_{i_j}$ is the notional maker fees of party $j$ in epoch $i$
-- $Q$ is the quantum of the asset in which the markets prices are expressed in (settlement for future and perpetual markets, quote for spot markets) 
+- $Q$ is the quantum of the asset in which the markets prices are expressed in (settlement for future and perpetual markets, quote for spot markets)
 
 > [!NOTE]
 > the maker fees is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of maker fees received.
@@ -55,11 +55,11 @@ $$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
 Where:
 
 - $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
-- $N$ the requirement specified by the network parameter `liquidityProvider.proportionRequirement` 
+- $N$ the requirement specified by the network parameter `liquidityProvider.proportionRequirement`
 
 By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 
-- "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide uncompetitive liquidity).
+- "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide un-competitive liquidity).
 - "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
 
 ## Volume of Notional
