@@ -31,5 +31,6 @@ The lifecycle of the auction process should be:
 
  1. Each time **Auction Volume Snapshot Schedule** ticks, a snapshot of the balance in the relevant account is taken and stored as an externally accessible value for the volume which would be traded at an auction
  2. When **Auction Schedule** ticks, an auction is triggered for **Auction Length** time period, in which a volume will be placed on the book equivalent to that measured in the last snapshot, and at a price taken from the latest **Price Oracle** value multiplied by the **Oracle Offset Factor**. The side of the market should be inferred automatically from the token being sold. The order placed on the market should be a GFA order, which will trade as much as possible on auction exit and then be removed.
- 3. Any remaining balance in the account should be carried over to the next scheduled auction
+ 3. Any remaining balance in the account should be carried over to the next scheduled auction.
+ 4. Any traded balance should be send to the account specified in **Account Type To**. Note that these sales do not change ownership, and so the destination key does not require specification (all accounts are network-owned).
 
