@@ -62,19 +62,21 @@ By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 - "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide uncompetitive liquidity).
 - "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
 
-## Implied Commitment Amount
+## Volume of Notional
 
-Each LPs `implied commitment amount` is defined as, the maximum volume of notional liquidity that they supplied within a specified range for at least N % of the epoch (where the liquidity range and N are market configurable parameters).
+The volume of notional is a measure of how much liquidity an LP provided to a market throughout the epoch.
 
-To calculate the implied commitment amount, throughout the epoch, the network must sample and store the volume of notional liquidity supplied by each LP at that point. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
+Each LPs `volume of notional` is defined as, the maximum notional volume that they supplied through orders within a specified range for at least N % of the epoch (where the liquidity range and N are market configurable parameters).
 
-### Instantaneous Supplied Liquidity
+To calculate the volume of notional, throughout the epoch, the network must sample and store the current volume of notional supplied by each LP at that point. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
 
-Calculating the liquidity supplied at any given point in time is done as follows:
+### Instantaneous Volume of Notional
+
+Calculating the notional volume supplied at any given point in time is done as follows:
 
 Whilst in continuous trading:
 
-- If there is no mid price each LP is treated as supplying `0` liquidity.
+- If there is no mid price each LP is treated as supplying `0` volume.
 
 - If there is a mid price calculate the volume of notional that is in the range.
 
@@ -90,11 +92,11 @@ Whilst in monitoring auctions:
 (1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
-- If there is no 'indicative uncrossing price' each LP is treated as supplying `0` liquidity.
+- If there is no 'indicative uncrossing price' each LP is treated as supplying `0` volume.
 
-### Calculating the implied commitment amount
+### Calculating the Volume of Notional
 
-At the end of the epoch, before distributing fees, each LPs `implied commitment amount` is set to the largest volume of notional that was supplied for at least N % of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
+At the end of the epoch, before distributing fees, each LPs `volume of notional` is set to the largest volume of notional that was supplied for at least N % of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
 
 $$i= \text{ceil}(len(array)/N)$$
 
@@ -102,11 +104,11 @@ $$i= \text{ceil}(len(array)/N)$$
 
 At the end of epoch, after each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points as follows.
 
-$$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{L_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
+$$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{V_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
 
 Where:
 
 - $f_{i_j}$ is the liquidity fees distributed to party $j$ in epoch $i$
 - $f_{i}$ is the liquidity fees accumulated by the market in epoch $i$
 - $ELS_j$ is the current number of ELS points for party $j$
-- $L_j$ is the implied commitment amount of party $j$
+- $V_j$ is the volume of notional of party $j$
