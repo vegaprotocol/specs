@@ -82,6 +82,8 @@ Note, discounts are calculated and applied one after the other and **before** re
 - infrastructure: staking/governance system/engine (network wide)
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
+- treasury: Fees sent to network treasury for later usage via governance votes (network wide)
+- buyback: Fees used to purchase governance tokens to the protocol via regular auctions (network wide)
 
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
@@ -168,11 +170,11 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 ### Applying benefit factors
 
 1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
-    - `infrastructure_referral_fee_discount`
+    - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
 1. Referee discounts with differing discounts across the three factors are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-034" href="#0029-FEES-034">0029-FEES-034</a>)
-    - `infrastructure_referral_fee_discount`
+    - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
 1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
