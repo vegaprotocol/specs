@@ -82,6 +82,8 @@ Note, discounts are calculated and applied one after the other and **before** re
 - infrastructure: staking/governance system/engine (network wide)
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
+- treasury: Fees sent to network treasury for later usage via governance votes (network wide)
+- buyback: Fees used to purchase governance tokens to the protocol via regular auctions (network wide)
 
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
@@ -94,7 +96,7 @@ trade_value_for_fee_purposes:
 
 Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = `size_of_trade` * `price_of_trade`. For other product types, we may want to use something other than the notional value. This is determined by the Product.
 
-NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as integers will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
+NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as integers will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done gl∏obal by the position management component of Vega which may expose both a true and an integer position size, or something).
 
 ### Collecting and Distributing Fees
 
