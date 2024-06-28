@@ -39,7 +39,6 @@ The default settings should be:
   | `24h`     | `6h`                          |
 
 
-
 ## Interaction between different auction modes
 
 When market goes into auction mode from its default trading mode then the auction trigger which caused this should be listed as `trigger` on the API as long as that auction hasn't finished (including cases when it gets extended).
