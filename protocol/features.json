@@ -25,19 +25,29 @@
   },
   "Isolated margin": {
     "milestone": "colosseo",
-    "acs": ["0019-MCAL-208"]
+    "acs": [
+      "0019-MCAL-208"
+    ]
   },
   "Closeout trades and auctions": {
     "milestone": "colosseo",
-    "acs": ["0012-POSR-030"]
+    "acs": [
+      "0012-POSR-030"
+    ]
   },
   "Market suspended/resumed before enactment": {
     "milestone": "colosseo",
-    "acs": ["0043-MKTL-011", "0043-MKTL-012", "0043-MKTL-013"]
+    "acs": [
+      "0043-MKTL-011",
+      "0043-MKTL-012",
+      "0043-MKTL-013"
+    ]
   },
   "Teams": {
     "milestone": "colosseo",
-    "acs": ["0083-RFPR-068"]
+    "acs": [
+      "0083-RFPR-068"
+    ]
   },
   "Spot": {
     "milestone": "colosseo",
@@ -530,11 +540,17 @@
   },
   "Perpetual funding rates": {
     "milestone": "colosseo",
-    "acs": ["0053-PERP-036"]
+    "acs": [
+      "0053-PERP-036"
+    ]
   },
   "Explicit liquidation range": {
     "milestone": "colosseo",
-    "acs": ["0012-POSR-031", "0012-POSR-032", "0012-POSR-033"]
+    "acs": [
+      "0012-POSR-031",
+      "0012-POSR-032",
+      "0012-POSR-033"
+    ]
   },
   "Community Tags": {
     "milestone": "colosseo",
@@ -554,7 +570,9 @@
   },
   "LPs voting without gov token": {
     "milestone": "colosseo",
-    "acs": ["0028-GOVE-185"]
+    "acs": [
+      "0028-GOVE-185"
+    ]
   },
   "Reward Improvements": {
     "milestone": "colosseo",
@@ -723,7 +741,12 @@
   },
   "Cancelling Proposals": {
     "milestone": "colosseo_II",
-    "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
+    "acs": [
+      "0028-GOVE-188",
+      "0028-GOVE-189",
+      "0028-GOVE-190",
+      "0028-GOVE-191"
+    ]
   },
   "Transaction Ordering": {
     "milestone": "colosseo_II",
@@ -747,6 +770,21 @@
       "0028-GOVE-192",
       "0028-GOVE-194",
       "0028-GOVE-193"
+    ]
+  },
+  "Long Block Auction": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0026-AUCT-039",
+      "0026-AUCT-040",
+      "0094-PRAC-001",
+      "0094-PRAC-002",
+      "0094-PRAC-003",
+      "0094-PRAC-004",
+      "0094-PRAC-005",
+      "0094-PRAC-006",
+      "0094-PRAC-007",
+      "0094-PRAC-008"
     ]
   },
   "Spot AMM": {
