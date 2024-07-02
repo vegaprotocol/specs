@@ -748,6 +748,10 @@
       "0028-GOVE-191"
     ]
   },
+  "Volume Discount Factor Customisation": {
+    "milestone": "colosseo_II",
+    "acs": ["0084-VDPR-018", "0029-FEES-034", "0029-FEES-035"]
+  },
   "Transaction Ordering": {
     "milestone": "colosseo_II",
     "acs": [
