@@ -42,8 +42,12 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 
 ## Minimum transfer amount
 
-This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md).
-The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
+Transfers are subject to a minimum transfer amount (expressed in quantum).
+
+- transfers to a reward pool are controlled by `transfer.minRewardTransferQuantumMultiple`.
+- all other transfers are controlled by `transfer.minTransferQuantumMultiple`.
+
+These network parameters are quantum specified for the relevant [asset](0040-ASSF-asset_framework.md) and the minimum transfer amount is the product of the relevant network parameter and the assets quantum.
 
 If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less than the full balance is not permitted).
 
