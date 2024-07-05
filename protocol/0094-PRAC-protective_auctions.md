@@ -40,9 +40,9 @@ The default settings should be:
 
 ## Acceptance criteria
 
-- When the network resumes after a crash (irrespective of how that was achieved) no trades get generated. All markets go into an auction of the same duration. Trades may only be generated in any market once the network-wide auction ends. (<a name="0094-PRAC-001" href="#0094-PRAC-001">0094-PRAC-001</a>)
+- When the network resumes after a crash (irrespective of how that was achieved) which lasted longer than the shortest long-block auction threshold, no trades get generated. All markets go into an auction of the same duration. Trades may only be generated in any market once the network-wide auction ends. (<a name="0094-PRAC-001" href="#0094-PRAC-001">0094-PRAC-001</a>)
 
-- When the network resumes after a [protocol upgrade](./0075-PLUP-protocol_upgrades.md) no trades get generated. All markets go into an auction of the same duration. Trades may only be generated in any market once the network-wide auction ends. (<a name="0094-PRAC-002" href="#0094-PRAC-002">0094-PRAC-002</a>)
+- When the network resumes after a [protocol upgrade](./0075-PLUP-protocol_upgrades.md) which lasted longer than the shortest long-block auction threshold, no trades get generated. All markets go into an auction of the same duration. Trades may only be generated in any market once the network-wide auction ends. (<a name="0094-PRAC-002" href="#0094-PRAC-002">0094-PRAC-002</a>)
 
 - When the lookup table for the network-wide auction is specified as:
   
