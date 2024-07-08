@@ -1,6 +1,5 @@
 ---
 
-
 matrix:
 
   - name: Markdown
@@ -38,6 +37,12 @@ matrix:
             # Ignore hugo/jinja tags
             - open: '{{'
               close: '}}'
+            # Ignore display LaTeX formulas ($$ ... $$)
+            - open: '\$\$'
+              close: '\$\$'
+            # Ignore display LaTeX formulas ($$ ... $$)
+            - open: '\$'
+              close: '\$'
       - pyspelling.filters.markdown: null
       - pyspelling.filters.html:
           comments: false
