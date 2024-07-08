@@ -1,6 +1,5 @@
 ---
 
-
 matrix:
 
   - name: Markdown
@@ -35,12 +34,15 @@ matrix:
             # Ignore text between inline back ticks
             - open: '`'
               close: '`'
-            # Ignore text between inline dollar signs (KaTex/LaTeX math)
-            - open: '$'
-              close: '$'
             # Ignore hugo/jinja tags
             - open: '{{'
               close: '}}'
+            # Ignore display LaTeX formulas ($$ ... $$)
+            - open: '\$\$'
+              close: '\$\$'
+            # Ignore display LaTeX formulas ($$ ... $$)
+            - open: '\$'
+              close: '\$'
       - pyspelling.filters.markdown: null
       - pyspelling.filters.html:
           comments: false
