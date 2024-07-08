@@ -125,7 +125,7 @@ Additionally, a `high_volume_market_maker_rebate` may be necessary which will be
 1. Take this fee from the `treasury_fee` and `buyback_fee` (protocol restrictions on governance changes ensure that `treasury_fee + buyback_fee >= high_volume_maker_fee` is always true) as a proportion of their relative sizes, i.e.:
    1. `high_volume_maker_fee = high_volume_factor * trade_value_for_fee_purposes`
    1. `treasury_fee = treasury_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`
-   1. `buyback_fee = treasury_fee * (1 - buyback_fee / (treasury_fee + buyback_fee))`
+   1. `buyback_fee = buyback_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`
 
 Now [apply benefit factors](#applying-benefit-factors) and then distribute funds from the "temporary fee bucket" as follows:
 
