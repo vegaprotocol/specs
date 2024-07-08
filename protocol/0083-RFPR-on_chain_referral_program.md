@@ -360,42 +360,42 @@ Given:
             "minimum_running_notional_taker_volume": 10000,
             "minimum_epochs": 0,
             "referral_reward_factor": {
-                "referral_maker_reward_factor": 0.001,
-                "referral_infrastructure_reward_factor": 0.001,
-                "referral_liquidity_reward_factor": 0.001
+                "maker_reward_factor": 0.001,
+                "infrastructure_reward_factor": 0.001,
+                "liquidity_reward_factor": 0.001
             },
             "referral_discount_factor": {
-                "referral_maker_discount_factor": 0.001,
-                "referral_infrastructure_discount_factor": 0.001,
-                "referral_liquidity_discount_factor": 0.001
+                "maker_discount_factor": 0.001,
+                "infrastructure_discount_factor": 0.001,
+                "liquidity_discount_factor": 0.001
             },
         },
         {
             "minimum_running_notional_taker_volume": 20000,
             "minimum_epochs": 7,
             "referral_reward_factor": {
-                "referral_maker_reward_factor": 0.005,
-                "referral_infrastructure_reward_factor": 0.005,
-                "referral_liquidity_reward_factor": 0.005
+                "maker_reward_factor": 0.005,
+                "infrastructure_reward_factor": 0.005,
+                "liquidity_reward_factor": 0.005
             },
             "referral_discount_factor": {
-                "referral_maker_discount_factor": 0.005,
-                "referral_infrastructure_discount_factor": 0.005,
-                "referral_liquidity_discount_factor": 0.005
+                "maker_discount_factor": 0.005,
+                "infrastructure_discount_factor": 0.005,
+                "liquidity_discount_factor": 0.005
             },
         },
         {
             "minimum_running_notional_taker_volume": 30000,
             "minimum_epochs": 31,
             "referral_reward_factor": {
-                "referral_maker_reward_factor": 0.01,
-                "referral_infrastructure_reward_factor": 0.01,
-                "referral_liquidity_reward_factor": 0. 01
+                "maker_reward_factor": 0.01,
+                "infrastructure_reward_factor": 0.01,
+                "liquidity_reward_factor": 0. 01
             },
             "referral_discount_factor": {
-                "referral_maker_discount_factor": 0.01,
-                "referral_infrastructure_discount_factor": 0.01,
-                "referral_liquidity_discount_factor": 0.01
+                "maker_discount_factor": 0.01,
+                "infrastructure_discount_factor": 0.01,
+                "liquidity_discount_factor": 0.01
             },
         },
     ]

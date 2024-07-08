@@ -18,9 +18,9 @@ Enabling or changing the terms of the volume discount program can be proposed vi
 - `benefit_tiers`: a list of dictionaries with the following fields
   - `minimum_party_running_notional_taker_volume`: the required `party_running_notional_taker_volume` in quantum units for a party to access this tier
   - `volume_discount_factors`: a dictionary with the following fields
-    - `maker_volume_discount_factor`: the factor to discount the maker fee component of any fees paid
-    - `infrastructure_volume_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
-    - `lp_volume_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
+    - `maker_discount_factor`: the factor to discount the maker fee component of any fees paid
+    - `infrastructure_discount_factor`: the factor to discount the infrastructure fee component of any fees paid
+    - `lp_discount_factor`: the factor to discount the liquidity provider fee component of any fees paid
 - `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the program will become inactive and benefits will be disabled. If this field is empty, the program runs indefinitely.
 - `window_length`:  the number of epochs over which to evaluate a parties notional running volume
 
@@ -31,25 +31,25 @@ message UpdateVolumeDiscountProgram{
             {
                 "minimum_party_running_notional_taker_volume": 1000,
                 "volume_discount_factors": {
-                    "maker_volume_discount_factor": 0.001,
-                    "infrastructure_volume_discount_factor": 0.001,
-                    "lp_volume_discount_factor": 0.001
+                    "maker_discount_factor": 0.001,
+                    "infrastructure_discount_factor": 0.001,
+                    "lp_discount_factor": 0.001
                 }
             },
             {
                 "minimum_party_running_notional_taker_volume": 20000,
                 "volume_discount_factors": {
-                    "maker_volume_discount_factor": 0.002,
-                    "infrastructure_volume_discount_factor": 0.002,
-                    "lp_volume_discount_factor": 0.002
+                    "maker_discount_factor": 0.002,
+                    "infrastructure_discount_factor": 0.002,
+                    "lp_discount_factor": 0.002
                 }
             },
             {
                 "minimum_party_running_notional_taker_volume": 30000,
                 "volume_discount_factors": {
-                    "maker_volume_discount_factor": 0.003,
-                    "infrastructure_volume_discount_factor": 0.003,
-                    "lp_volume_discount_factor": 0.003
+                    "maker_discount_factor": 0.003,
+                    "infrastructure_discount_factor": 0.003,
+                    "lp_discount_factor": 0.003
                 }
             },
         ],
@@ -94,25 +94,25 @@ Given:
         {
             "minimum_party_running_notional_taker_volume": 10000,
             "volume_discount_factors": {
-                "maker_volume_discount_factor": 0.001,
-                "infrastructure_volume_discount_factor": 0.001,
-                "lp_volume_discount_factor": 0.001
+                "maker_discount_factor": 0.001,
+                "infrastructure_discount_factor": 0.001,
+                "lp_discount_factor": 0.001
             }
         },
         {
             "minimum_party_running_notional_taker_volume": 20000,
             "volume_discount_factors": {
-                "maker_volume_discount_factor": 0.005,
-                "infrastructure_volume_discount_factor": 0.005,
-                "lp_volume_discount_factor": 0.005
+                "maker_discount_factor": 0.005,
+                "infrastructure_discount_factor": 0.005,
+                "lp_discount_factor": 0.005
             }
         },
         {
             "minimum_party_running_notional_taker_volume": 30000,
             "volume_discount_factors": {
-                "maker_volume_discount_factor": 0.05,
-                "infrastructure_volume_discount_factor": 0.05,
-                "lp_volume_discount_factor": 0.05
+                "maker_discount_factor": 0.05,
+                "infrastructure_discount_factor": 0.05,
+                "lp_discount_factor": 0.05
             }
         },
     ]
