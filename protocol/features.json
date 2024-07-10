@@ -538,12 +538,7 @@
       "0009-MRKP-037"
     ]
   },
-  "Perpetual funding rates": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0053-PERP-036"
-    ]
-  },
+
   "Explicit liquidation range": {
     "milestone": "colosseo",
     "acs": [
@@ -552,28 +547,8 @@
       "0012-POSR-033"
     ]
   },
-  "Community Tags": {
-    "milestone": "colosseo_III",
-    "acs": [
-      "0028-GOVE-168",
-      "0028-GOVE-169",
-      "0028-GOVE-170",
-      "0028-GOVE-171",
-      "0028-GOVE-172",
-      "0028-GOVE-173",
-      "0028-GOVE-174",
-      "0028-GOVE-175",
-      "0028-GOVE-176",
-      "0028-GOVE-177",
-      "0028-GOVE-178"
-    ]
-  },
-  "LPs voting without gov token": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0028-GOVE-185"
-    ]
-  },
+
+
   "Reward Improvements": {
     "milestone": "colosseo",
     "acs": [
@@ -623,6 +598,93 @@
       "0057-TRAN-078",
       "0057-TRAN-079"
     ]
+  },
+
+  "Capped Futures": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0016-PFUT-013",
+      "0016-PFUT-014",
+      "0016-PFUT-015",
+      "0016-PFUT-016",
+      "0016-PFUT-017",
+      "0016-PFUT-018",
+      "0016-PFUT-019",
+      "0016-PFUT-020",
+      "0016-PFUT-021",
+      "0016-PFUT-022",
+      "0016-PFUT-023",
+      "0016-PFUT-024",
+      "0016-PFUT-025",
+      "0019-MCAL-154",
+      "0019-MCAL-155",
+      "0019-MCAL-156",
+      "0019-MCAL-157",
+      "0019-MCAL-158",
+      "0019-MCAL-170",
+      "0019-MCAL-171",
+      "0016-PFUT-029"
+    ]
+  },
+  "Model-free alternatives": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0016-PFUT-026",
+      "0016-PFUT-027",
+      "0016-PFUT-028",
+      "0053-PERP-047",
+      "0053-PERP-048",
+      "0053-PERP-049",
+      "0032-PRIM-041",
+      "0032-PRIM-042",
+      "0032-PRIM-043",
+      "0042-LIQF-095",
+      "0042-LIQF-096",
+      "0019-MCAL-159"
+    ]
+  },
+  "Transaction Ordering": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0093-TRTO-001",
+      "0093-TRTO-002",
+      "0093-TRTO-003",
+      "0093-TRTO-004",
+      "0093-TRTO-005",
+      "0093-TRTO-006",
+      "0093-TRTO-007",
+      "0093-TRTO-008",
+      "0093-TRTO-009",
+      "0093-TRTO-010",
+      "0093-TRTO-011",
+      "0093-TRTO-012",
+      "0093-TRTO-013",
+      "0093-TRTO-014",
+      "0093-TRTO-015",
+      "0093-TRTO-016",
+      "0028-GOVE-192",
+      "0028-GOVE-194",
+      "0028-GOVE-193"
+    ]
+  },
+  "Long Block Auction": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0026-AUCT-039",
+      "0026-AUCT-040",
+      "0094-PRAC-001",
+      "0094-PRAC-002",
+      "0094-PRAC-003",
+      "0094-PRAC-004",
+      "0094-PRAC-005",
+      "0094-PRAC-006",
+      "0094-PRAC-007",
+      "0094-PRAC-008"
+    ]
+  },
+  "Fee mechanic changes": {
+    "milestone": "colosseo_III",
+    "acs": []
   },
   "vAMMs": {
     "milestone": "colosseo_III",
@@ -696,95 +758,20 @@
       "0085-RVST-025"
     ]
   },
-  "Capped Futures": {
-    "milestone": "colosseo_II",
+  "Community Tags": {
+    "milestone": "colosseo_III",
     "acs": [
-      "0016-PFUT-013",
-      "0016-PFUT-014",
-      "0016-PFUT-015",
-      "0016-PFUT-016",
-      "0016-PFUT-017",
-      "0016-PFUT-018",
-      "0016-PFUT-019",
-      "0016-PFUT-020",
-      "0016-PFUT-021",
-      "0016-PFUT-022",
-      "0016-PFUT-023",
-      "0016-PFUT-024",
-      "0016-PFUT-025",
-      "0019-MCAL-154",
-      "0019-MCAL-155",
-      "0019-MCAL-156",
-      "0019-MCAL-157",
-      "0019-MCAL-158",
-      "0019-MCAL-170",
-      "0019-MCAL-171",
-      "0016-PFUT-029"
-    ]
-  },
-  "Model-free alternatives": {
-    "milestone": "colosseo_II",
-    "acs": [
-      "0016-PFUT-026",
-      "0016-PFUT-027",
-      "0016-PFUT-028",
-      "0053-PERP-047",
-      "0053-PERP-048",
-      "0053-PERP-049",
-      "0032-PRIM-041",
-      "0032-PRIM-042",
-      "0032-PRIM-043",
-      "0042-LIQF-095",
-      "0042-LIQF-096",
-      "0019-MCAL-159"
-    ]
-  },
-  "Cancelling Proposals": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0028-GOVE-188",
-      "0028-GOVE-189",
-      "0028-GOVE-190",
-      "0028-GOVE-191"
-    ]
-  },
-  "Transaction Ordering": {
-    "milestone": "colosseo_II",
-    "acs": [
-      "0093-TRTO-001",
-      "0093-TRTO-002",
-      "0093-TRTO-003",
-      "0093-TRTO-004",
-      "0093-TRTO-005",
-      "0093-TRTO-006",
-      "0093-TRTO-007",
-      "0093-TRTO-008",
-      "0093-TRTO-009",
-      "0093-TRTO-010",
-      "0093-TRTO-011",
-      "0093-TRTO-012",
-      "0093-TRTO-013",
-      "0093-TRTO-014",
-      "0093-TRTO-015",
-      "0093-TRTO-016",
-      "0028-GOVE-192",
-      "0028-GOVE-194",
-      "0028-GOVE-193"
-    ]
-  },
-  "Long Block Auction": {
-    "milestone": "colosseo_II",
-    "acs": [
-      "0026-AUCT-039",
-      "0026-AUCT-040",
-      "0094-PRAC-001",
-      "0094-PRAC-002",
-      "0094-PRAC-003",
-      "0094-PRAC-004",
-      "0094-PRAC-005",
-      "0094-PRAC-006",
-      "0094-PRAC-007",
-      "0094-PRAC-008"
+      "0028-GOVE-168",
+      "0028-GOVE-169",
+      "0028-GOVE-170",
+      "0028-GOVE-171",
+      "0028-GOVE-172",
+      "0028-GOVE-173",
+      "0028-GOVE-174",
+      "0028-GOVE-175",
+      "0028-GOVE-176",
+      "0028-GOVE-177",
+      "0028-GOVE-178"
     ]
   },
   "Spot AMM": {
@@ -800,10 +787,6 @@
       "0092-SAMM-008"
     ]
   },
-  "Fee mechanic changes": {
-    "milestone": "colosseo_II",
-    "acs": []
-  },
   "LP 3.0": {
     "milestone": "genbu_temple",
     "acs": []
@@ -811,6 +794,27 @@
   "Token Buyback auction": {
     "milestone": "genbu_temple",
     "acs": []
+  },
+  "Cancelling Proposals": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0028-GOVE-188",
+      "0028-GOVE-189",
+      "0028-GOVE-190",
+      "0028-GOVE-191"
+    ]
+  },
+  "Perpetual funding rates": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0053-PERP-036"
+    ]
+  },
+  "LPs voting without gov token": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0028-GOVE-185"
+    ]
   },
   "Unknown": {
     "milestone": "unknown",
