@@ -539,7 +539,7 @@
     ]
   },
   "Perpetual funding rates": {
-    "milestone": "colosseo",
+    "milestone": "historic_distillery",
     "acs": [
       "0053-PERP-036"
     ]
@@ -553,7 +553,7 @@
     ]
   },
   "Community Tags": {
-    "milestone": "colosseo",
+    "milestone": "colosseo_III",
     "acs": [
       "0028-GOVE-168",
       "0028-GOVE-169",
@@ -569,7 +569,7 @@
     ]
   },
   "LPs voting without gov token": {
-    "milestone": "colosseo",
+    "milestone": "historic_distillery",
     "acs": [
       "0028-GOVE-185"
     ]
@@ -625,7 +625,7 @@
     ]
   },
   "vAMMs": {
-    "milestone": "colosseo_II",
+    "milestone": "colosseo_III",
     "acs": [
       "0042-LIQF-092",
       "0042-LIQF-093",
@@ -740,7 +740,7 @@
     ]
   },
   "Cancelling Proposals": {
-    "milestone": "colosseo_II",
+    "milestone": "historic_distillery",
     "acs": [
       "0028-GOVE-188",
       "0028-GOVE-189",
@@ -799,6 +799,18 @@
       "0092-SAMM-007",
       "0092-SAMM-008"
     ]
+  },
+  "Fee mechanic changes": {
+    "milestone": "colosseo_II",
+    "acs": []
+  },
+  "LP 3.0": {
+    "milestone": "genbu_temple",
+    "acs": []
+  },
+  "Token Buyback auction": {
+    "milestone": "genbu_temple",
+    "acs": []
   },
   "Unknown": {
     "milestone": "unknown",
