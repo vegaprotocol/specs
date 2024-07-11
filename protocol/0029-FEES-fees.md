@@ -120,6 +120,7 @@ Other than the criteria whether to proceed or discard, this is exactly the same 
 The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the different components.
 
 Additionally, a `high_volume_market_maker_rebate` may be necessary which will be taken from the `treasury/buyback_fee` components. This will be calculated as:
+
 1. Determine whether the maker party of the trade (if there is one) qualifies for a `high volume market maker rebate` and, if so, at what rate.
 1. Calculate the fee that this corresponds to as `high_volume_maker_fee = high_volume_factor * trade_value_for_fee_purposes`.
 1. Take this fee from the `treasury_fee` and `buyback_fee` (protocol restrictions on governance changes ensure that `treasury_fee + buyback_fee >= high_volume_maker_fee` is always true) as a proportion of their relative sizes, i.e.:
