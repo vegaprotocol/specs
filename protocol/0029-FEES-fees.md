@@ -92,8 +92,8 @@ Note, discounts are calculated and applied one after the other and **before** re
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
 The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-The treasury fee factor is set by the network parameter `market.fee.factors.treasuryFee`.
-The buyback fee factor is set by the network parameter `market.fee.factors.buybackFee`.
+The treasury fee factor is set by the network parameter `market.fee.factors.treasuryFee` with a default value should of `0`.
+The buyback fee factor is set by the network parameter `market.fee.factors.buybackFee` with a default value should of `0`.
 
 trade_value_for_fee_purposes:
 
