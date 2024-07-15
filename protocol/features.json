@@ -538,7 +538,6 @@
       "0009-MRKP-037"
     ]
   },
-
   "Explicit liquidation range": {
     "milestone": "colosseo",
     "acs": [
@@ -547,8 +546,6 @@
       "0012-POSR-033"
     ]
   },
-
-
   "Reward Improvements": {
     "milestone": "colosseo",
     "acs": [
@@ -599,7 +596,6 @@
       "0057-TRAN-079"
     ]
   },
-
   "Capped Futures": {
     "milestone": "colosseo_II",
     "acs": [
@@ -801,6 +797,14 @@
       "0028-GOVE-189",
       "0028-GOVE-190",
       "0028-GOVE-191"
+    ]
+  },
+  "Volume Discount Factor Customisation": {
+    "milestone": "colosseo_II",
+    "acs": [
+      "0084-VDPR-015",
+      "0029-FEES-034",
+      "0029-FEES-035"
     ]
   },
   "Perpetual funding rates": {
