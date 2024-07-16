@@ -367,7 +367,7 @@
     ]
   },
   "Spot stretch": {
-    "milestone": "colosseo",
+    "milestone": "historic_distillery",
     "acs": [
       "0029-FEES-015",
       "0029-FEES-016",
@@ -622,7 +622,7 @@
     ]
   },
   "Model-free alternatives": {
-    "milestone": "colosseo_II",
+    "milestone": "suzuka_castle",
     "acs": [
       "0016-PFUT-026",
       "0016-PFUT-027",
@@ -678,11 +678,11 @@
     ]
   },
   "Fee mechanic changes": {
-    "milestone": "colosseo_III",
+    "milestone": "suzuka_castle",
     "acs": []
   },
   "vAMMs": {
-    "milestone": "colosseo_III",
+    "milestone": "suzuka_castle",
     "acs": [
       "0042-LIQF-092",
       "0042-LIQF-093",
@@ -754,7 +754,7 @@
     ]
   },
   "Community Tags": {
-    "milestone": "colosseo_III",
+    "milestone": "suzuka_castle",
     "acs": [
       "0028-GOVE-168",
       "0028-GOVE-169",
@@ -800,7 +800,7 @@
     ]
   },
   "Volume Discount Factor Customisation": {
-    "milestone": "colosseo_II",
+    "milestone": "suzuka_castle",
     "acs": [
       "0084-VDPR-015",
       "0029-FEES-034",
