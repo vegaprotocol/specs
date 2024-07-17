@@ -229,7 +229,7 @@ Built-in assets work much the same as any Vega asset except they can not be depo
 - as the quote asset in a spot market
 - as the settlement asset in a derivatives market (future or perpetual)
 
-These restrictions should be updatable at any point through governance. When updating an asset the following cases should be considered:
+These restrictions can be updated at any point through governance. When updating an asset the following cases should be considered:
 
 - given an asset allows transfers, if a delayed one-off or recurring transfer is created and then the asset is updated to not allow transfers, any outstanding transfers are not cancelled and are executed as normal.
 - given an asset allows use as a base, quote, or settlement asset, if a market is created using the asset and the asset is later updated to not allow the respective use, the market is not cancelled and should operate as normal.
