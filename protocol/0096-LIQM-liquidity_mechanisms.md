@@ -57,6 +57,39 @@ A boolean, defaulting to `false`, which sets whether internal assets representin
 
 Note, the restriction on the asset can always be updated later through governance.
 
+# Mechanisms
+
+There are three liquidity mechanisms that take place at the end of the epoch.
+
+1. Liquidity fees are distributed amongst liquidity providers
+2. New liquidity providers are delegated
+3. The new liquidity providers accrue ELS points
+
+It is critical these stages are done in this order so that:
+
+- Liquidity fees are distributed only to parties who were delegated as LPs for the epoch that is ending.
+- ELS points are accrued by parties who have been delegated for the next epoch based on the volume they created in the epoch that is ending.
+
+Note, sections in this specification are not listed in the order in which they should be executed but are instead ordered for readability. Refer to the list above for order of execution.
+
+## Designating Liquidity Providers
+
+A party will only be able to accrue ELS points, receive liquidity fees, or earn liquidity rewards providing they are designated as an LP for that epoch.
+
+A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
+
+$$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
+
+Where:
+
+- $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
+- $N$ the requirement specified by the network parameter `liquidity.providers.makerRequirement`
+
+By designating parties as LPs on an epoch by epoch basis the protocol ensures:
+
+- "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide un-competitive liquidity).
+- "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
+
 ## ELS Points
 
 ### Creating ELS points
@@ -79,7 +112,7 @@ $$\text{transfer.minTransferQuantumMultiple}\cdot\text{liquidity.els.defaultQuan
 
 ### Accruing ELS points
 
-At the end of each epoch, each party accrues ELS points for the relevant market as follows:
+At the end of each epoch, each party designated as an LP accrues ELS points for the relevant market as follows:
 
 $$ELS_{i_j} = V_{i_j} \cdot 10^{-Q}$$
 
@@ -92,23 +125,6 @@ Where:
 > [!NOTE]
 > the maker fees is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of maker fees received.
 
-## Designating Liquidity Providers
-
-A party will only be able to receive liquidity fees or earn liquidity rewards providing they are designated as an LP for that epoch.
-
-A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
-
-$$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
-
-Where:
-
-- $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
-- $N$ the requirement specified by the network parameter `liquidity.providers.makerRequirement`
-
-By designating parties as LPs on an epoch by epoch basis the protocol ensures:
-
-- "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide un-competitive liquidity).
-- "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
 
 ## Volume of Notional
 
@@ -158,7 +174,7 @@ $$i= \lceil\text{len(array)}\cdot{\text{minTimeFraction}}\rceil$$
 
 ## Distributing Liquidity Fees
 
-At the end of epoch, after each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points as follows.
+At the end of epoch, before new LPs are delegated and each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points and volume of notional as follows.
 
 $$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{V_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
 
