@@ -21,7 +21,7 @@ The mechanisms also enable the following features:
 
 ## Network parameters
 
-### `liquidityProvider.proportionRequirement`
+### `liquidity.providers.makerRequirement`
 
 A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker fees a party must receive in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
 
@@ -96,14 +96,14 @@ Where:
 
 A party will only be able to receive liquidity fees or earn liquidity rewards providing they are designated as an LP for that epoch.
 
-A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidityProvider.proportionRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
+A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
 
 $$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
 
 Where:
 
 - $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
-- $N$ the requirement specified by the network parameter `liquidityProvider.proportionRequirement`
+- $N$ the requirement specified by the network parameter `liquidity.providers.makerRequirement`
 
 By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 
