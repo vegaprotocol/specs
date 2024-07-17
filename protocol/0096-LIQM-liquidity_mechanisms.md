@@ -27,9 +27,57 @@ A number in the range $[0, 1]$ which defines the minimum proportion of a markets
 
 Updates to this parameter will be used the next time LPs are designated, i.e. updating the network parameter will not result in LPs instantly being re-designated.
 
-## Accruing ELS Points
+### `liquidity.els.defaultQuantumFactor`
+
+A number in the range $[0, 100]$ which defines the amount to scale the quantum of the markets settlement or quote asset by (for derivative and spot markets respectively) when setting the initial quantum of the internal asset representing the ELS points for the market.
+
+Note, this parameter influences the minimum amount of ELS points a party will have to accrue before being able to transfer.
+
+### `liquidity.els.transferEnabled`
+
+A boolean, defaulting to `true`, which sets whether internal assets representing ELS points are allowed to be transferred when the asset is first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+### `liquidity.els.settlementAssetEnabled`
+
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the settlement asset of a derivative market when they are first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+### `liquidity.els.baseAssetEnabled`
+
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the base asset of a spot market when they are first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+### `liquidity.els.quoteAssetEnabled`
+
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the quote asset of a spot market when they are first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+## ELS Points
+
+### Creating ELS points
 
 Whenever a market proposal is enacted (passes opening auction), an internal Vega asset is created to track the ELS points of that market. For a successor market, a new asset should not be created and instead the ELS asset of the parent market should be used.
+
+When ever an internal asset representing ELS points is created the [internal asset restrictions]() are defaulted to the respective [network parameter](#network-parameters). It's quantum should be set using the following formula. Note, both the restrictions and quantum can later be updated through governance.
+
+$$q_{ELS} = \frac{q}{n}$$
+
+where:
+
+- $q_{ELS}$ is the quantum of the internal asset representing the  
+- $q$ is the quantum of the settlement or quote asset depending on whether the market is a derivative or spot market.
+- $n$ is the network parameter `liquidity.els.defaultQuantumFactor`
+
+The relationship between how many points a party must then accrue before they will have enough to pass spam protection when transferring assets can simply be thought of as:
+
+$$\text{transfer.minTransferQuantumMultiple}\cdot\text{liquidity.els.defaultQuantumFactor}$$
+
+### Accruing ELS points
 
 At the end of each epoch, each party accrues ELS points for the relevant market as follows:
 
