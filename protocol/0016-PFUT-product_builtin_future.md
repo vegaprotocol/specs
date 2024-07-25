@@ -92,6 +92,8 @@ Validation:
 - `fully-collateralised mode` is only allowed when there is a `max_price` specified
 - `binary_settlement` is only allowed when there is a `max_price` specified
 
+Note that these fields are not specified on the market update types. Once a capped future is created and set to fully collateralised (and/or binary settlement), it cannot be changed.
+
 ## Acceptance Criteria
 
 1. Create a Cash Settled Future with trading termination triggered by a date/time based data source (<a name="0016-PFUT-001" href="#0016-PFUT-001">0016-PFUT-001</a>)
@@ -125,4 +127,3 @@ Optional parameters:
 1. Futures market can be created with a with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb). (<a name="0016-PFUT-026" href="#0016-PFUT-026">0016-PFUT-026</a>)
 1. Updating a risk model on a futures market with regular risk model to with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb) results in recalculation of all margin levels in line with hardcoded values and collateral search/release where appropriate. (<a name="0016-PFUT-027" href="#0016-PFUT-027">0016-PFUT-027</a>)
 1. Updating a risk model on a futures market with [hardcoded risk factors](./0018-RSKM-quant_risk_models.ipynb) to a regular risk model results in recalculation of all margin levels in line with the specified risk model (hardcoded value are no longer used) and collateral search/release where appropriate. (<a name="0016-PFUT-028" href="#0016-PFUT-028">0016-PFUT-028</a>)
-1. It's not possible to modify the `fully-collateralised` flag with a market update transaction. (<a name="0016-PFUT-029" href="#0016-PFUT-029">0016-PFUT-029</a>)
