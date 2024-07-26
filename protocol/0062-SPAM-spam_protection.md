@@ -92,7 +92,7 @@ Before any order or liquidity commitment is accepted for a perpetual futures or 
 Further, given the network parameter: `spam.order.minimalMarginQuantumMultiple` (between 0 and infinite)
 
 If the maintenance margin for a given transaction is smaller than the parameter `spam.order.minimalMarginQuantumMultiple`, then the transaction is pre-block rejected.
-I.e. if `(rf + linear slippage param) x size x price <  spam.order.minimalMarginQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively. 
+I.e. if `(rf + linear slippage param) x size x price <  spam.order.minimalMarginQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
 
 For pegged orders `mark price +/- offset` should be used in place of price. The `mark price` value can be cached from end of last block (if that helps for performance, we need this to be cheap). In opening auctions pegged orders should be rejected.
 
@@ -107,7 +107,7 @@ Before any order or liquidity commitment is accepted for a spot market, check th
 Further, given the network parameter: `spam.order.minimalHoldingQuantumMultiple` (between 0 and infinite)
 
 If the holding requirement for a given transaction is smaller than the parameter `spam.order.minimalHoldingQuantumMultiple`, then the transaction is pre-block rejected.
-I.e. if `size x price <  spam.order.minimalHoldingQuantumMultiple x quote asset quantum amount` then the order is rejected. Here `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively. 
+I.e. if `size x price <  spam.order.minimalHoldingQuantumMultiple x quote asset quantum amount` then the order is rejected. Here `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
 
 For pegged orders `last traded price +/- offset` should be used in place of price. The `last traded price` value can be cached from end of last block (if that helps for performance). In opening auctions pegged orders should be rejected.
 
