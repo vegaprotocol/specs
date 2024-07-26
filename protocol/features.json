@@ -25,19 +25,29 @@
   },
   "Isolated margin": {
     "milestone": "colosseo",
-    "acs": ["0019-MCAL-208"]
+    "acs": [
+      "0019-MCAL-208"
+    ]
   },
   "Closeout trades and auctions": {
     "milestone": "colosseo",
-    "acs": ["0012-POSR-030"]
+    "acs": [
+      "0012-POSR-030"
+    ]
   },
   "Market suspended/resumed before enactment": {
     "milestone": "colosseo",
-    "acs": ["0043-MKTL-011", "0043-MKTL-012", "0043-MKTL-013"]
+    "acs": [
+      "0043-MKTL-011",
+      "0043-MKTL-012",
+      "0043-MKTL-013"
+    ]
   },
   "Teams": {
     "milestone": "colosseo",
-    "acs": ["0083-RFPR-068"]
+    "acs": [
+      "0083-RFPR-068"
+    ]
   },
   "Spot": {
     "milestone": "colosseo",
