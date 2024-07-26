@@ -362,12 +362,9 @@
       "0044-LIME-101",
       "0044-LIME-102",
       "0026-AUCT-016",
-      "0026-AUCT-017",
       "0026-AUCT-018",
       "0026-AUCT-019",
       "0026-AUCT-020",
-      "0026-AUCT-021",
-      "0026-AUCT-022",
       "0034-PROB-004",
       "0042-LIQF-055"
     ]
@@ -465,7 +462,7 @@
       "0062-SPAM-037"
     ]
   },
-"Rewards": {
+  "Rewards": {
     "milestone": "deployment-2",
     "acs": [
       "0085-RVST-001",
@@ -558,7 +555,7 @@
       "0028-GOVE-152"
     ]
   },
-    "Batch change proposals": {
+  "Batch change proposals": {
     "milestone": "deployment-3",
     "acs": [
       "0028-GOVE-145",
@@ -926,18 +923,33 @@
   },
   "Iceberg Orders": {
     "milestone": "cosmic-carryover",
-    "acs": ["0014-ORDT-069"]
+    "acs": [
+      "0014-ORDT-069"
+    ]
   },
   "Successor Markets": {
     "milestone": "cosmic-carryover",
-    "acs": ["0001-MKTF-008"]
+    "acs": [
+      "0001-MKTF-008"
+    ]
   },
   "Ethereum oracles": {
     "milestone": "cosmic-carryover",
-    "acs": ["0082-ETHD-035", "0082-ETHD-041"]
+    "acs": [
+      "0082-ETHD-035",
+      "0082-ETHD-041"
+    ]
   },
   "Stop Orders": {
     "milestone": "cosmic-carryover",
-    "acs": ["0079-TGAP-004", "0079-TGAP-005", "0014-ORDT-132", "0014-ORDT-133", "0014-ORDT-134", "0014-ORDT-135", "0014-ORDT-136"]
+    "acs": [
+      "0079-TGAP-004",
+      "0079-TGAP-005",
+      "0014-ORDT-132",
+      "0014-ORDT-133",
+      "0014-ORDT-134",
+      "0014-ORDT-135",
+      "0014-ORDT-136"
+    ]
   }
 }

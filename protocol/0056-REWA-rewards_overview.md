@@ -73,35 +73,36 @@ If the reward account balance is `0` at the end of the epoch for a given recurri
 
 Note, trading fees paid or received on Spot markets will contribute to fee-based reward metrics.
 
-### Average position metric
+### Average notional position metric
 
-The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
+The average notional position metric, $m_{ap}$, measures each parties time-weighted average notional position over a number of epochs.
 
-At the start of each epoch, the network must reset each parties time weighted average position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
+At the start of each epoch, the network must reset each parties time weighted average notional position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows. Note, to reduce computation the tracker is not updated on every mark price update, only on trades involving the relevant party.
 
 Let:
 
-- $\bar{P}$ be the parties time weighted average position in the epoch so far
-- $P_{n}$ be the parties position before their position changed
+- $\bar{P}$ be the parties time weighted average notional position in the epoch so far
+- $P_{n}$ be the parties notional position before their position changed
 - $t_{n}$ be the time the party held the previous position in seconds
 - $t$ be the amount of time elapsed in the current epoch so far
+- $S$ be the current mark price.
 
 
-$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
+$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + S \cdot \frac{|P_{n}| \cdot t_{n}}{t}$$
 
-At the end of the epoch, the network must store the parties time weighted average position and then calculate their average position reward metric as follows.
+At the end of the epoch, the network must store the parties time weighted average notional position and then calculate their average position reward metric as follows.
 
 Let:
 
-- $m_{ap}$ be the parties average position reward metric
-- $\bar{P_{i}}$ be the parties time weighted average position in the $i$-th epoch
+- $m_{ap}$ be the parties average notional position reward metric
+- $\bar{P_{i}}$ be the parties time weighted average notional position in the $i$-th epoch
 - $N$ be the window length specified in the recurring transfer.
 
 $$m_{ap} = \frac{\sum_{i}^{n}\bar{P_{i}}}{N}$$
 
 ### Relative return metric
 
-The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average position](#average-position-metric), over a number of epochs.
+The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their time-weighted average position, over a number of epochs.
 
 At the end of each epoch, the network must calculate and store the parties relative returns as follows.
 
@@ -130,13 +131,15 @@ Note, as a position can not be created on a Spot market. Trading activity on a S
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs, call this variance $\sigma^2$.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the variance of the set $R$.
+The reward metric $m_{rv}$ is the reciprocal of the variance of the set $R$.
+
+$$m_{rv} = \frac{1}{\sigma^2}$$
 
 Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
@@ -239,7 +242,7 @@ The entire reward account balance is paid out every epoch unless the total value
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
-Any rewards which would be distributed to an AMM sub-key should instead be sent to the parent key's corresponding account. These transfers should be labelled with a field `from_key` which specifies the sub-key as the original recipient. This field should be blank for rewards earned by a standard key.
+Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
 
 ### Distributing rewards amongst entities
 
@@ -1018,12 +1021,14 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Average Position
 
-- If an eligible party opens a position at the beginning of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-078" href="#0056-REWA-078">0056-REWA-078</a>).
-- If an eligible party held an open position at the start of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-079" href="#0056-REWA-079">0056-REWA-079</a>).
-- If an eligible party opens a position half way through the epoch, their average position reward metric should be half the size of the position at the end of the epoch (<a name="0056-REWA-080" href="#0056-REWA-080">0056-REWA-080</a>).
-- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average position reward metric should be equal to the size of that position at the end of the epoch (<a name="0056-REWA-081" href="#0056-REWA-081">0056-REWA-081</a>).
-- If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
-- If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
+- If an eligible party opens a position at the beginning of the epoch, and the mark price does **not** change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>).
+- If an eligible party opens a position at the beginning of the epoch, and the price changes during the epoch, their average notional position reward metric should be set equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>).
+- If an eligible party held an open position at the start of the epoch, and the mark price does **not** change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>).
+- If an eligible party held an open position at the start of the epoch, and the mark price does change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>).
+- If an eligible party opens a position half way through the epoch, their average notional position reward metric should be half the notional value of the position at the end of the epoch (<a name="0056-REWA-175" href="#0056-REWA-175">0056-REWA-175</a>).
+- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average notional position reward metric should be equal to half the notional value of the position at the point they closed their position (<a name="0056-REWA-176" href="#0056-REWA-176">0056-REWA-176</a>).
+- If an eligible party held positions in multiple in-scope markets, their average notional position reward metric should be the sum of their time-weighted-average-notional-position in each market (<a name="0056-REWA-177" href="#0056-REWA-177">0056-REWA-177</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties average notional position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-178" href="#0056-REWA-178">0056-REWA-178</a>).
 
 ### Relative returns
 
@@ -1039,8 +1044,8 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ### Returns volatility
 
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the reciprocal of the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the reciprocal of the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
 
 ### Realised returns
 
@@ -1141,5 +1146,4 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ## vAMMs
 
-- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
-- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).
+- If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).

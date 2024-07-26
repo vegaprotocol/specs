@@ -6,7 +6,7 @@ The automated market maker (AMM) framework is designed to allow for the provisio
 
 An automated market maker is configured at a per-key level, and is enabled by submitting a transaction with the requisite parameters. At this point in time the protocol will move committed funds to a sub-account which will be used to manage margin for the AMM. Once enabled, the configuration will be added to the pool of available AMMs to be utilised by the matching engine.
 
-Each party may have only one AMM configuration per market.
+Each party may have only one AMM configuration per market, and both Spot and Futures markets are eligible, with the behaviour differing slightly for each.
 
 ## Process Overview
 
@@ -28,7 +28,8 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
-- Cancellation: When the vAMM is cancelled the strategy specified will be followed. Either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
+- Cancellation: When the vAMM is cancelled the strategy specified will be followed:
+  - For futures, either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
 - Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface
@@ -58,7 +59,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
 }
 ```
 
-### Concentrated Liquidity
+### Concentrated Liquidity - Futures
 
 The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style pricing curve for managing price based upon current market price. This allows for the market maker to automatically provide a pricing curve for any prices within some configurable range, alongside offering the capability to control risk by only trading within certain price bounds and out to known position limits.
 
@@ -80,6 +81,8 @@ Additionally, as all commitments require some processing overhead on the core, t
 
 #### Creation
 
+##### Futures
+
 A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the vAMM in line with where it "should" be the vAMM will determine whether the order book is currently able to synchronise the vAMM and reject the transaction if not
 
   1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active vAMMs) it is marked as created and enters normal quoting with no trade necessary.
@@ -100,12 +103,15 @@ A `Concentrated Liquidity` AMM has an inherent linkage between position and impl
 
 #### Amendment
 
+##### Futures
+
 A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter an aggressive trade to synchronise. In general, the behaviour above will be followed. As the vAMM may be currently holding a position, the existing position should be compared to that required at both sides (best bid/ask) of the order book to determine whether buying or selling is necessary. If the current position is between that required at best bid and best ask the amendment succeeds without requiring a trade.
 
 If reducing the `commitment amount` then only funds contained within the AMMs `general` account are eligible for removal. If the deduction is less than the `general` account's balance then the reduced funds will be removed immediately and the AMM will enter `single-sided` mode as specified above to reduce the position. If a deduction of greater than the `general` account is requested then the transaction is rejected and no changes are made.
 
-
 #### Cancellation
+
+##### Futures
 
 In addition to amending to reduce the size a user may also cancel their AMM entirely. In order to do this they must submit a transaction containing only a field `Reduction Strategy` which can take two values:
 
@@ -237,10 +243,9 @@ As an AMM does not directly place orders on the book this calculation first need
 
 Once these are retrieved, the price / volume points should be combined with a precomputed array of the probability of trading at each price level to calculate the liquidity supplied on each side of the orderbook as defined in [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb). Once this is calculated, use this value as the instantaneous liquidity score for fee distribution as defined in [setting fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-As the computation of this virtual order shape may be heavy when run across a large number of passive AMMs the number of AMMs updated per block should be throttled to a fixed maximum number, updating on a rolling frequency, or when updated/first created.
+As the computation of this virtual order shape may be heavy when run across a large number of passive AMMs the number of AMMs updated per block should be throttled to a fixed maximum number, updating on a rolling frequency, or when updated/first created. Additionally, a network parameter of `market.liquidity.maxAmmCalculationLevels` should be used to determine the maximum number of levels to be used between the upper and lower SLA bounds. If this number is exceeded the space between upper and lower should be linearly interpolated to produce at most this many sampling points and an estimate using those price levels be used instead.
 
-A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key'
-s ELS updated as normal.
+A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key's ELS updated as normal.
 
 ## Setting Fees
 
@@ -312,7 +317,7 @@ At market settlement, an AMM's position will be settled alongside all others as 
 
 - When an AMM is active on a market at time of settlement with a position in a well collateralised state, the market can settle successfully and then all funds on the AMM key are transferred back to the main party's account (<a name="0090-VAMM-031" href="#0090-VAMM-031">0090-VAMM-031</a>)
 
-- When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transfeered back to the main party's account (<a name="0090-VAMM-032" href="#0090-VAMM-032">0090-VAMM-032</a>)
+- When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transferred back to the main party's account (<a name="0090-VAMM-032" href="#0090-VAMM-032">0090-VAMM-032</a>)
 
 - An AMM with base price `1000`, upper price `1100`, lower price `900` and current position `0`:
   - Quotes a volume of `8.216` units to buy to move fair price to `900`
@@ -327,8 +332,8 @@ At market settlement, an AMM's position will be settled alongside all others as 
   - Quotes a price of `997.488` to sell `16.030` units
   - Does not quote a price to sell `17` units
 
-- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, but where upper and lower bounds of each are far beyond the base/fair prices, triggers a trade between the two vAMMs, after which they both have the same fair price and the book is not crossed.
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, but where upper and lower bounds of each are far beyond the base/fair prices, triggers a trade between the two vAMMs, after which they both have the same fair price and the book is not crossed. (<a name="0090-VAMM-033" href="#0090-VAMM-033">0090-VAMM-033</a>)
 
-- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, with upper and lower bounds set such that the entire structure is separate to the existing vAMM (e.g. the incoming vAMM's lower price is greater than the existing vAMM's upper price), a trade occurs between the two AMMs leaving at least one of them at the extreme edge of their quoting range.
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, with upper and lower bounds set such that the entire structure is separate to the existing vAMM (e.g. the incoming vAMM's lower price is greater than the existing vAMM's upper price), a trade occurs between the two AMMs leaving at least one of them at the extreme edge of their quoting range. (<a name="0090-VAMM-034" href="#0090-VAMM-034">0090-VAMM-034</a>)
 
-- With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread.
+- With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread. (<a name="0090-VAMM-035" href="#0090-VAMM-035">0090-VAMM-035</a>)

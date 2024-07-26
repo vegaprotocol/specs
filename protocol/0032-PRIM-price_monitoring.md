@@ -4,8 +4,10 @@
 
 The dynamics of market price movements are such that prices don't always represent the participants' true average view of the price, but are instead artefacts of the market microstructure: sometimes low liquidity and/or a large quantity of order volume can cause the price to diverge from the true market price. It is impossible to tell at any point in time if this has happened or not.
 
-As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent. We are going to rely on the risk model to formalise this process. Risk model can be used to obtain the probability distribution of prices at a future point in time given the current price. A price monitoring trigger can be constructed using a fixed horizon and probability level.
+As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent.
+We are going to rely on the risk model to formalise this process. Risk model can be used to obtain the probability distribution of prices at a future point in time given the current price. A price monitoring trigger can be constructed using a fixed horizon and probability level.
 To give an example: get the price distribution in an hour as implied by the risk model given the current mid price, if after the hour has passed and the actual mid price is beyond what the model implied (either too low or too high) with some chosen probability level (say 99%), then we'd characterise such market move as large.  In general we may want to use a few such triggers per market (i.e. different horizon and probability level pairs). The framework should be able to trigger a price protection auction period with any valid trading mode.
+We're also going to allow specifying triggers directly as the maximum valid moves with respect to the reference price. In that case the `maxUpMoveFactor`, `maxDownMoveFactor` can be specified for a given horizon, such that a price is considered valid as long as it's in the range `[reference_price(horizon) * maxDownMoveFactor, [reference)price(horizon) * maxUpMoveFactor]`, where `[reference_price(horizon)` is the reference price corresponding to the specified horizon - obtained in exactly the same way as in the case of a model-based trigger.
 
 As mentioned above, price monitoring is meant to stop large market movements that are not "real" from occurring, rather than just detect them after the fact. To that end, it is necessary to pre-process every transaction and check if it triggers the price monitoring action. If pre-processing the transaction doesn't result in the trigger being activated then it should be "committed" by generating the associated events and modifying the order book accordingly (e.g. generate a trade and take the orders that matched off the book). On the other hand if the trigger is activated and the submitted transaction is valid for auction mode, the entire order book **along with that transaction** needs to be processed via price protection auction. If the transaction which activate the trigger is not valid for auction, then it should get rejected and market should continue in the current trading mode. Auction period associated with a given distribution projection horizon and probability level will be specified as part of market setup. Once the auction period finishes the trading should resume in regular fashion (unless other triggers are active, more on that in [reference-level explanation](#reference-level-explanation)).
 
@@ -44,6 +46,8 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 #### Market
 
+##### Model-based triggers
+
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
   - `probability` - probability level used in price monitoring. Must be in the [0.9,1) range.
@@ -54,6 +58,13 @@ If any of the above parameters or the risk model gets modified in any way, the p
 - any remaining price monitoring bounds calculated prior to the update should get deactivated,
 - the auction end time implied by the currently running auction/extension should remain unchanged,
 - when auction uncrosses price monitoring should get reset using the updated parameters.
+
+##### Model-free triggers
+
+- `modelFreePriceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
+  - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
+  - `maxUpMoveFactor` - a factor to be applied to the reference price (for the specified horizon) so that the maximum valid price is `reference_price(horizon) * maxUpMoveFactor`. Must be greater than `1`.
+  - `maxDownMoveFactor` - a factor to be applied to the reference price (for the specified horizon) so that the minimum valid price is `reference_price(horizon) * maxDownMoveFactor`. Must be less than `1`.
 
 #### Network
 
@@ -141,3 +152,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Same as above, but more matching orders get placed during the auction extension. The volume of the trades generated by the later orders is larger than that of the original pair which triggered the auction. Hence the auction concludes generating the trades from the later orders. The overall auction duration is equal to the sum of the extension periods of the two triggers. (<a name="0032-PRIM-021" href="#0032-PRIM-021">0032-PRIM-021</a>). For product spot: (<a name="0032-PRIM-038" href="#0032-PRIM-038">0032-PRIM-038</a>)
 - For all available mark price calculation methodologies: the price history used by the price monitoring engine is in line with market's mark price history. (<a name="0032-PRIM-039" href="#0032-PRIM-039">0032-PRIM-039</a>)
 - For all available mark-price calculation methodologies: the mark price update candidate gets rejected if it violates the price monitoring engine bounds. (<a name="0032-PRIM-040" href="#0032-PRIM-040">0032-PRIM-040</a>)
+- Model-free triggers can be added to the market at creation time along with regular triggers. (<a name="0032-PRIM-041" href="#0032-PRIM-041">0032-PRIM-041</a>)
+- Model-free triggers can be added to the market during market update along with regular triggers. (<a name="0032-PRIM-042" href="#0032-PRIM-042">0032-PRIM-042</a>)
+- Adding a model-free trigger with `maxUpMoveFactor = 1.1` and `maxDownMoveFactor = 0.95` results in bonds with max valid price of `110` and min valid price of `95` when a reference price is `100`. When time passes so that the reference price becomes `90` then the resulting max valid price is `99` and min valid price is `85.5`. Violating any of these bounds results in an auction. (<a name="0032-PRIM-043" href="#0032-PRIM-043">0032-PRIM-043</a>
+)

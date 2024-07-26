@@ -153,6 +153,7 @@ int64
 integrations
 intrablock
 IOC
+iteratively
 joinable
 joinable
 JSON
@@ -220,6 +221,7 @@ permissioned
 permissionless
 PERP
 perps
+piecewise
 PME
 PnL
 PoS
@@ -227,6 +229,7 @@ PoW
 PoWs
 pre
 precomputed
+priori
 pro
 protobuf
 Pseudocode
