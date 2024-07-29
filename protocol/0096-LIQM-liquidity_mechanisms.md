@@ -29,7 +29,7 @@ Updates to this parameter will be used the next time LPs are designated, i.e. up
 
 ### `liquidity.els.defaultQuantumFactor`
 
-A number in the range $[0, 100]$ which defines the amount to scale the quantum of the markets settlement or quote asset by (for derivative and spot markets respectively) when setting the initial quantum of the internal asset representing the ELS points for the market.
+A number in the range $(0, 10000]$ which defines the amount to scale the quantum of the markets settlement or quote asset by (for derivative and spot markets respectively) when setting the initial quantum of the internal asset representing the ELS points for the market.
 
 Note, this parameter influences the minimum amount of ELS points a party will have to accrue before being able to transfer.
 
@@ -96,7 +96,7 @@ By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 
 Whenever a market proposal is enacted (passes opening auction), an internal Vega asset is created to track the ELS points of that market. For a successor market, a new asset should not be created and instead the ELS asset of the parent market should be used.
 
-When ever an internal asset representing ELS points is created the [internal asset restrictions](./0040-ASSF-asset_framework.md#built-in-assets) are defaulted to the respective [network parameter](#network-parameters). It's quantum should be set using the following formula. Note, both the restrictions and quantum can later be updated through governance.
+When ever an internal asset representing ELS points is created the [internal asset restrictions](./0040-ASSF-asset_framework.md#built-in-assets) are defaulted to the respective [network parameter](#network-parameters). Its quantum should be set using the following formula. Note, both the restrictions and quantum can later be updated through governance.
 
 $$q_{ELS} = \frac{q}{n}$$
 
