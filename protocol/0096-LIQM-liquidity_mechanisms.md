@@ -62,13 +62,13 @@ Note, the restriction on the asset can always be updated later through governanc
 There are three liquidity mechanisms that take place at the end of the epoch.
 
 1. Liquidity fees are distributed amongst liquidity providers
-2. New liquidity providers are delegated
+2. New liquidity providers are designated
 3. The new liquidity providers accrue ELS points
 
 It is critical these stages are done in this order so that:
 
-- Liquidity fees are distributed only to parties who were delegated as LPs for the epoch that is ending.
-- ELS points are accrued by parties who have been delegated for the next epoch based on the volume they created in the epoch that is ending.
+- Liquidity fees are distributed only to parties who were designated as LPs for the epoch that is ending.
+- ELS points are accrued by parties who have been designated for the next epoch based on the volume they created in the epoch that is ending.
 
 Note, sections in this specification are not listed in the order in which they should be executed but are instead ordered for readability. Refer to the list above for order of execution.
 
@@ -174,7 +174,7 @@ $$i= \lceil\text{len(array)}\cdot{\text{minTimeFraction}}\rceil$$
 
 ### Distributing Liquidity Fees
 
-At the end of epoch, before new LPs are delegated and each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points and volume of notional as follows.
+At the end of epoch, before new LPs are designated and each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points and volume of notional as follows.
 
 $$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{V_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
 
