@@ -9,17 +9,13 @@ An order may cross with more than one other order, creating multiple trades. Eac
 
 The trading fee is:
 
-`total_fee = infrastructure_fee + maker_fee + liquidity_fee + buyback_fee + treasury_fee`
+`total_fee = infrastructure_fee + maker_fee + liquidity_fee`
 
 `infrastructure_fee = fee_factor[infrastructure] * trade_value_for_fee_purposes`
 
 `maker_fee =  fee_factor[maker]  * trade_value_for_fee_purposes`
 
 `liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes`
-
-`buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes`
-
-`treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes`
 
 Fees are calculated and collected in the settlement currency of the market, collected from the general account. Fees are collected first from the trader's account and then margin from account balance. If the general account doesn't have sufficient balance, then the remaining fee amount is collected from the margin account. If this is still insufficient then different rules apply between continuous trading and auctions (details below).
 
@@ -29,14 +25,14 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 
 Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
 
-Note, discounts are calculated and applied one after the other and **before** rewards are calculated. Additionally, no benefit discounts can be applied to the treasury or buyback fee components as these may be required for the `high volume market maker rebate`.
+Note, discounts are calculated and applied one after the other and **before** rewards are calculated.
 
 1. Calculate any referral discounts due to the party.
 
     ```pseudo
-    infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_infrastructure_discount_factor)
-    liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_liquidity_discount_factor)
-    maker_fee_referral_discount = floor(original_maker_fee * referral_maker_discount_factor)
+    infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_discount_factor)
+    liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_discount_factor)
+    maker_fee_referral_discount = floor(original_maker_fee * referral_discount_factor)
     ```
 
 1. Apply referral discounts to the original fee.
@@ -50,9 +46,9 @@ Note, discounts are calculated and applied one after the other and **before** re
 1. Calculate any volume discounts due to the party.
 
     ```pseudo
-    infrastructure_fee_volume_discount = floor(infrastructure_fee_after_referral_discount * volume_infrastructure_discount_factor)
-    liquidity_fee_volume_discount = floor(liquidity_fee_after_referral_discount * volume_liquidity_discount_factor)
-    maker_fee_volume_discount = floor(maker_fee_after_referral_discount * volume_maker_discount_factor)
+    infrastructure_fee_volume_discount = floor(infrastructure_fee_after_referral_discount * volume_discount_factor)
+    liquidity_fee_volume_discount = floor(liquidity_fee_after_referral_discount * volume_discount_factor)
+    maker_fee_volume_discount = floor(maker_fee_after_referral_discount * volume_discount_factor)
     ```
 
 1. Apply any volume discounts to the fee after referral discounts.
@@ -66,9 +62,9 @@ Note, discounts are calculated and applied one after the other and **before** re
 1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 4 and the `referralProgram.maxReferralRewardProportion` is the network parameter described in the [referral program spec](./0083-RFPR-on_chain_referral_program.md#network-parameters))
 
     ```pseudo
-    infrastructure_fee_referral_reward = floor(infrastructure_fee_after_volume_discount * min(referral_infrastructure_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
-    liquidity_fee_referral_reward = floor(liquidity_fee * min(liquidity_fee_after_volume_discount * min(referral_liquidity_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion)))
-    maker_fee_referral_reward = floor(maker_fee * min(maker_fee_after_volume_discount * min(referral_maker_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion)))
+    infrastructure_fee_referral_reward = floor(infrastructure_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    liquidity_fee_referral_reward = floor(liquidity_fee * min(liquidity_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    maker_fee_referral_reward = floor(maker_fee * min(maker_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
     ```
 
 1. Finally, update the fee components by applying the rewards.
@@ -86,14 +82,10 @@ Note, discounts are calculated and applied one after the other and **before** re
 - infrastructure: staking/governance system/engine (network wide)
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
-- treasury: Fees sent to network treasury for later usage via governance votes (network wide)
-- buyback: Fees used to purchase governance tokens to the protocol via regular auctions (network wide)
 
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
 The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-The treasury fee factor is set by the network parameter `market.fee.factors.treasuryFee` with a default value should of `0`.
-The buyback fee factor is set by the network parameter `market.fee.factors.buybackFee` with a default value should of `0`.
 
 trade_value_for_fee_purposes:
 
@@ -115,26 +107,15 @@ If the transfer fails:
 1. If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error).
 This functionality requires to match orders and create trades without changing the state of the order book or passing trades downstream so that the execution of the transaction can be discarded with no impact on the order book if needed.
 Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](./0032-PRIM-price_monitoring.md).
-1. If we are in auction mode, ignore the shortfall (and see more details below).
+2. If we are in auction mode, ignore the shortfall (and see more details below).
 
-The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the different components.
-
-Additionally, a `high_volume_market_maker_rebate` may be necessary which will be taken from the `treasury/buyback_fee` components. This will be calculated as:
-
-1. Determine whether the maker party of the trade (if there is one) qualifies for a `high volume market maker rebate` and, if so, at what rate.
-1. Calculate the fee that this corresponds to as `high_volume_maker_fee = high_volume_factor * trade_value_for_fee_purposes`.
-1. Take this fee from the `treasury_fee` and `buyback_fee` (protocol restrictions on governance changes ensure that `treasury_fee + buyback_fee >= high_volume_maker_fee` is always true) as a proportion of their relative sizes, i.e.:
-   1. `high_volume_maker_fee = high_volume_factor * trade_value_for_fee_purposes`
-   1. `treasury_fee = treasury_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`
-   1. `buyback_fee = buyback_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`
+The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components.
 
 Now [apply benefit factors](#applying-benefit-factors) and then distribute funds from the "temporary fee bucket" as follows:
 
 1. The `infrastructure_fee` is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
-1. The `maker_fee` and any `high_volume_maker_fee` are transferred to the relevant party (the maker).
+1. The `maker_fee` is transferred to the relevant party (the maker).
 1. The `liquidity_fee` is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-1. The `treasury_fee` is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.
-1. The `buyback_fee` is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.
 1. The referral fee components (if any) can then be individually transferred to the relevant party (the referee).
 
 ### During Continuous Trading
@@ -145,9 +126,9 @@ The "aggressor or price taker" pays the fee. The "passive or price maker" party 
 
 ### Normal Auctions (including market protection and opening auctions)
 
-During normal auctions there is no "price maker" both parties are "takers". Each side in a matched trade should contribute 1/2 of the infrastructure_fee + liquidity_fee + treasury_fee + buyback_fee. Note that this does not include a maker fee.
+During normal auctions there is no "price maker" both parties are "takers". Each side in a matched trade should contribute 1/2 of the infrastructure_fee + liquidity_fee. Note that this does not include a maker fee.
 
-Fees calculated and collected from general + margin as in continuous trading *but* if a party has insufficient capital to cover the trading fee then in auction the trade *still* *goes* *ahead* as long as the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee/treasury_fee/buyback_fee.
+Fees calculated and collected from general + margin as in continuous trading *but* if a party has insufficient capital to cover the trading fee then in auction the trade *still* *goes* *ahead* as long as the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee.
 
 During an opening auction of a market, no fees are collected.
 
@@ -187,21 +168,13 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 ### Applying benefit factors
 
 1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
-    - `infrastructure_fee_referral_discount`
-    - `liquidity_fee_referral_discount`
-    - `maker_fee_referral_discount`
-1. Referee discounts with differing discounts across the three factors are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-034" href="#0029-FEES-034">0029-FEES-034</a>)
-    - `infrastructure_fee_referral_discount`
+    - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
 1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
     - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
 1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
-    - `infrastructure_fee_referral_reward`
-    - `liquidity_fee_referral_reward`
-    - `maker_fee_referral_reward`
-1. Referrer rewards with differing reward factors are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-035" href="#0029-FEES-035">0029-FEES-035</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
     - `maker_fee_referral_reward`
