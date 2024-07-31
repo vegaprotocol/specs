@@ -260,11 +260,33 @@ Recurring transfers can target groups of markets, or all markets for a settlemen
 
 All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
+If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to distribute at rewards is first scaled by as per the mechanics defined in section [reward scaling](#reward-scaling). The scaled amount is then paid out unless the total value of the metric over all entities is zero.
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
 Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
+
+
+### Reward scaling
+
+Before distributing rewards amongst entities, in order to prevent over funding rewards when volume is low, the actual amount transferred and distributed can be scaled based on the notional volume and some target notional volume.
+
+$$T_a = T\cdot\min{(1, \frac{V_a}{V_t})}$$
+
+Where:
+
+- $T_a$ is the actual amount of funds to transfer and distribute amongst entities.
+- $T$ is the transfer amount specified in the recurring transfer.
+- $V_t$ is the target notional volume specified in the recurring transfer (represented in asset decimals).
+- $V_a$ is the actual notional volume across all markets within the scope of the recurring transfer (represented in asset decimals).
+
+Note the following considerations:
+
+- If no target notional volume is specified in the recurring transfer, no scaling takes place. The full transfer amount is always distributed if possible.
+- If the actual notional volume is greater than the target notional volume, the rewards will not be scaled (as the scaling factor will be `1`). The final transfer amount cannot be greater than the transfer amount specified in the recurring transfer.
+- reward scaling is not possible for the following reward metrics.
+  - [Validator ranking](#validator-ranking-metric)
+  - [Market creation](#market-creation-reward-metrics)
 
 ### Distributing rewards amongst entities
 
