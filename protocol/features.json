@@ -481,6 +481,7 @@
       "0009-MRKP-037"
     ]
   },
+
   "Explicit liquidation range": {
     "milestone": "colosseo",
     "acs": [
@@ -522,6 +523,8 @@
       "0004-AMND-061"
     ]
   },
+
+
   "Reward Improvements": {
     "milestone": "colosseo",
     "acs": [
@@ -572,6 +575,7 @@
       "0057-TRAN-079"
     ]
   },
+
   "Capped Futures": {
     "milestone": "colosseo_II",
     "acs": [
@@ -775,7 +779,6 @@
       "0028-GOVE-191"
     ]
   },
-
   "Perpetual funding rates": {
     "milestone": "historic_distillery",
     "acs": [
