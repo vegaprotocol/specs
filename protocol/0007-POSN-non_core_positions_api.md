@@ -42,22 +42,25 @@ When a party is subject to [loss socialisation](./0002-STTL-settlement.md#loss-s
 
 The API is expected to expose:
 
-### Position
+### Position (for the market for the key)
 
-- Open volume (this is a core API)
-- Open volume average entry price (method = averaged)
-- Unrealised P&L (method = averaged)
-- Realised P&L for the market for the key (method = averaged)
-- Realised P&L for the market for the key including fees(method = averaged)
-- Realised P&L for the market for the key inclding fundings (method = averaged)
-- Realised P&L for the market for the key including both fees and fundings (method = averaged)
-- Realised P&L for the market for the key since the position last changed from 0 (method = averaged)
-- Taker fees paid for the market for the key.
-- Taker fees paid for the market for the key since position last changed from 0.
-- Maker fees received for the market for the key.
-- Maker fees received for the market for the key since position last changed from 0.
-- Funding total for the market for the key.
-- Funding total for the market for the key since position last changed from 0.
+- Open volume (this is a core API).
+- Open volume average entry price (method = averaged).
+- Unrealised P&L.
+- Realised P&L.
+- Realised P&L since the last time the position changed from 0 or flipped sign.
+- Realised P&L including fees.
+- Realised P&L including fees since the last time the position changed from 0 or flipped sign.
+- Realised P&L inclding fundings.
+- Realised P&L inclding fundings since the last time the position changed from 0 or flipped sign.
+- Realised P&L including both fees and fundings.
+- Realised P&L including both fees and fundings since the last time the position changed from 0 or flipped sign.
+- Taker fees paid.
+- Taker fees paid since the last time the position changed from 0 or flipped sign.
+- Maker fees received.
+- Maker fees received since the last time the position changed from 0 or flipped sign.
+- Fundings total.
+- Fundings total since the last time the position changed from 0 or flipped sign.
 
 ### Trade
 
