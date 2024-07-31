@@ -4,8 +4,8 @@
 
 The aim of the on-chain liquidity mechanisms are to reward parties for supplying competitively priced liquidity and facilitating the growth of a market. At a high level, the liquidity mechanisms are:
 
-- parties [accrue](#accruing-els-points) ELS points over time proportional to their maker fees earned.
-- parties are [designated](#designating-liquidity-providers) as LPs on an epoch by epoch basis if they receive above a specified proportion of the markets maker fees.
+- parties [accrue](#accruing-els-points) ELS points over time proportional to their maker volume earned.
+- parties are [designated](#designating-liquidity-providers) as LPs on an epoch by epoch basis if they comprise more than a specified proportion of the markets maker volume.
 - parties [receive](#distributing-liquidity-fees) a proportion of the liquidity fees accumulated in an epoch relative to their [accrued](#accruing-els-points) ELS points and [volume of notional](#volume-of-notional) (but only when designated as an LP).
 
 With the above mechanisms the protocol incentives the following desirable behaviour.
@@ -23,7 +23,7 @@ The mechanisms also enable the following features:
 
 ### `liquidity.providers.makerRequirement`
 
-A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker fees a party must receive in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
+A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker volume a party must comprise in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
 
 Updates to this parameter will be used the next time LPs are designated, i.e. updating the network parameter will not result in LPs instantly being re-designated.
 
@@ -76,13 +76,13 @@ Note, sections in this specification are not listed in the order in which they s
 
 A party will only be able to accrue ELS points, receive liquidity fees, or earn liquidity rewards providing they are designated as an LP for that epoch.
 
-A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
+A party will only be designated as an LP providing they comprised more than a specified proportion of the markets total maker volume in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker volume, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
 
 $$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
 
 Where:
 
-- $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
+- $M_{i_j}$ is the maker volume of party ${j}$ in epoch ${i}$
 - $N$ the requirement specified by the network parameter `liquidity.providers.makerRequirement`
 
 By designating parties as LPs on an epoch by epoch basis the protocol ensures:
@@ -121,11 +121,11 @@ $$ELS_{i_j} = V_{i_j} \cdot 10^{-Q}$$
 Where:
 
 - $ELS_{j}$ is the ELS points accrued by party $j$ in epoch $i$
-- $V_{i_j}$ is the notional maker fees of party $j$ in epoch $i$
+- $V_{i_j}$ is the notional maker volume of party $j$ in epoch $i$
 - $Q$ is the quantum of the asset in which the markets prices are expressed in (settlement for future and perpetual markets, quote for spot markets)
 
 > [!NOTE]
-> the maker fees is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of maker fees received.
+> the maker volume is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of notional volume created.
 
 
 ### Volume of Notional
