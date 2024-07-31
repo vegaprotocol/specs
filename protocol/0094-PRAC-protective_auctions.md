@@ -69,12 +69,9 @@ and at some point network determines that the length of the last block was 90s, 
 - A market which has been in a per-market auction which was triggered before the network-wide auction was initiated remains in auction mode even if the exit condition for the original per-market auction gets satisfied before the network-wide auction ends. No intermediate trades get generated even in the presence of non-zero indicative volume at the point of that market's per-market auction exit condition being satisfied. The market only goes back into its default trading mode and possibly generates trades once the network-wide auction ends. (<a name="0094-PRAC-004" href="#0094-PRAC-004">0094-PRAC-004</a>)
 
 - A market which has been in a per-market auction which was triggered before the network-wide auction was initiated remains in auction mode once the network-wide auction ends if the exit condition for the original per-market auction hasn't been met at that point and no intermediate trades get generated even in the presence of non-zero indicative volume at the point of network-wide auction end. (<a name="0094-PRAC-005" href="#0094-PRAC-005">0094-PRAC-005</a>)
-<<<<<<< HEAD
 
 - When market is in a price monitoring auction which is meant to finish at `10am`, but prior to that time a long block auction finishing at 11am gets triggered then the market stays in auction till `11am`, it's auction trigger is listed as price monitoring auction and it's extension trigger is listed as long block auction.  (<a name="0094-PRAC-006" href="#0094-PRAC-006">0094-PRAC-006</a>)
 
 - When a market's `trigger` or `extension_trigger` is set to represent a governance suspension then no other triggers can affect the market.  (<a name="0094-PRAC-007" href="#0094-PRAC-007">0094-PRAC-007</a>)
 
 - When a market's `trigger` and `extension_trigger` are set to represent that the market went into auction due to the price monitoring mechanism and was later extended by the same mechanism and the auction is meant to finish at `11am`, but now a long block auction is being triggered so that it ends at `10am` then this market is unaffected in any way.  (<a name="0094-PRAC-008" href="#0094-PRAC-008">0094-PRAC-008</a>)
-=======
->>>>>>> 85b28baa (chore: update genbutemple branch (#2308))
