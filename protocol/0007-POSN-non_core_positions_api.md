@@ -42,10 +42,12 @@ When a party is subject to [loss socialisation](./0002-STTL-settlement.md#loss-s
 
 The API is expected to expose:
 
-### Position (for the market for the key)
+### Position 
 
-- Open volume (this is a core API).
-- Open volume average entry price (method = averaged).
+The following must be available for each market and for each key using the P&L method "averaged" (as opposed to FIFO):
+
+- Position volume (this is a core API).
+- Position average entry price.
 - Unrealised P&L.
 - Realised P&L.
 - Realised P&L since the last time the position changed from 0 or flipped sign.
@@ -59,8 +61,8 @@ The API is expected to expose:
 - Taker fees paid since the last time the position changed from 0 or flipped sign.
 - Maker fees received.
 - Maker fees received since the last time the position changed from 0 or flipped sign.
-- Fundings total.
-- Fundings total since the last time the position changed from 0 or flipped sign.
+- Funding total.
+- Funding total since the last time the position changed from 0 or flipped sign.
 
 ### Trade
 
