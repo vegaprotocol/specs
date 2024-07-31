@@ -48,6 +48,9 @@ The API is expected to expose:
 - Open volume average entry price (method = averaged)
 - Unrealised P&L (method = averaged)
 - Realised P&L for the market for the key (method = averaged)
+- Realised P&L for the market for the key including fees(method = averaged)
+- Realised P&L for the market for the key inclding fundings (method = averaged)
+- Realised P&L for the market for the key including both fees and fundings (method = averaged)
 - Realised P&L for the market for the key since the position last changed from 0 (method = averaged)
 - Taker fees paid for the market for the key.
 - Taker fees paid for the market for the key since position last changed from 0.
