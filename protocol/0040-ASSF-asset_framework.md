@@ -67,6 +67,7 @@ message DevAssets {
 }
 
 message AssetRestrictions {
+  bool faucetEnabled = 1;
   bool transferEnabled = 1;
   bool baseAssetEnabled = 1;
   bool quoteAssetEnabled = 1;
@@ -222,8 +223,11 @@ This section will be expanded if additional ethereum based token standards are s
 
 #### Built-In Assets
 
-Built-in assets work much the same as any Vega asset except they can not be deposited or withdrawn. They also optionally can be restricted from use in specific functions. These functions include:
+Built-in assets work much the same as any Vega asset except they can not be deposited or withdrawn. The creation of internal assets through governance proposals is restricted by the network parameter, `limits.assets.proposeBuiltinEnabled`.
 
+They also optionally can be restricted from use in specific functions. These functions include:
+
+- minting
 - transfers
 - as the base asset in a spot market
 - as the quote asset in a spot market
