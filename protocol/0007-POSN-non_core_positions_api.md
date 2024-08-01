@@ -53,10 +53,10 @@ The following must be available for each market and for each key using the P&L m
 - Realised P&L since the last time the position changed from 0 or flipped sign.
 - Realised P&L including fees.
 - Realised P&L including fees since the last time the position changed from 0 or flipped sign.
-- Realised P&L including fundings.
-- Realised P&L including fundings since the last time the position changed from 0 or flipped sign.
-- Realised P&L including both fees and fundings.
-- Realised P&L including both fees and fundings since the last time the position changed from 0 or flipped sign.
+- Realised P&L including funding.
+- Realised P&L including funding since the last time the position changed from 0 or flipped sign.
+- Realised P&L including both fees and funding.
+- Realised P&L including both fees and funding since the last time the position changed from 0 or flipped sign.
 - Taker fees paid.
 - Taker fees paid since the last time the position changed from 0 or flipped sign.
 - Maker fees received.
@@ -84,10 +84,10 @@ The following must be available for each market and for each key using the P&L m
 - Realised P&L since the last time the position changed from 0 or flipped sign should be accessible from API.(<a name="0007-POSN-022" href="#0007-POSN-022">0007-POSN-022</a>)
 - Realised P&L including fees should be accessible from API.(<a name="0007-POSN-023" href="#0007-POSN-023">0007-POSN-023</a>)
 - Realised P&L including fees since the last time the position changed from 0 or flipped sign should be accessible from API.(<a name="0007-POSN-024" href="#0007-POSN-024">0007-POSN-024</a>)
-- Realised P&L including fundings should be accessible from API.(<a name="0007-POSN-025" href="#0007-POSN-025">0007-POSN-025</a>)
-- Realised P&L including fundings since the last time the position changed from 0 or flipped sign should be accessible from API.(<a name="0007-POSN-026" href="#0007-POSN-026">0007-POSN-026</a>)
-- Realised P&L including both fees and fundings should be accessible from API.(<a name="0007-POSN-027" href="#0007-POSN-027">0007-POSN-027</a>)
-- Realised P&L including both fees and fundings since the last time the position changed from 0 or flipped sign should be accessible from API .(<a name="0007-POSN-028" href="#0007-POSN-028">0007-POSN-028</a>)
+- Realised P&L including funding should be accessible from API.(<a name="0007-POSN-025" href="#0007-POSN-025">0007-POSN-025</a>)
+- Realised P&L including funding since the last time the position changed from 0 or flipped sign should be accessible from API.(<a name="0007-POSN-026" href="#0007-POSN-026">0007-POSN-026</a>)
+- Realised P&L including both fees and funding should be accessible from API.(<a name="0007-POSN-027" href="#0007-POSN-027">0007-POSN-027</a>)
+- Realised P&L including both fees and funding since the last time the position changed from 0 or flipped sign should be accessible from API .(<a name="0007-POSN-028" href="#0007-POSN-028">0007-POSN-028</a>)
 - Taker fees paid should be accessible from API .(<a name="0007-POSN-029" href="#0007-POSN-029">0007-POSN-029</a>)
 - Taker fees paid since the last time the position changed from 0 or flipped sign should be accessible from AP.(<a name="0007-POSN-030" href="#0007-POSN-030">0007-POSN-030</a>)
 - Maker fees received should be accessible from API .(<a name="0007-POSN-031" href="#0007-POSN-031">0007-POSN-031</a>)
