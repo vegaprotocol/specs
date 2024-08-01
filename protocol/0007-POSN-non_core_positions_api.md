@@ -44,10 +44,25 @@ The API is expected to expose:
 
 ### Position
 
-- Open volume (this is a core API)
-- Unrealised P&L (method = averaged)
-- Realised P&L (method = averaged)
-- Open volume average entry price (method = averaged)
+The following must be available for each market and for each key using the P&L method "averaged" (as opposed to FIFO):
+
+- Position volume (this is a core API).
+- Position average entry price.
+- Unrealised P&L.
+- Realised P&L.
+- Realised P&L since the last time the position changed from 0 or flipped sign.
+- Realised P&L including fees.
+- Realised P&L including fees since the last time the position changed from 0 or flipped sign.
+- Realised P&L including funding.
+- Realised P&L including funding since the last time the position changed from 0 or flipped sign.
+- Realised P&L including both fees and funding.
+- Realised P&L including both fees and funding since the last time the position changed from 0 or flipped sign.
+- Taker fees paid.
+- Taker fees paid since the last time the position changed from 0 or flipped sign.
+- Maker fees received.
+- Maker fees received since the last time the position changed from 0 or flipped sign.
+- Funding total.
+- Funding total since the last time the position changed from 0 or flipped sign.
 
 ### Trade
 
@@ -58,10 +73,27 @@ The API is expected to expose:
 
 - When a party has never had a position, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
 - When a party has a non-zero position, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant in absence of loss socialisation (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
+- Unrealised P&L should be correct and accessible from API.(<a name="0007-POSN-020" href="#0007-POSN-020">0007-POSN-020</a>)
 - When a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
 - During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update based on settlement price (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
 - If a party is subject to loss socialisation (its MTM gains get scaled down) the loss amount (forgone profit) should get recorded in realised PnL(<a name="0007-POSN-013" href="#0007-POSN-013">0007-POSN-013</a>)
 - If a party is subject to loss socialisation, the profits that could not be paid out due to loss socialisation is logged as "loss socialisation amount" which is accessible from API (<a name="0007-POSN-014" href="#0007-POSN-014">0007-POSN-014</a>)
+- Position volume should be accessible from API.(<a name="0007-POSN-018" href="#0007-POSN-018">0007-POSN-018</a>)
+- Position average entry price should be accessible from API.(<a name="0007-POSN-019" href="#0007-POSN-019">0007-POSN-019</a>)
+- When a party has a position which gets (partially) closed-out, realised P&L should be showing correct number and should be accessible from API.(<a name="0007-POSN-021" href="#0007-POSN-021">0007-POSN-021</a>)
+- Realised P&L since the last time the position changed from 0 or flipped sign should be showing correct number and should be accessible from API.(<a name="0007-POSN-022" href="#0007-POSN-022">0007-POSN-022</a>)
+- When a party has a position which gets (partially) closed-out, realised P&L including fees should be showing correct number and accessible from API.(<a name="0007-POSN-023" href="#0007-POSN-023">0007-POSN-023</a>)
+- Realised P&L including fees since the last time the position changed from 0 or flipped sign should be showing correct number and accessible from API.(<a name="0007-POSN-024" href="#0007-POSN-024">0007-POSN-024</a>)
+- When a party has a position which gets (partially) closed-out and the funding has happened, realised P&L including funding should be showing correct number and accessible from API.(<a name="0007-POSN-025" href="#0007-POSN-025">0007-POSN-025</a>)
+- Realised P&L including funding since the last time the position changed from 0 or flipped sign and the funding has happened, should be accessible from API.(<a name="0007-POSN-026" href="#0007-POSN-026">0007-POSN-026</a>)
+- When a party has a position which gets (partially) closed-out and the funding has happened, realised P&L including both fees and funding should be showing correct number and accessible from API.(<a name="0007-POSN-027" href="#0007-POSN-027">0007-POSN-027</a>)
+- Realised P&L including both fees and funding since the last time the position changed from 0 or flipped sign and the funding has happened should be showing correct number and accessible from API.(<a name="0007-POSN-028" href="#0007-POSN-028">0007-POSN-028</a>)
+- Taker fees paid should be correct and accessible from API.(<a name="0007-POSN-029" href="#0007-POSN-029">0007-POSN-029</a>)
+- Taker fees paid since the last time the position changed from 0 or flipped sign should be correct and accessible from AP.(<a name="0007-POSN-030" href="#0007-POSN-030">0007-POSN-030</a>)
+- Maker fees received should be correct and accessible from API.(<a name="0007-POSN-031" href="#0007-POSN-031">0007-POSN-031</a>)
+- Maker fees received since the last time the position changed from 0 or flipped sign should be correct and accessible from API .(<a name="0007-POSN-032" href="#0007-POSN-032">0007-POSN-032</a>)
+- Funding total should be correct and accessible from API.(<a name="0007-POSN-033" href="#0007-POSN-033">0007-POSN-033</a>)
+- Funding total since the last time the position changed from 0 or flipped sign should be correct and accessible from API.(<a name="0007-POSN-034" href="#0007-POSN-034">0007-POSN-034</a>)
 
 ## Definitions / glossary
 
