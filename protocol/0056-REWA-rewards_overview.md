@@ -1187,6 +1187,40 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
 
+### Reward Scaling
+
+#### Specifying valid/invalid values
+
+- If a `target_notional_volume` is not specified, the full transfer amount should be paid out regardless of the volume.
+- If a `target_notional_volume` is specified but the value is zero. The transfer should be rejected.
+- If a `target_notional_volume` is specified but the dispatch metric is for market creation rewards. The transfer should be rejected.
+- If a `target_notional_volume` is specified but the dispatch metric is for validator ranking rewards. The transfer should be rejected.
+
+#### Interactions with scoping markets
+
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that markets volume is less than the target, the rewards distributed are scaled accordingly.
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that markets volume is greater than the target, no more than the full reward amount is distributed.
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should receive the same amount of rewards).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should receive the same amount of rewards).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread un-evenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread un-evenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume).
+
+#### Interactions with reward windows
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly.
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is distributed.
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread un-evenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly.
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread un-evenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed.
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly.
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed.
+
 ### Spot markets
 
 - In a spot market, trades in which a party is the buyer and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
