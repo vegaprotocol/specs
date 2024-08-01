@@ -269,16 +269,16 @@ Any rewards earned by an AMM sub-key should be sent as normal to the relevant ve
 
 ### Reward scaling
 
-Before distributing rewards amongst entities, in order to prevent over funding rewards when volume is low, the actual amount transferred and distributed can be scaled based on the notional volume and some target notional volume.
+Before distributing rewards amongst entities, in order to prevent over funding rewards when volume is low, the actual amount transferred and distributed can be scaled based on the target notional volume and the actual notional volume over the reward window (the size of the window specified in the recurring transfer).
 
-$$T_a = T\cdot\min{(1, \frac{V_a}{V_t})}$$
+$$T_a = T\cdot\min{(1, \frac{\sum_{i}^{n}V_i}{V_t})}$$
 
 Where:
 
 - $T_a$ is the actual amount of funds to transfer and distribute amongst entities.
 - $T$ is the transfer amount specified in the recurring transfer.
-- $V_t$ is the target notional volume specified in the recurring transfer (represented in asset decimals).
-- $V_a$ is the actual notional volume across all markets within the scope of the recurring transfer (represented in asset decimals).
+- $V_t$ is the target average notional volume specified in the recurring transfer (represented in asset decimals).
+- ${V_i}$ is the actual notional volume across all markets within scope in epoch $i$ (represented in asset decimals).
 
 Note the following considerations:
 
