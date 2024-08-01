@@ -260,7 +260,7 @@ Recurring transfers can target groups of markets, or all markets for a settlemen
 
 All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to distribute at rewards is first scaled by as per the mechanics defined in section [reward scaling](#reward-scaling). The scaled amount is then paid out unless the total value of the metric over all entities is zero.
+If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to distribute as rewards is first scaled as per the mechanics defined in section [reward scaling](#reward-scaling). The scaled amount is then paid out unless the total value of the metric over all entities is zero.
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
