@@ -24,6 +24,14 @@
       "0029-FEES-035"
     ]
   },
+  "volume discount changes": {
+    "milestone": "suzuka_castle",
+    "acs": [
+      "0083-RFPR-053",
+      "0083-RFPR-054",
+      "0083-RFPR-055"
+    ]
+  },
   "vAMMs": {
     "milestone": "suzuka_castle",
     "acs": [
