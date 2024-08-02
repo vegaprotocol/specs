@@ -1,5 +1,5 @@
 {
-    "Model-free alternatives": {
+  "Model-free alternatives": {
     "milestone": "suzuka_castle",
     "acs": [
       "0016-PFUT-026",
@@ -27,9 +27,6 @@
   "vAMMs": {
     "milestone": "suzuka_castle",
     "acs": [
-      "0042-LIQF-092",
-      "0042-LIQF-093",
-      "0042-LIQF-094",
       "0090-VAMM-001",
       "0090-VAMM-002",
       "0090-VAMM-003",
