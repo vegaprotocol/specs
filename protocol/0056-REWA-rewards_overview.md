@@ -215,6 +215,28 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Note this reward metric **is not** available for team rewards.
 
+## Eligible entities reward metric
+
+The eligible entities rewards metric $m_ee$ rewards entities who meet all the [eligibility requirements](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) set in the transfer.
+
+If a party meets **all** the eligibility requirements, their reward metric $m_ee$ is simply set to $1$.
+
+### Conditional transfer fields
+
+In order to allow creation of rewards which can pay-out to parties who are not actively trading, a transfer using this metric should be accepted in the cases where:
+
+- it specifies no metric asset, no markets within the market scope, no staking requirement, and no position requirement - in this case, all parties on the network are given a score of $1$.
+- it specifies no metric asset, no markets within the market scope, no position requirement, but does specify a staking requirement - in this case, all parties meeting the staking requirement are given a score of $1$.
+
+If however a position requirement is specified, an asset must be specified also and then parties must meet the position requirement to receive rewards.
+
+### Reward windows and transfer delays
+
+Note the following interactions with reward windows and transfer delays.
+
+- if a reward window greater than one is specified, an entity only needs to meet the eligibility requirements in the epoch the reward is distributed.
+- if a transfer delay greater than one is specified, an entity still **only** needs to meet the eligibility requirements in the epochs in the reward window (as per the point above).
+
 ## Team reward metrics
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
@@ -1144,3 +1166,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ## vAMMs
 
 - If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
+
+- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in the current epoch will receive rewards at the end of the epoch.
+- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window will receive **no** rewards at the end of the epoch.
+
+### Distributing rewards
+
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity meets the staking requirement they will receive rewards.
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity does not meet the staking requirement they will receive no rewards.
+
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity meets the position requirement they will receive rewards.
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity does not meet the position requirement they will receive no rewards.
+
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets neither the staking or position requirement, they will receive no rewards.
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the staking but not the position requirement, they will receive no rewards.
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards.
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards.
+
