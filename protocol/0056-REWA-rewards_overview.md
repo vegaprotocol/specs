@@ -336,6 +336,22 @@ Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$,
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
+### Distributing based on lottery
+
+Rewards funded using the lottery-distribution strategy use the same rank-table as described in [0057-TRAN](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) and should be distributed as follows.
+
+1. At the end of the epoch, take the hash of the most recent block as the seed.
+2. Iterate over the rank table, randomly assigning an entity to that rank where an entities probability of selection is as follows.
+
+Let:
+
+- $p_i$ be the probability entity $i$ is selected
+- $r_i$ be the reward score of entity $i$
+
+$$p_{i} = \frac{r_i}{\sum_{i}^{n}{r_i}}$$
+
+3. Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
+
 ### Distributing rewards amongst team members
 
 If rewards are distributed to a team, rewards must then be distributed between team members who had a reward metric, $m$, greater than `0` based on their payout multipliers.
@@ -1167,6 +1183,50 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
 
+## Eligible Entities Metric
+
+### Valid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network regardless of trading activity.
+  - no dispatch metric specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
+  - no dispatch metric specified
+  - no markets specified
+  - a staking requirement specified
+  - no position requirement specified
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network meeting the position requirement across all markets using that asset.
+  - a dispatch metric specified
+  - no markets specified
+  - a position requirement specified
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities  meeting the position requirement across the specified markets.
+  - a dispatch metric specified
+  - a set of markets specified
+  - a position requirement specified
+
+### Invalid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - no markets specified
+  - a position requirement specified
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - a set of markets specified
+  - a position requirement specified
+
+### Interaction with reward multipliers
+
+- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers. 
+
+### Interaction with reward windows
+
 - Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in the current epoch will receive rewards at the end of the epoch.
 - Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window will receive **no** rewards at the end of the epoch.
 
@@ -1183,3 +1243,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards.
 - Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards.
 
+## Lottery dispatch strategy
+
+- Given a recurring transfer using the litter-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity.
+- Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers.
