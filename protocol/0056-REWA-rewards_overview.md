@@ -350,7 +350,7 @@ Let:
 
 $$p_{i} = \frac{r_i}{\sum_{i}^{n}{r_i}}$$
 
-3. Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
+Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
 
 ### Distributing rewards amongst team members
 
@@ -1223,7 +1223,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Interaction with reward multipliers
 
-- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers. 
+- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers.
 
 ### Interaction with reward windows
 
