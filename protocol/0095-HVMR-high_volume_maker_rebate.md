@@ -20,7 +20,7 @@ For each party, the network must track the maker volume they created in each epo
 
 At the start of an epoch the network should calculate each parties `party_maker_volume_fraction` by calculating what proportion of the maker volume over the last $m$ epochs a party made up (where m is the `window_length` set configured in the program), i.e.
 
-$$\text{partyMakerVolumeFraction} = \frac{\sum_{i=1}^{m}{V_i}_j}{\sum_{i=1}^{m}\sum_{j=1}^{n}{V_i}_j}$$
+$$\text{partyMakerVolumeFraction}_j = \frac{\sum_{i=1}^{m} V_{i,j}}{\sum_{i=1}^{m} \sum_{k=1}^{n} V_{i,k}}$$
 
 where:
 
