@@ -215,6 +215,28 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Note this reward metric **is not** available for team rewards.
 
+## Eligible entities reward metric
+
+The eligible entities rewards metric $m_ee$ rewards entities who meet all the [eligibility requirements](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) set in the transfer.
+
+If a party meets **all** the eligibility requirements, their reward metric $m_ee$ is simply set to $1$.
+
+### Conditional transfer fields
+
+In order to allow creation of rewards which can pay-out to parties who are not actively trading, a transfer using this metric should be accepted in the cases where:
+
+- it specifies no metric asset, no markets within the market scope, no staking requirement, and no position requirement - in this case, all parties on the network are given a score of $1$.
+- it specifies no metric asset, no markets within the market scope, no position requirement, but does specify a staking requirement - in this case, all parties meeting the staking requirement are given a score of $1$.
+
+If however a position requirement is specified, an asset must be specified also and then parties must meet the position requirement to receive rewards.
+
+### Reward windows and transfer delays
+
+Note the following interactions with reward windows and transfer delays.
+
+- if a reward window greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated,
+- if a transfer delay greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated (as per the point above).
+
 ## Team reward metrics
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
@@ -313,6 +335,24 @@ Note if the entity is a team, $M_{i}$ is set to 1 as reward payout multipliers a
 Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
+### Distributing based on lottery
+
+Rewards funded using the lottery-distribution strategy use the same rank-table as described in [0057-TRAN](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) and should be distributed as follows.
+
+1. At the end of the epoch, take the hash of the most recent block as the seed.
+2. Iterate over the rank table, randomly assigning an entity to that rank where an entities probability of selection is as follows.
+
+Let:
+
+- $p_i$ be the probability entity $i$ is selected
+- $r_i$ be the reward score of entity $i$
+
+$$p_{i} = \frac{r_i}{\sum_{i}^{n}{r_i}}$$
+
+Note: after the first iterations only entities which aren't already included in the ranking are concerned for selection, i.e. it's not possible for any entity to be selected more than once.
+
+Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
 
 ### Distributing rewards amongst team members
 
@@ -1144,3 +1184,75 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ## vAMMs
 
 - If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
+
+## Eligible Entities Metric
+
+### Valid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network regardless of trading activity.
+  - no dispatch metric specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+(<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
+  - no dispatch metric specified
+  - no markets specified
+  - a staking requirement specified
+  - no position requirement specified
+(<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network meeting the position requirement across all markets using that asset.
+  - a dispatch metric specified
+  - no markets specified
+  - a position requirement specified
+(<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities  meeting the position requirement across the specified markets.
+  - a dispatch metric specified
+  - a set of markets specified
+  - a position requirement specified
+(<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>)
+
+### Invalid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - no markets specified
+  - a position requirement specified
+(<a name="0056-REWA-175" href="#0056-REWA-175">0056-REWA-175</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - a set of markets specified
+  - a position requirement specified
+(<a name="0056-REWA-176" href="#0056-REWA-176">0056-REWA-176</a>)
+
+### Interaction with reward multipliers
+
+- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers. (<a name="0056-REWA-178" href="#0056-REWA-178">0056-REWA-178</a>)
+
+### Interaction with reward windows
+
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch as well as the previous `N-1` epochs will receive rewards at the end of the epoch. (<a name="0056-REWA-179" href="#0056-REWA-179">0056-REWA-179</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch only will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-180" href="#0056-REWA-180">0056-REWA-180</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window, but not the current epoch will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-181" href="#0056-REWA-181">0056-REWA-181</a>)
+
+### Distributing rewards
+
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity meets the staking requirement they will receive rewards. (<a name="0056-REWA-182" href="#0056-REWA-182">0056-REWA-182</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity does not meet the staking requirement they will receive no rewards. (<a name="0056-REWA-183" href="#0056-REWA-183">0056-REWA-183</a>)
+
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity meets the position requirement they will receive rewards. (<a name="0056-REWA-184" href="#0056-REWA-184">0056-REWA-184</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity does not meet the position requirement they will receive no rewards. (<a name="0056-REWA-185" href="#0056-REWA-185">0056-REWA-185</a>)
+
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets neither the staking or position requirement, they will receive no rewards. (<a name="0056-REWA-186" href="#0056-REWA-186">0056-REWA-186</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the staking but not the position requirement, they will receive no rewards. (<a name="0056-REWA-187" href="#0056-REWA-187">0056-REWA-187</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards. (<a name="0056-REWA-188" href="#0056-REWA-188">0056-REWA-188</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards. (<a name="0056-REWA-189" href="#0056-REWA-189">0056-REWA-189</a>)
+
+## Lottery dispatch strategy
+
+- Given a recurring transfer using the litter-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity. (<a name="0056-REWA-190" href="#0056-REWA-190">0056-REWA-190</a>)
+- Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers. (<a name="0056-REWA-191" href="#0056-REWA-191">0056-REWA-191</a>)
