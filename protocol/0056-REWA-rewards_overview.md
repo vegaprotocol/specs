@@ -234,8 +234,8 @@ If however a position requirement is specified, an asset must be specified also 
 
 Note the following interactions with reward windows and transfer delays.
 
-- if a reward window greater than one is specified, an entity only needs to meet the eligibility requirements in the epoch the reward is distributed.
-- if a transfer delay greater than one is specified, an entity still **only** needs to meet the eligibility requirements in the epochs in the reward window (as per the point above).
+- if a reward window greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated,
+- if a transfer delay greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated (as per the point above).
 
 ## Team reward metrics
 
@@ -349,6 +349,8 @@ Let:
 - $r_i$ be the reward score of entity $i$
 
 $$p_{i} = \frac{r_i}{\sum_{i}^{n}{r_i}}$$
+
+Note: after the first iterations only entities which aren't already included in the ranking are concerned for selection, i.e. it's not possible for any entity to be selected more than once.
 
 Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
 
@@ -1192,22 +1194,26 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
   - no markets specified
   - no staking requirement specified
   - no position requirement specified
+(<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
   - no dispatch metric specified
   - no markets specified
   - a staking requirement specified
   - no position requirement specified
+(<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network meeting the position requirement across all markets using that asset.
   - a dispatch metric specified
   - no markets specified
   - a position requirement specified
+(<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities  meeting the position requirement across the specified markets.
   - a dispatch metric specified
   - a set of markets specified
   - a position requirement specified
+(<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>)
 
 ### Invalid combinations
 
@@ -1215,35 +1221,38 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
   - no dispatch metric specified
   - no markets specified
   - a position requirement specified
+(<a name="0056-REWA-175" href="#0056-REWA-175">0056-REWA-175</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
   - no dispatch metric specified
   - a set of markets specified
   - a position requirement specified
+(<a name="0056-REWA-176" href="#0056-REWA-176">0056-REWA-176</a>)
 
 ### Interaction with reward multipliers
 
-- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers.
+- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers. (<a name="0056-REWA-178" href="#0056-REWA-178">0056-REWA-178</a>)
 
 ### Interaction with reward windows
 
-- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in the current epoch will receive rewards at the end of the epoch.
-- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window will receive **no** rewards at the end of the epoch.
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch as well as the previous `N-1` epochs will receive rewards at the end of the epoch. (<a name="0056-REWA-179" href="#0056-REWA-179">0056-REWA-179</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch only will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-180" href="#0056-REWA-180">0056-REWA-180</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window, but not the current epoch will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-181" href="#0056-REWA-181">0056-REWA-181</a>)
 
 ### Distributing rewards
 
-- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity meets the staking requirement they will receive rewards.
-- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity does not meet the staking requirement they will receive no rewards.
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity meets the staking requirement they will receive rewards. (<a name="0056-REWA-182" href="#0056-REWA-182">0056-REWA-182</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity does not meet the staking requirement they will receive no rewards. (<a name="0056-REWA-183" href="#0056-REWA-183">0056-REWA-183</a>)
 
-- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity meets the position requirement they will receive rewards.
-- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity does not meet the position requirement they will receive no rewards.
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity meets the position requirement they will receive rewards. (<a name="0056-REWA-184" href="#0056-REWA-184">0056-REWA-184</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity does not meet the position requirement they will receive no rewards. (<a name="0056-REWA-185" href="#0056-REWA-185">0056-REWA-185</a>)
 
-- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets neither the staking or position requirement, they will receive no rewards.
-- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the staking but not the position requirement, they will receive no rewards.
-- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards.
-- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards.
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets neither the staking or position requirement, they will receive no rewards. (<a name="0056-REWA-186" href="#0056-REWA-186">0056-REWA-186</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the staking but not the position requirement, they will receive no rewards. (<a name="0056-REWA-187" href="#0056-REWA-187">0056-REWA-187</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards. (<a name="0056-REWA-188" href="#0056-REWA-188">0056-REWA-188</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards. (<a name="0056-REWA-189" href="#0056-REWA-189">0056-REWA-189</a>)
 
 ## Lottery dispatch strategy
 
-- Given a recurring transfer using the litter-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity.
-- Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers.
+- Given a recurring transfer using the litter-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity. (<a name="0056-REWA-190" href="#0056-REWA-190">0056-REWA-190</a>)
+- Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers. (<a name="0056-REWA-191" href="#0056-REWA-191">0056-REWA-191</a>)
