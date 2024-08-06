@@ -199,11 +199,11 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - Once total fee is collected, `maker_fee = fee_factor[maker]  * trade_value_for_fee_purposes` is transferred to maker at the end of fee distribution time. (<a name="0029-FEES-046" href="#0029-FEES-046">0029-FEES-046</a>)
 - Once total fee is collected, the `high_volume_maker_fee` is transferred to maker at the end of fee distribution time. (<a name="0029-FEES-047" href="#0029-FEES-047">0029-FEES-047</a>)
 - Once total fee is collected, `liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes` is distributed to liquidity providers as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).(<a name="0029-FEES-048" href="#0029-FEES-048">0029-FEES-048</a>)
-- Once total fee is collected, `treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes` (with apropriate fraction of `high_volume_maker_fee` deducted) is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.(<a name="0029-FEES-049" href="#0029-FEES-049">0029-FEES-049</a>)
-- Once total fee is collected, `buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes` (with with apropriate fraction of `high_volume_maker_fee` deducted) is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.(<a name="0029-FEES-050" href="#0029-FEES-050">0029-FEES-050</a>)
+- Once total fee is collected, `treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes` (with appropriate fraction of `high_volume_maker_fee` deducted) is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.(<a name="0029-FEES-049" href="#0029-FEES-049">0029-FEES-049</a>)
+- Once total fee is collected, `buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes` (with with appropriate fraction of `high_volume_maker_fee` deducted) is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.(<a name="0029-FEES-050" href="#0029-FEES-050">0029-FEES-050</a>)
 - If network parameter `market.fee.factors.treasuryFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-051" href="#0029-FEES-051">0029-FEES-051</a>)
 - If network parameter `market.fee.factors.buybackFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-052" href="#0029-FEES-052">0029-FEES-052</a>)
-op
+
 ### Applying benefit factors
 
 1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-053" href="#0029-FEES-053">0029-FEES-053</a>)
