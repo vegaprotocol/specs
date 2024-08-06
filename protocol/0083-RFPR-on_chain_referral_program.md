@@ -590,7 +590,7 @@ Before fees are transferred, if there is an [active referral program](./0083-RFP
 
 Note, discounts are calculated and applied one after the other and **before** rewards are calculated. Additionally, no benefit discounts can be applied to the treasury or buyback fee components as these may be required for the `high volume market maker rebate`.
 
-Referer should see the discount applied to the total fee from below:
+Referrer should see the discount applied to the total fee from below:
 
 `total fee = infrastructure_fee_after_referral_discount + maker_fee_after_referral_discount + liquidity_fee_after_referral_discount + treasury_fee + buyback_fee`
 
