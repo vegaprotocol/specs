@@ -149,7 +149,7 @@ During normal auctions there is no "price maker" both parties are "takers". Each
 
 Fees calculated and collected from general + margin as in continuous trading *but* if a party has insufficient capital to cover the trading fee then in auction the trade *still* *goes* *ahead* as long as the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee/treasury_fee/buyback_fee.
 
-During an opening auction of a market, no fees are collected.
+During an opening auction of a market, no makers fees are collected.
 
 ### Frequent Batch Auctions
 
@@ -184,7 +184,7 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>). For product spot: (<a name="0029-FEES-021" href="#0029-FEES-021">0029-FEES-021</a>)
 - A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>). For product spot: (<a name="0029-FEES-022" href="#0029-FEES-022">0029-FEES-022</a>)
 
-- During opening auction, there should be no fees collected.(<a name="0029-FEES-036" href="#0029-FEES-036">0029-FEES-036</a>)
+- During opening auction, there should be no maker fees collected.(<a name="0029-FEES-036" href="#0029-FEES-036">0029-FEES-036</a>)
 - During normal auction (including market protection and opening auctions), each side in a matched trade should contribute `0.5*(infrastructure_fee + liquidity_fee + treasury_fee + buyback_fee)`(<a name="0029-FEES-037" href="#0029-FEES-037">0029-FEES-037</a>)
 - In a matched trade, if the price taker has enough asset to cover the total fee in their general account, then the total fee should be taken from their general account. The total fee should be `infrastructure_fee + maker_fee + liquidity_fee + treasury_fee + buyback_fee`.(<a name="0029-FEES-038" href="#0029-FEES-038">0029-FEES-038</a>)
 - In a matched trade, if the price taker has insufficient asset to cover the total fee in their general account (but has enough in general + margin account), then the remainder will be taken from their margin account. (<a name="0029-FEES-039" href="#0029-FEES-039">0029-FEES-039</a>)
@@ -195,15 +195,15 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - When there is `high_volume_market_maker_rebate`, treasury fee will be updated to: `treasury_fee = treasury_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`(<a name="0029-FEES-043" href="#0029-FEES-043">0029-FEES-043</a>)
 - When there is `high_volume_market_maker_rebate`, buyback fee will be updated to: `buyback_fee = buyback_fee * (1 - high_volume_maker_fee / (treasury_fee + buyback_fee))`(<a name="0029-FEES-044" href="#0029-FEES-044">0029-FEES-044</a>)
 
-- Once total fee is collected, `infrastructure_fee = infrastructure_fee + maker_fee + liquidity_fee + buyback_fee + treasury_fee` is transferred to infrastructure fee pool for that asset at the end of fee distribution time. (<a name="0029-FEES-045" href="#0029-FEES-045">0029-FEES-045</a>)
+- Once total fee is collected, `infrastructure_fee = fee_factor[infrastucture]  * trade_value_for_fee_purposes` is transferred to infrastructure fee pool for that asset at the end of fee distribution time. (<a name="0029-FEES-045" href="#0029-FEES-045">0029-FEES-045</a>)
 - Once total fee is collected, `maker_fee = fee_factor[maker]  * trade_value_for_fee_purposes` is transferred to maker at the end of fee distribution time. (<a name="0029-FEES-046" href="#0029-FEES-046">0029-FEES-046</a>)
 - Once total fee is collected, the `high_volume_maker_fee` is transferred to maker at the end of fee distribution time. (<a name="0029-FEES-047" href="#0029-FEES-047">0029-FEES-047</a>)
 - Once total fee is collected, `liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes` is distributed to liquidity providers as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).(<a name="0029-FEES-048" href="#0029-FEES-048">0029-FEES-048</a>)
-- Once total fee is collected, `treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes` (with `high_volume_maker_fee` deducted) is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.(<a name="0029-FEES-049" href="#0029-FEES-049">0029-FEES-049</a>)
-- Once total fee is collected, `buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes` (with `high_volume_maker_fee` deducted) is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.(<a name="0029-FEES-050" href="#0029-FEES-050">0029-FEES-050</a>)
+- Once total fee is collected, `treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes` (with apropriate fraction of `high_volume_maker_fee` deducted) is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.(<a name="0029-FEES-049" href="#0029-FEES-049">0029-FEES-049</a>)
+- Once total fee is collected, `buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes` (with with apropriate fraction of `high_volume_maker_fee` deducted) is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.(<a name="0029-FEES-050" href="#0029-FEES-050">0029-FEES-050</a>)
 - If network parameter `market.fee.factors.treasuryFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-051" href="#0029-FEES-051">0029-FEES-051</a>)
 - If network parameter `market.fee.factors.buybackFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-052" href="#0029-FEES-052">0029-FEES-052</a>)
-
+op
 ### Applying benefit factors
 
 1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-053" href="#0029-FEES-053">0029-FEES-053</a>)
