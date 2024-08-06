@@ -225,10 +225,9 @@ If a party meets **all** the eligibility requirements, their reward metric $m_ee
 
 In order to allow creation of rewards which can pay-out to parties who are not actively trading, a transfer using this metric should be accepted in the cases where:
 
-- it specifies no metric asset, no markets within the market scope, no staking requirement, and no position requirement - in this case, all parties on the network are given a score of $1$.
-- it specifies no metric asset, no markets within the market scope, no position requirement, but does specify a staking requirement - in this case, all parties meeting the staking requirement are given a score of $1$.
+- it specifies only one of: metric asset, market scope, staking requirement, position requirement (an asset must be specified also in this case) - all parties meeting the eligibility criteria are given a score of $1$.
 
-If however a position requirement is specified, an asset must be specified also and then parties must meet the position requirement to receive rewards.
+Note: at least one requirement must be specified to avoid a trivial attack on the network where an attacker can just keep setting these rewards such that they never get paid but constantly evaluated on the whole network.
 
 ### Reward windows and transfer delays
 
@@ -1189,7 +1188,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Valid combinations
 
-- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network regardless of trading activity.
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should not be distributed since no eligibility criteria are set:
   - no dispatch metric specified
   - no markets specified
   - no staking requirement specified
