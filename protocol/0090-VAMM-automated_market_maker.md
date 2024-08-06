@@ -338,4 +338,6 @@ At market settlement, an AMM's position will be settled alongside all others as 
 
 - With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread. (<a name="0090-VAMM-035" href="#0090-VAMM-035">0090-VAMM-035</a>)
 
-- With an existing book consisting solely of one vAMM, pegged orders referencing best bid/best ask remain deployed, pegged to their pegs, where the best buy/sell vAMM order price acts as the best bid, or best ask peg respectively. (<a name="0090-VAMM-036" href="#0090-VAMM-036">0090-VAMM-036</a>)
+- With an existing book consisting solely of vAMM orders, pegged orders referencing best bid/best ask remain deployed, pegged to their pegs, where the best buy/sell vAMM order price acts as the best bid, or best ask peg respectively. (<a name="0090-VAMM-036" href="#0090-VAMM-036">0090-VAMM-036</a>)
+
+- With an existing book consisting solely of vAMM orders on one side, pegged orders referencing best bid/best ask remain deployed on the side with the vAMM orders. Pegged orders referencing the empty side of the book are parked. (<a name="0090-VAMM-037" href="#0090-VAMM-037">0090-VAMM-037</a>)
