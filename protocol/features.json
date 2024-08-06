@@ -41,6 +41,19 @@
       "0028-GOVE-185"
     ]
   },
+  "Average notional position": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0056-REWA-171",
+      "0056-REWA-172",
+      "0056-REWA-173",
+      "0056-REWA-174",
+      "0056-REWA-175",
+      "0056-REWA-176",
+      "0056-REWA-177",
+      "0056-REWA-178"
+    ]
+  },
   "Spot stretch": {
     "milestone": "historic_distillery",
     "acs": [
