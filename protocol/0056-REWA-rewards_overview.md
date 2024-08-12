@@ -77,7 +77,7 @@ Note, trading fees paid or received on Spot markets will contribute to fee-based
 
 The average notional position metric, $m_{ap}$, measures each parties time-weighted average notional position over a number of epochs.
 
-At the start of each epoch, the network must reset each parties time weighted average notional position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows. Note, to reduce computation the tracker is not updated on every mark price update, only on trades involving the relevant party.
+At the start of each epoch, the network must reset each parties time weighted average notional position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows (note, to reduce computation the tracker is not updated on every mark price update).
 
 Let:
 
