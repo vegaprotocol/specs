@@ -116,7 +116,8 @@ Here, `feed_paid_since_last_payout` are the total trading fees paid by a party (
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
   - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
   - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
-- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK`, an ordered list dictionaries defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers in an ascending order and the table can have strictly no more than 500 rows.
+  - `DISTRIBUTION_STRATEGY_RANK_LOTTERY` - rewards should be distributed among entities [based on randomly assigned rank](./0056-REWA-rewards_overview.md#distributing-based-on-lottery).
+- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK` or `DISTRIBUTION_STRATEGY_RANK_LOTTERY`, an ordered list dictionaries defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers in an ascending order and the table can have strictly no more than 500 rows.
 
     ```pseudo
         rank_table = [
