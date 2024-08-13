@@ -6,6 +6,9 @@ ABIs
 actioned
 Allowlist
 allowlisted
+AMM
+AMM's
+AMMs
 antiwhaling
 API
 APIs
@@ -31,6 +34,7 @@ cashflows
 CCP
 ccy
 cdot
+cdotp
 ceil
 ceiled
 CFD
@@ -73,6 +77,7 @@ delegateable
 delegator
 delegators
 deterministically
+differentiator
 discoverability
 disincentivise
 DLT
@@ -114,6 +119,7 @@ frontend
 funder
 FX
 GBP
+geq
 Geth
 Getters
 GFA
@@ -147,6 +153,9 @@ int64
 integrations
 intrablock
 IOC
+iteratively
+joinable
+joinable
 JSON
 keyholder
 keypair
@@ -176,6 +185,8 @@ margined
 margining
 marketID
 math
+mathbb
+mathbf
 MDPs
 mempool
 Merkle
@@ -190,6 +201,7 @@ multisig
 multisigs
 MultisigControl
 multisignature
+multisigs
 NFTs
 nonfungible
 OAUTH
@@ -210,12 +222,15 @@ permissioned
 permissionless
 PERP
 perps
+piecewise
 PME
 PnL
 PoS
 PoW
 PoWs
 pre
+precomputed
+priori
 pro
 protobuf
 Pseudocode
@@ -223,7 +238,10 @@ pseudorandom
 pubkey
 quant
 rata
+rebalance
+rebalancing
 rebased
+rebasing
 recollateralise
 ReferralSet
 reimplemented
@@ -237,8 +255,10 @@ RFQ
 roadmap
 Ropsten
 RPC
+rulesets
 runnable
 runtime
+rz
 scalability
 scalable
 Scholes
@@ -251,6 +271,7 @@ sharded
 siskas
 SLA
 Solana
+sqrt
 src
 SSD
 SSL
@@ -299,6 +320,8 @@ undelegations
 undeployed
 underlyings
 unencrypted
+Uniswap
+Uniswap's
 unitless
 unmarshal
 unnominated
@@ -307,6 +330,8 @@ unstake
 unstaked
 unstakes
 unstaking
+unsynchronised
+Unsynchronised
 untriggered
 unvested
 url
@@ -318,7 +343,9 @@ validator
 validator's
 validators
 vAMM
+vAMM's
 vAMMs
+vee
 vega
 vegaprotocol
 vegatools
@@ -336,9 +363,3 @@ wBTC
 wei
 whitepaper
 Yubikey
-joinable
-mathbb
-geq
-vee
-mathbf
-rz

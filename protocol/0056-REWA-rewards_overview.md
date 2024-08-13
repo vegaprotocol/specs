@@ -51,7 +51,7 @@ Although rewards are distributed at the end of an epoch, to give users of the pr
 
 For each game, each entities (individual or team) **current reward metric** and rank in the game is to be updated every `rewards.updateFrequency` seconds. Note, the actual reward metric should be updated and exposed rather than the underlying data in the current epoch, this is important for games where the window length is greater than `1`.
 
-For reward metrics which can only be calculated at the end of the epoch, ie. [liquidity fees received](#fee-based-reward-metrics); scores are only required to be updated and exposed at the end of the epoch. [Market creation](#market-creation-reward-metrics) and [validator ranking](#validator-ranking-metric) scores will not be published as part of the interim reward information.
+For reward metrics which can only be calculated at the end of the epoch, e.g. [market creation](#market-creation-reward-metrics), [liquidity fees received](#fee-based-reward-metrics), and [validator ranking](#validator-ranking-metric); scores are only required to be updated and exposed at the end of the epoch.
 
 For each game, the following data for each party should also be published every update period so APIs are able to relay information to users about their eligibility and expected rewards.
 
@@ -130,13 +130,15 @@ Note, as a position can not be created on a Spot market. Trading activity on a S
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs, call this variance $\sigma^2$.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the variance of the set $R$.
+The reward metric $m_{rv}$ is the reciprocal of the variance of the set $R$.
+
+$$m_{rv} = \frac{1}{\sigma^2}$$
 
 Note, as a position can not be created on a Spot market. Trading activity on a Spot market will not contribute to this reward metric.
 
@@ -238,6 +240,8 @@ All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md
 The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
+
+Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
 
 ### Distributing rewards amongst entities
 
@@ -1037,8 +1041,8 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ### Returns volatility
 
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the reciprocal of the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the reciprocal of the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
 
 ### Realised returns
 
@@ -1103,16 +1107,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees paid, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-136" href="#0056-REWA-136">0056-REWA-136</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is maker fees received, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-137" href="#0056-REWA-137">0056-REWA-137</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is liquidity fees received, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-138" href="#0056-REWA-138">0056-REWA-138</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is market creation, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-139" href="#0056-REWA-139">0056-REWA-139</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is average position, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-140" href="#0056-REWA-140">0056-REWA-140</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is relative returns, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-141" href="#0056-REWA-141">0056-REWA-141</a>).
 - Given a recurring transfer where the entity scope is individuals and the dispatch metric is returns volatility, a parties reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-142" href="#0056-REWA-142">0056-REWA-142</a>).
+- Given a recurring transfer where the entity scope is individuals and the dispatch metric is validator ranking, a parties reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-143" href="#0056-REWA-143">0056-REWA-143</a>).
 
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees paid, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-144" href="#0056-REWA-144">0056-REWA-144</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is maker fees received, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-145" href="#0056-REWA-145">0056-REWA-145</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is liquidity fees received, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-146" href="#0056-REWA-146">0056-REWA-146</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is market creation, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-147" href="#0056-REWA-147">0056-REWA-147</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is average position, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-148" href="#0056-REWA-148">0056-REWA-148</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
+- Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
 
 ### Spot markets
 
@@ -1132,3 +1140,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees paid reward metric. (<a name="0056-REWA-165" href="#0056-REWA-165">0056-REWA-165</a>).
 - Given a reward metric scoping both spot and leveraged markets, a parties trades in the spot market will correctly contribute to their maker fees received reward metric. (<a name="0056-REWA-166" href="#0056-REWA-166">0056-REWA-166</a>).
 - Given a reward metric scoping both spot and leveraged markets, a parties received liquidity fees from the spot market will correctly contribute to their liquidity fees received reward metric. (<a name="0056-REWA-167" href="#0056-REWA-167">0056-REWA-167</a>).
+
+## vAMMs
+
+- If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).

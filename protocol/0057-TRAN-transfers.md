@@ -101,6 +101,7 @@ To support entity scoping, the transaction include the following fields:
   - `INDIVIDUAL_SCOPE_ALL` - all parties on the network are within the scope of this reward
   - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
   - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
+  - `INDIVIDUAL_SCOPE_AMM` - all keys representing AMM parties (i.e. excluding those directly controlled by parties) are within the scope of this reward
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
 - `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
@@ -410,3 +411,5 @@ If a party sets up a recurring transfer with a `transfer_interval` field strictl
 If a party sets up a recurring transfer with a `transfer_interval` field strictly greater than `1`, if they cancel the recurring transfer the locked funds will not be released and the next payout event will happen regardless. (<a name="0057-TRAN-078" href="#0057-TRAN-078">0057-TRAN-078</a>)
 
 If a party sets up a recurring transfer with a transfer interval strictly greater than `1` and specifies a `cap_reward_fee_multiple`. If `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum`(<a name="0057-TRAN-079" href="#0057-TRAN-079">0057-TRAN-079</a>)
+
+A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-080" href="#0057-TRAN-080">0057-TRAN-080</a>)

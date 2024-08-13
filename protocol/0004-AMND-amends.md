@@ -27,6 +27,7 @@
 - Attempting to alter details on a cancelled order will cause the amend to be rejected (<a name="0004-AMND-018" href="#0004-AMND-018">0004-AMND-018</a>). For product spot: (<a name="0004-AMND-046" href="#0004-AMND-046">0004-AMND-046</a>)
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>). For product spot: (<a name="0004-AMND-047" href="#0004-AMND-047">0004-AMND-047</a>)
 - Amending expiry time of an active GTT order to a past time whilst also simultaneously amending the price of the order will cause the order to immediately expire with the order details updated to reflect the order details requiring amendment (<a name="0004-AMND-029" href="#0004-AMND-029">0004-AMND-029</a>). For product spot: (<a name="0004-AMND-048" href="#0004-AMND-048">0004-AMND-048</a>)
+- An amendment which would result in the margin requirement for the order being smaller than `spam.order.minimalMarginQuantumMultiple` should fail with the order remaining unchanged (<a name="0004-AMND-061" href="#0004-AMND-061">0004-AMND-061</a>)
 
 For a party with no position on a given market:
 
