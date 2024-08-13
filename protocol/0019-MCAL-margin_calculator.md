@@ -425,6 +425,22 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - All order margin balances are restored after a protocol upgrade (<a name="0019-MCAL-152" href="#0019-MCAL-152">0019-MCAL-152</a>).
 - The `margin mode` and `margin factor` of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
 
+## Acceptance Criteria (Fully collateralised mode)
+
+Assume a [capped future](./0093-CFUT-product_builtin_capped_future.md) market with a `max price = 100` and mark-to-market cashflows being exchanged every block:
+
+- Party A posts an order to buy `10` contracts at a price of `30`, there's no other volume in that price range so the order lands on the book and the  maintenance and initial margin levels for the party and order margin account balance are all equal to `300`. (<a name="0019-MCAL-154" href="#0019-MCAL-154">0019-MCAL-154</a>)
+- Party B posts an order to sell `15` contracts at a price of `20`, a trade is generated for `10` contracts at price of `30` with party A. The maintenance and initial margin levels party A remains at `300`, order margin account balance is now `0` and margin account balance is `300`, the position is `10` and there are no open orders. The  maintenance and initial margin levels for party B are equal to `10 * (100 - 30) + 5 * (100 - 20) = 1100`, the margin account balance is `700`, order margin account balance is `400`, the position is `-10` and the remaining volume on the book from this party is `5` at a price of `20`. (<a name="0019-MCAL-155" href="#0019-MCAL-155">0019-MCAL-155</a>)
+- Party B posts an order to buy `10` contracts at a price of `18`, the orders get placed on the book and margin levels as well margin account balances and position remain unchanged. (<a name="0019-MCAL-156" href="#0019-MCAL-156">0019-MCAL-156</a>)
+- Party B posts an order to buy `30` contracts at a price of `16`, the orders get placed on the book, the maintenance and initial margin levels for party B grow to `1180`, and the margin account balance remains unchanged at `700` and the order margin account balance grows to `480 = max (5 * (100 - 20), 30 * 16)`. The position remains unchanged at `-10`. (<a name="0019-MCAL-157" href="#0019-MCAL-157">0019-MCAL-157</a>)
+- Party A posts an order to sell `20` contracts at a price of `17`. A trade is generated for `10` contracts at a price of `18` with party B. A sell order for `10` contracts at a price of `17` from party A gets added to the book. The maintenance and initial margin levels for party A is now `10 * (100 - 17) = 830`, the position is `0` and the remaining volume on the book from this party is `10` at a price of `18`. Party A lost `120` on its position, hence `830 - (300 - 120) = 410` additional funds get moved from the general account as part of the transaction which submitted the order to sell `20` at `17`. Party B now has a position of `0` and following orders open on the book: sell `5` at `20` and buy `30` at `16`. The maintenance and initial margin levels are `max(5 * (100 - 20), 30 * 16) = 480`. The margin account momentarily becomes `820` (`700` + `120` of gains from the now closed position of `-10`), order margin account balance is `480`, hence `820` gets released back into the general account and margin account becomes `0`. (<a name="0019-MCAL-158" href="#0019-MCAL-158">0019-MCAL-158</a>)
+- `fully-collateralised mode` is only allowed when there is a `max_price` specified (<a name="0019-MCAL-170" href="#0019-MCAL-170">0019-MCAL-170</a>)
+- `binary_settlement` is only allowed when there is a `max_price` specified (<a name="0019-MCAL-171" href="#0019-MCAL-171">0019-MCAL-171</a>)
+
+## Acceptance Criteria (Hardcoded risk factors)
+
+- When a risk model with hardcoded risk factors is used on a regular (NOT fully-collateralised) market then margin calculations depend entirely on the hardcoded values and updating other risk model parameters has no effect on margins (<a name="0019-MCAL-159" href="#0019-MCAL-159">0019-MCAL-159</a>)
+
 ## Summary
 
 The *margin calculator* returns the set of margin levels for a given *actual position*, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
@@ -432,7 +448,9 @@ The *margin calculator* returns the set of margin levels for a given *actual pos
 
 ### Margining modes
 
-The system can operate in one of two margining modes for each position.
+#### Partially-collateralised
+
+The system can operate in one of two partially-collateralised margining modes for each position.
 The current mode will be stored alongside of party's position record.
 
 1. **Cross-margin mode (default)**: this is the mode used by all newly created positions.
@@ -443,6 +461,23 @@ In this mode, the entire margin for any newly opened position volume is transfer
 This includes completely new positions and increases to position size. Other than at time of future trades, the general account will then
 *never* be searched for additional funds (a position will be allowed to be closed out instead), nor will profits be moved into the
 general account from the margin account.
+
+#### Fully-collateralised
+
+For certain derivatives markets it may be possible to collateralise the position in full so that there's no default risk for any party.
+
+If a product specifies an upper bound on price (`max price`) (e.g. [capped future](./0093-CFUT-product_builtin_capped_future.md)) then a fully-collateralised mode can be specified for the market. If it is chosen then, it's mandatory for all parties (it's not possible to self-select any of the above partially-collateralised margining modes).
+
+In this mode long positions provide `position size * average entry price` in initial margin, whereas shorts provide `postion size * (max price - average entry price)`. The initial margin level is only re-evaluated when party changes their position. The [mark-to-market](./0003-MTMK-mark_to_market_settlement.md) is carried out as usual. Maintenance and initial margin levels should be set to the same value.  Margin search and release levels are set to `0` and never used.
+
+In this mode it is not possible for a party to be liquidated. Even if the price moves to the extremes of zero or the `max price` and parties may therefore have zero in their margin account, the parties must not be liquidated. Fully collateralised means that the posted collateral explicitly covers all eventualities and positions will only be closed at final settlement at maturity.
+
+Order margin is calculated as per [isolated margin mode](#placing-an-order) with:
+
+- `side margin = limit price * size` for buy orders
+- `side margin = (max price - limit price) * size` for sell orders.
+
+Same calculation should be applied during auction (unlike in isolated margin mode).
 
 ### Actual position margin levels
 

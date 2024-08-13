@@ -26,9 +26,11 @@ Each bridge contains two primary functions and emits two primary events, each ta
 
 ### Block confirmations
 
-It is normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. We need to do the same, to have acceptably high probability that the event is on the longest chain and there won't be a fork in the future which will invalidate this. We achieve this by ensuring that enough time has passed.
+It used to be normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. With the new version of Ethereum, an additional mechanism exists that assures finality of a block
+that can be used instead, which leads to cleaner results.
 
-This will need to be configured per chain that we connect to. ETH, ERC-20, ERC-XXX can all share a value, which should be configurable and changeable via governance. For Ethereum, this should be 20 confirmations. It is safe to lower this for development networks.
+We use this mechanism for all Ethereum related finality requirements. For legacy reasons ,there is still a parameter
+defining the number of confirmations previously used, but this parameter is ignored now.
 
 ## Reference-level explanation
 
@@ -115,7 +117,7 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
 | `staking_bridge_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for [staking events](./0059-STKG-simple_staking_and_delegating.md). |
 | `token_vesting_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for [vesting contract events](./0059-STKG-simple_staking_and_delegating.md). |
 | `multisig_control_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for multisig control event |
-| `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action   |
+| `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action (legacy)  |
 
 ### Full example
 
