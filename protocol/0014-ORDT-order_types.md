@@ -402,7 +402,6 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>). For spot products (<a name="0014-ORDT-160" href="#0014-ORDT-160">0014-ORDT-160</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>). For spot products (<a name="0014-ORDT-161" href="#0014-ORDT-161">0014-ORDT-161</a>)
 - If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
-- A party with a long position cannot enter a buy stop order, and a party with a short position cannot enter a sell stop order (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
 ## Stop Orders - Snapshots
 
