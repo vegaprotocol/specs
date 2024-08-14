@@ -181,9 +181,6 @@
       "0033-OCAN-015",
       "0033-OCAN-016",
       "0033-OCAN-017",
-      "0034-PROB-003",
-      "0034-PROB-008",
-      "0034-PROB-010",
       "0039-MKTD-020",
       "0039-MKTD-021",
       "0039-MKTD-022",
@@ -314,9 +311,13 @@
       "0056-REWA-165",
       "0056-REWA-166",
       "0056-REWA-167"
+    ],
+    "acsToEnableInSuzukaBranch": [
+      "0034-PROB-003",
+      "0034-PROB-008",
+      "0034-PROB-010"
     ]
   },
-
   "Order spam": {
     "milestone": "colosseo_II",
     "acs": [
@@ -476,7 +477,9 @@
   "Fee mechanic changes": {
     "milestone": "suzuka_castle",
     "acs": [
-      "0084-VDPR-015",
+      "0084-VDPR-015"
+    ],
+    "acsToEnableInSuzukaBranch": [
       "0029-FEES-034",
       "0029-FEES-035",
       "0029-FEES-036",
@@ -502,7 +505,9 @@
   "Reward improvements": {
     "milestone": "suzuka_castle",
     "acs": [
-      "0056-REWA-170",
+      "0056-REWA-170"
+    ],
+    "acsToEnableInSuzukaBranch": [
       "0056-REWA-171",
       "0056-REWA-172",
       "0056-REWA-173",
