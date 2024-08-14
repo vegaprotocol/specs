@@ -92,8 +92,10 @@ Note, discounts are calculated and applied one after the other and **before** re
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
 The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-The treasury fee factor is set by the network parameter `market.fee.factors.treasuryFee` with a default value should of `0`.
-The buyback fee factor is set by the network parameter `market.fee.factors.buybackFee` with a default value should of `0`.
+
+The treasury fee factor is set by the network parameter `market.fee.factors.treasuryFee` can be changed through a network parameter update proposal. It has minimum allowable value of `0` maximum allowable value of `1` and a default of `0`.
+
+The buyback fee factor is set by the network parameter `market.fee.factors.buybackFee` can be changed through a network parameter update proposal. It has minimum allowable value of `0` maximum allowable value of `1` and a default of `0`.
 
 trade_value_for_fee_purposes:
 
@@ -201,8 +203,8 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - Once total fee is collected, `liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes` is distributed to liquidity providers as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).(<a name="0029-FEES-048" href="#0029-FEES-048">0029-FEES-048</a>)
 - Once total fee is collected, `treasury_fee = fee_factor[treasury] * trade_value_for_fee_purposes` (with appropriate fraction of `high_volume_maker_fee` deducted) is transferred to the treasury fee pool for that asset, where it will remain until community governance votes for transfers.(<a name="0029-FEES-049" href="#0029-FEES-049">0029-FEES-049</a>)
 - Once total fee is collected, `buyback_fee = fee_factor[buyback] * trade_value_for_fee_purposes` (with with appropriate fraction of `high_volume_maker_fee` deducted) is transferred to the buyback fee pool for that asset, where it will remain until community governance votes for transfers or a regular purchase program is set up.(<a name="0029-FEES-050" href="#0029-FEES-050">0029-FEES-050</a>)
-- If network parameter `market.fee.factors.treasuryFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-051" href="#0029-FEES-051">0029-FEES-051</a>)
-- If network parameter `market.fee.factors.buybackFee` is not set during market creation, then it should use the default value of `0`.(<a name="0029-FEES-052" href="#0029-FEES-052">0029-FEES-052</a>)
+- Change of network parameter `market.fee.factors.treasuryFee` will, as soon as the current epoch ends, change the amount of `treasury_fee` that is transferred to the treasury fee pool for that asset. (<a name="0029-FEES-051" href="#0029-FEES-051">0029-FEES-051</a>)
+- Change of network parameter `market.fee.factors.buybackFee` will, as soon as the current epoch ends, change the amount of `buyback_fee` that is transferred to the treasury fee pool for that asset. (<a name="0029-FEES-052" href="#0029-FEES-052">0029-FEES-052</a>)
 
 ### Applying benefit factors
 
