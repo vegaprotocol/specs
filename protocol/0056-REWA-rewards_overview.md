@@ -260,7 +260,7 @@ Recurring transfers can target groups of markets, or all markets for a settlemen
 
 All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to distribute as rewards is first scaled as per the mechanics defined in section [reward scaling](#reward-scaling). The scaled amount is then paid out unless the total value of the metric over all entities is zero.
+If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to take from the source account and distribute as rewards is scaled as per the mechanics defined in section [reward scaling](#reward-scaling).
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
@@ -284,9 +284,10 @@ Note the following considerations:
 
 - If no target notional volume is specified in the recurring transfer, no scaling takes place. The full transfer amount is always distributed if possible.
 - If the actual notional volume is greater than the target notional volume, the rewards will not be scaled (as the scaling factor will be `1`). The final transfer amount cannot be greater than the transfer amount specified in the recurring transfer.
-- reward scaling is not possible for the following reward metrics.
-  - [Validator ranking](#validator-ranking-metric)
-  - [Market creation](#market-creation-reward-metrics)
+- reward scaling is not possible.
+  - when using the [Validator ranking](#validator-ranking-metric) metric
+  - when using the [Market creation](#market-creation-reward-metrics) metric
+  - when using the [Eligible entities](#eligible-entities-metric) metric and specifying no asset for metric (i.e. when only specifying a staking requirement)
 
 ### Distributing rewards amongst entities
 
@@ -1193,8 +1194,10 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If a `target_notional_volume` is not specified, the full transfer amount should be paid out regardless of the volume.
 - If a `target_notional_volume` is specified but the value is zero. The transfer should be rejected.
-- If a `target_notional_volume` is specified but the dispatch metric is for market creation rewards. The transfer should be rejected.
-- If a `target_notional_volume` is specified but the dispatch metric is for validator ranking rewards. The transfer should be rejected.
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is specified, the transfer should be accepted.
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is **not** specified, the transfer should be rejected.
+- If a `target_notional_volume` is specified and the dispatch metric is for market creation rewards, the transfer should be rejected.
+- If a `target_notional_volume` is specified and the dispatch metric is for validator ranking rewards, the transfer should be rejected.
 
 #### Interactions with scoping markets
 
