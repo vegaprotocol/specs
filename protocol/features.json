@@ -609,8 +609,16 @@
       "0085-RVST-025"
     ]
   },
-  "Spot AMM": {
+  "LP 3.0": {
     "milestone": "genbu_temple",
+    "acs": []
+  },
+  "Token Buyback auction": {
+    "milestone": "genbu_temple",
+    "acs": []
+  },
+  "Spot AMM": {
+    "milestone": "historic_distillery",
     "acs": [
       "0092-SAMM-001",
       "0092-SAMM-002",
@@ -621,14 +629,6 @@
       "0092-SAMM-007",
       "0092-SAMM-008"
     ]
-  },
-  "LP 3.0": {
-    "milestone": "genbu_temple",
-    "acs": []
-  },
-  "Token Buyback auction": {
-    "milestone": "genbu_temple",
-    "acs": []
   },
   "Model-free alternatives": {
     "milestone": "historic_distillery",
