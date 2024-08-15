@@ -108,9 +108,9 @@ Any APIs which report a party's rebate factor should adhere to this cap and retu
 
 #### Evaluating contributions across markets
 
-1. Given two party's making markets in two separate derivative markets using settlement assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-023" href="#0095-HVMR-023">0095-HVMR-023</a>).
-1. Given two party's making markets in two separate spot markets using quote assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-024" href="#0095-HVMR-024">0095-HVMR-024</a>).
-1. Given two party's making markets in a separate derivative and spot market using a settlement and quote asset with different quantum values respectively, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-025" href="#0095-HVMR-025">0095-HVMR-025</a>).
+1. Given two parties' making markets in two separate derivative markets using settlement assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-023" href="#0095-HVMR-023">0095-HVMR-023</a>).
+1. Given two parties' making markets in two separate spot markets using quote assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-024" href="#0095-HVMR-024">0095-HVMR-024</a>).
+1. Given two parties' making markets in a separate derivative and spot market using a settlement and quote asset with different quantum values respectively, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-025" href="#0095-HVMR-025">0095-HVMR-025</a>).
 
 ### Setting rebate factors
 
