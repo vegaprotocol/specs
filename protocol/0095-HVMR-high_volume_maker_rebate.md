@@ -18,7 +18,7 @@ Enabling or changing the terms of the program can be proposed via governance. As
 
 For each party, the network must track the maker volume they created in each epoch.
 
-At the start of an epoch the network should calculate each parties `party_maker_volume_fraction` by calculating what proportion of the maker volume over the last $m$ epochs a party made up (where m is the `window_length` set configured in the program), i.e.
+At the start of an epoch the network should calculate each party's `party_maker_volume_fraction` by calculating what proportion of the maker volume over the last $m$ epochs a party made up (where m is the `window_length` set configured in the program), i.e.
 
 $$\text{partyMakerVolumeFraction}_j = \frac{\sum_{i=1}^{m} V_{i,j}}{\sum_{i=1}^{m} \sum_{k=1}^{n} V_{i,k}}$$
 
@@ -27,7 +27,7 @@ where:
 - ${V_i}_j$ is the maker volume of party `j` in epoch `i`
 
 
-Each parties `additional_maker_rebate` is then fixed to the value in the highest tier they qualify for. A parties tier is defined as the highest tier for which their `party_maker_volume_fraction` is greater or equal to the tiers `minimum_party_maker_volume_fraction`. If a party does not qualify for any tier, their `additional_maker_rebate` is set to `0`.
+Each party's `additional_maker_rebate` is then fixed to the value in the highest tier they qualify for. A party's tier is defined as the highest tier for which their `party_maker_volume_fraction` is greater or equal to the tiers `minimum_party_maker_volume_fraction`. If a party does not qualify for any tier, their `additional_maker_rebate` is set to `0`.
 
 ```pseudo
 Given:
@@ -69,9 +69,9 @@ As the rebate is funded through the buyback and treasure fee, the effective reba
 
 $$\text{effectiveAdditionalMakerRebate} = \min{(\text{additionalMakerRebate}, \text{market.fee.factors.treasuryFee} + \text{market.fee.factors.buybackFee})}$$
 
-As a parties $effectiveAdditionalMakerRebate$ is dependent on the network parameters defining the factors, if the fee factors are updated through governance during an epoch, calculation of the effective rebate should be re-triggered a parties current $additionalMakerRebate$ and the updated factors. Note in this case, the network should not recalculate which tier and $additionalMakerRebate$ a party qualifies for as this is only done on epoch boundaries.
+As a party's $effectiveAdditionalMakerRebate$ is dependent on the network parameters defining the factors, if the fee factors are updated through governance during an epoch, calculation of the effective rebate should be re-triggered a party's current $additionalMakerRebate$ and the updated factors. Note in this case, the network should not recalculate which tier and $additionalMakerRebate$ a party qualifies for as this is only done on epoch boundaries.
 
-Any APIs which report a parties rebate factor should adhere to this cap and return the $effectiveAdditionalMakerRebate$.
+Any APIs which report a party's rebate factor should adhere to this cap and return the $effectiveAdditionalMakerRebate$.
 
 ## Acceptance Criteria
 
@@ -97,9 +97,9 @@ Any APIs which report a parties rebate factor should adhere to this cap and retu
 
 #### Contributing trades
 
-1. Each trade in which a party is the "maker" **should** contribute towards the parties maker volume fraction (<a name="0095-HVMR-013" href="#0095-HVMR-013">0095-HVMR-013</a>). For product spot (<a name="0095-HVMR-014" href="#0095-HVMR-014">0095-HVMR-014</a>).
-1. Each trade in which a party is the "taker" **should not** contribute towards the parties maker volume fraction (<a name="0095-HVMR-015" href="#0095-HVMR-015">0095-HVMR-015</a>). For product spot (<a name="0095-HVMR-016" href="#0095-HVMR-016">0095-HVMR-016</a>).
-1. A trade generated during auction uncrossing should not contribute to either parties maker volume fraction (<a name="0095-HVMR-017" href="#0095-HVMR-017">0095-HVMR-017</a>). For product spot (<a name="0095-HVMR-018" href="#0095-HVMR-018">0095-HVMR-018</a>).
+1. Each trade in which a party is the "maker" **should** contribute towards the party's maker volume fraction (<a name="0095-HVMR-013" href="#0095-HVMR-013">0095-HVMR-013</a>). For product spot (<a name="0095-HVMR-014" href="#0095-HVMR-014">0095-HVMR-014</a>).
+1. Each trade in which a party is the "taker" **should not** contribute towards the party's maker volume fraction (<a name="0095-HVMR-015" href="#0095-HVMR-015">0095-HVMR-015</a>). For product spot (<a name="0095-HVMR-016" href="#0095-HVMR-016">0095-HVMR-016</a>).
+1. A trade generated during auction uncrossing should not contribute to either party's maker volume fraction (<a name="0095-HVMR-017" href="#0095-HVMR-017">0095-HVMR-017</a>). For product spot (<a name="0095-HVMR-018" href="#0095-HVMR-018">0095-HVMR-018</a>).
 
 #### Evaluating contributions across windows
 
@@ -108,24 +108,24 @@ Any APIs which report a parties rebate factor should adhere to this cap and retu
 
 #### Evaluating contributions across markets
 
-1. Given two parties making markets in two separate derivative markets using settlement assets with different quantum values, if the parties generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-023" href="#0095-HVMR-023">0095-HVMR-023</a>).
-1. Given two parties making markets in two separate spot markets using quote assets with different quantum values, if the parties generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-024" href="#0095-HVMR-024">0095-HVMR-024</a>).
-1. Given two parties making markets in a separate derivative and spot market using a settlement and quote asset with different quantum values respectively, if the parties generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-025" href="#0095-HVMR-025">0095-HVMR-025</a>).
+1. Given two party's making markets in two separate derivative markets using settlement assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-023" href="#0095-HVMR-023">0095-HVMR-023</a>).
+1. Given two party's making markets in two separate spot markets using quote assets with different quantum values, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-024" href="#0095-HVMR-024">0095-HVMR-024</a>).
+1. Given two party's making markets in a separate derivative and spot market using a settlement and quote asset with different quantum values respectively, if the party's generated equal volume (e.g. 10,000 USD) then they should both have a maker volume fraction of `0.5`. (<a name="0095-HVMR-025" href="#0095-HVMR-025">0095-HVMR-025</a>).
 
 ### Setting rebate factors
 
-1. At the start of an epoch, each parties `additional_rebate_factor` is reevaluated and fixed for the epoch (<a name="0095-HVMR-026" href="#0095-HVMR-026">0095-HVMR-026</a>).
-1. A parties `additional_rebate_factor`  is set equal to the factors in the highest benefit tier they qualify for (<a name="0095-HVMR-027" href="#0095-HVMR-027">0095-HVMR-027</a>).
+1. At the start of an epoch, each party's `additional_rebate_factor` is reevaluated and fixed for the epoch (<a name="0095-HVMR-026" href="#0095-HVMR-026">0095-HVMR-026</a>).
+1. A party's `additional_rebate_factor`  is set equal to the factors in the highest benefit tier they qualify for (<a name="0095-HVMR-027" href="#0095-HVMR-027">0095-HVMR-027</a>).
 1. If a party does not qualify for the lowest tier, their `additional_rebate_factor`is set to `0` (<a name="0095-HVMR-028" href="#0095-HVMR-028">0095-HVMR-028</a>).
 
 #### Capping the effective rebate factor
 
 1. If a party qualifies for a tier where the `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be capped to a maximum and set to (`buyback_fee_factor` + `treasury_fee_factor`). In this case no treasury or buyback fees should be collected by the network for trades involving this party. (<a name="0095-HVMR-029" href="#0095-HVMR-029">0095-HVMR-029</a>).
 
-1. If the `buyback_fee_factor` is increased through a proposal in the middle of an epoch such that a parties `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-030" href="#0095-HVMR-030">0095-HVMR-030</a>).
-1. If the `treasury_fee_factor` is increased through a proposal in the middle of an epoch such that a parties `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-031" href="#0095-HVMR-031">0095-HVMR-031</a>).
-1. If the `buyback_fee_factor` and `treasury_fee_factor` are both increased through a batch proposal in the middle of an epoch such that a parties `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-032" href="#0095-HVMR-032">0095-HVMR-032</a>).
+1. If the `buyback_fee_factor` is increased through a proposal in the middle of an epoch such that a party's `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-030" href="#0095-HVMR-030">0095-HVMR-030</a>).
+1. If the `treasury_fee_factor` is increased through a proposal in the middle of an epoch such that a party's `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-031" href="#0095-HVMR-031">0095-HVMR-031</a>).
+1. If the `buyback_fee_factor` and `treasury_fee_factor` are both increased through a batch proposal in the middle of an epoch such that a party's `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to the new maximum (`buyback_fee_factor` + `treasury_fee_factor`). (<a name="0095-HVMR-032" href="#0095-HVMR-032">0095-HVMR-032</a>).
 
-1. If the `buyback_fee_factor` is reduced through a proposal in the middle of an epoch such that a parties `additional_rebate_factor` is less than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-033" href="#0095-HVMR-033">0095-HVMR-033</a>).
-1. If the `treasury_fee_factor` is reduced through a proposal in the middle of an epoch such that a parties `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-034" href="#0095-HVMR-034">0095-HVMR-034</a>).
-1. If the `buyback_fee_factor` and `treasury_fee_factor` are both reduced through a batch proposal in the middle of an epoch such that a parties current `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-035" href="#0095-HVMR-035">0095-HVMR-035</a>).
+1. If the `buyback_fee_factor` is reduced through a proposal in the middle of an epoch such that a party's `additional_rebate_factor` is less than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-033" href="#0095-HVMR-033">0095-HVMR-033</a>).
+1. If the `treasury_fee_factor` is reduced through a proposal in the middle of an epoch such that a party's `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-034" href="#0095-HVMR-034">0095-HVMR-034</a>).
+1. If the `buyback_fee_factor` and `treasury_fee_factor` are both reduced through a batch proposal in the middle of an epoch such that a party's current `additional_rebate_factor` is greater than (`buyback_fee_factor` + `treasury_fee_factor`), their `effective_additional_rebate_factor` should be set to their current `additional_rebate_factor`. (<a name="0095-HVMR-035" href="#0095-HVMR-035">0095-HVMR-035</a>).
