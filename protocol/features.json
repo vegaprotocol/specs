@@ -310,9 +310,7 @@
       "0056-REWA-164",
       "0056-REWA-165",
       "0056-REWA-166",
-      "0056-REWA-167"
-    ],
-    "acsToEnableInSuzukaBranch": [
+      "0056-REWA-167",
       "0034-PROB-003",
       "0034-PROB-008",
       "0034-PROB-010"
@@ -477,9 +475,7 @@
   "Fee mechanic changes": {
     "milestone": "suzuka_castle",
     "acs": [
-      "0084-VDPR-015"
-    ],
-    "acsToEnableInSuzukaBranch": [
+      "0084-VDPR-015",
       "0029-FEES-034",
       "0029-FEES-035",
       "0029-FEES-036",
@@ -505,9 +501,7 @@
   "Reward improvements": {
     "milestone": "suzuka_castle",
     "acs": [
-      "0056-REWA-170"
-    ],
-    "acsToEnableInSuzukaBranch": [
+      "0056-REWA-170",
       "0056-REWA-171",
       "0056-REWA-172",
       "0056-REWA-173",
