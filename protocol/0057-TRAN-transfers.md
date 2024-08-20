@@ -6,7 +6,7 @@ These transfers are not to be confused with the internal concept of transfers wh
 Allowing users to initiate transfers allows for the following capabilities:
 
 - A user can transfer funds from a public key A to a public key B.
-- A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+- A user can transfer funds from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
 - A user can set up a recurring transfer.
 - A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
@@ -17,12 +17,12 @@ Transfer can only be initiated by a party using their own funds from [accounts](
 Here's the list of accounts types from which a user send funds from:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
+- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md) 
 
 Here's the list of accounts types into which funds can be sent:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
+- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md) 
 - [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts) (only by the special recurring transfer to reward accounts transfer type)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
@@ -262,8 +262,8 @@ message CancelTransfer {
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 - As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-- As a user I can transfer funds from a general account I control to a locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-003" href="#0057-PALAZZO-003">0057-PALAZZO-003</a>).
-- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-004" href="#0057-PALAZZO-004">0057-PALAZZO-004</a>)
+- As a user I can transfer funds from a general account I control to a locked_for_staking. Such transfer can be immediate or delayed. (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>).
+- As a user I can transfer funds from a locked_from_staking account under my control to any party's general account. Such transfer can be immediate or delayed.  (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
