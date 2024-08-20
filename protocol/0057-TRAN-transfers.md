@@ -17,12 +17,12 @@ Transfer can only be initiated by a party using their own funds from [accounts](
 Here's the list of accounts types from which a user send funds from:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md) 
+- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md)
 
 Here's the list of accounts types into which funds can be sent:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md) 
+- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md)
 - [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts) (only by the special recurring transfer to reward accounts transfer type)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
