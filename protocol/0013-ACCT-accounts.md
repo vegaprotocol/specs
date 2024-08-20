@@ -2,8 +2,11 @@
 
 ## Accounts controlled by parties
 
-A party only has control over balances in the "general" account for each asset.
-[Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created.
+A party only has control over balances in the "general" and "LOCKED_FOR_STAKING" account for each asset.
+[Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account and "LOCKED_FOR_STAKING" for the relevant [asset](./0040-ASSF-asset_framework.md) created. 
+
+A party can transfer governance tokens in and out of the "LOCKED_FOR_STAKING" account. The balance in this account should count towards the tokens "associated" with the Vega key for staking purposes and can be staked to specific validators, earning staking rewards for that key.
+
 In order to submit [orders](./0014-ORDT-order_types.md) a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
 
 Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md).
