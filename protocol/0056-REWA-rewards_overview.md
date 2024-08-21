@@ -426,6 +426,14 @@ Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next ep
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts.
 
+### Locked Reward
+
+When a party earns rewards (in governance token), they are transferred into the party's locked account and locked for the appropriate period before vesting. Sum of  rewards in vesting account and locked account will be reflected in the party's "LOCKED_FOR_STAKING" account and they can be staked. 
+
+- When a party receives a governance token reward that is locked, the [Locked_FOR_REWARD] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-200" href="#0056-REWA-200">0056-REWA-200</a>).
+- When a party transfers locked tokens out of the [Locked_FOR_REWARD] account, the balance for the party is decreased by the corresponding amount. (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
+- A party can stake the assets in the [Locked_FOR_REWARD] account. (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
+
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
 for product spot: (<a name="0056-REWA-060" href="#0056-REWA-060">0056-REWA-060</a>)
@@ -1143,7 +1151,6 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
 - If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
-
 
 ### Entity Scope
 

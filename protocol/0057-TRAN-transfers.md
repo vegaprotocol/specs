@@ -6,7 +6,8 @@ These transfers are not to be confused with the internal concept of transfers wh
 Allowing users to initiate transfers allows for the following capabilities:
 
 - A user can transfer funds from a public key A to a public key B.
-- A user can transfer the governance token only from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+- A user can transfer governance tokens from general account to another key's general account.
+- A user can transfer governance tokens from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
 
 
 - A user can set up a recurring transfer.
