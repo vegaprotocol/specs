@@ -433,7 +433,7 @@ Sum of rewards in vesting account and locked account should count toward the par
 
 - When a party receives a governance token reward that is locked, the [Locked_FOR_REWARD] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-200" href="#0056-REWA-200">0056-REWA-200</a>).
 - When a party transfers locked tokens out of the [Locked_FOR_REWARD] account, the balance for the party is decreased by the corresponding amount. (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
-- A party can stake the assets in the [Locked_FOR_REWARD] account. (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
+- Balance of the governance asset in the [Locked_FOR_REWARD] account counts towards the party's staking balance and can be nominated to a validator and earn staking rewards. (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
 
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
