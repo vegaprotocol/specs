@@ -18,7 +18,7 @@ nomination. To this end, a Vega token (or a fraction thereof) can be:
 - Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
 - Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
-Governance tokens locked in the "LOCKED_FOR_STAKING" account count as associated with the VEGA key of the party controlling the account.
+Governance tokens that have been transferred into the "LOCKED_FOR_STAKING" account count as associated with the VEGA key of the party controlling the account.
 To stake these locked governance tokens, the party must delegate them to one or more validators.
 When governance token balance is transferred out of the "LOCKED_FOR_STAKING" account, the key's balance of associated token will be reduced accordingly and the staking balances removed from validators.
 
