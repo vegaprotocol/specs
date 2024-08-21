@@ -5,7 +5,9 @@
 A party only has control over balances in the "general" and "LOCKED_FOR_STAKING" account for each asset.
 [Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account and "LOCKED_FOR_STAKING" for the relevant [asset](./0040-ASSF-asset_framework.md) created.
 
-A party can transfer governance tokens in and out of the "LOCKED_FOR_STAKING" account. The balance in this account should count towards the tokens "associated" with the Vega key for staking purposes and can be staked to specific validators, earning staking rewards for that key.
+A party can transfer governance tokens in and out of the "LOCKED_FOR_STAKING" account. The balance in this account should count towards the tokens [associated](./0059-STKG-simple_staking_and_delegating.md) with the Vega key for staking purposes and can be staked to specific validators, earning staking rewards for that key.
+
+Vega core listens to events on other chains (currently Ethereum) for events on the bridge contract. If governance token reward is locked on the bridge contract with a Vega party key associated then the [Locked_FOR_REWARD](./0013-ACCT-accounts.md) balance for the party is incremented by the appropriate amount.
 
 In order to submit [orders](./0014-ORDT-order_types.md) a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
 
@@ -185,3 +187,8 @@ One key difference with staking accounts is that the collateral is not held in a
 
 - It is possible to deposit funds from Ethereum directly into the global rewards account by specifying the `0` Vega address. (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
 - It is possible to transfer funds from a Vega general account to the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)
+
+### Locked_FOR_REWARD account
+
+- When a party receives a governance token reward that is locked, the [Locked_FOR_REWARD] balance for the party is incremented by the corresponding amount. (<a name="0013-ACCT-029" href="#0013-ACCT-029">0013-ACCT-029</a>)
+- When a party transfers locked tokens out of the [Locked_FOR_REWARD] account, the balance for the party is decreased by the corresponding amount. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-ACCT-030</a>)

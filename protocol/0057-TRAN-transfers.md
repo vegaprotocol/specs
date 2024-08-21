@@ -6,7 +6,9 @@ These transfers are not to be confused with the internal concept of transfers wh
 Allowing users to initiate transfers allows for the following capabilities:
 
 - A user can transfer funds from a public key A to a public key B.
-- A user can transfer funds from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+- A user can transfer the governance token only from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+
+
 - A user can set up a recurring transfer.
 - A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
@@ -262,8 +264,8 @@ message CancelTransfer {
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 - As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-- As a user I can transfer funds from a general account I control to a LOCKED_FOR_STAKING account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>).
-- As a user I can transfer funds from a LOCKED_FOR_STAKING account under my control to any party's general account. Such transfer can be immediate or delayed.  (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
+- As a user I can transfer the governance token from a general account I control to a LOCKED_FOR_STAKING account. Such transfer must be immediate. (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>).
+- As a user I can transfer the governance token from a LOCKED_FOR_STAKING account under my control to any party's general account. Such transfer must be immediate.  (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)

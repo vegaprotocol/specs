@@ -18,6 +18,8 @@ nomination. To this end, a Vega token (or a fraction thereof) can be:
 - Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
 - Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
+Governance tokens locked in the "LOCKED_FOR_STAKING" account are associated with a VEGA key. To stake these locked governance tokens, the party must delegate them to one or more validators. When tokens are transferred in or out of the "LOCKED_FOR_STAKING" account, the keys associated with the tokens will be unassociated and associated to the new keys accordingly. However, the validator to whom the tokens were delegated will remain unchanged unless the new token owner decides to change the validator.
+
 ## Smart Contract / Staking Bridge Interaction
 
 It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
@@ -62,8 +64,6 @@ delegation-message on the chain. However, the delegation only becomes valid
 towards the next epoch, though it can be undone through undelegate.
 
 Once Vega is aware of locked tokens, the users will have an [account](./0013-ACCT-accounts.md#staking-accounts) with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally.
-
-Any rewards paid in governance tokens that are locked should be included in the same [account].
 
 ```proto
 message Delegate {
