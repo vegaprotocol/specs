@@ -428,7 +428,7 @@ Run for another epoch with no fee generated. Expect no transfer to be made to th
 
 ### Locked Reward
 
-When a party earns rewards (in governance token), they are transferred into the party's locked account and locked for the appropriate period before vesting. Sum of  rewards in vesting account and locked account will be reflected in the party's "LOCKED_FOR_STAKING" account and they can be staked. 
+When a party earns rewards (in governance token), they are transferred into the party's locked account and locked for the appropriate period before vesting. Sum of rewards in vesting account and locked account will be reflected in the party's "LOCKED_FOR_STAKING" account and they can be staked.
 
 - When a party receives a governance token reward that is locked, the [Locked_FOR_REWARD] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-200" href="#0056-REWA-200">0056-REWA-200</a>).
 - When a party transfers locked tokens out of the [Locked_FOR_REWARD] account, the balance for the party is decreased by the corresponding amount. (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
