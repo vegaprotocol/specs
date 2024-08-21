@@ -590,34 +590,6 @@
       "0042-LIQF-109",
       "0042-LIQF-110",
       "0042-LIQF-111",
-      "0056-REWA-170",
-      "0056-REWA-171",
-      "0056-REWA-172",
-      "0056-REWA-173",
-      "0056-REWA-174",
-      "0056-REWA-175",
-      "0056-REWA-176",
-      "0056-REWA-178",
-      "0056-REWA-179",
-      "0056-REWA-180",
-      "0056-REWA-181",
-      "0056-REWA-182",
-      "0056-REWA-183",
-      "0056-REWA-184",
-      "0056-REWA-185",
-      "0056-REWA-186",
-      "0056-REWA-187",
-      "0056-REWA-188",
-      "0056-REWA-189",
-      "0056-REWA-190",
-      "0056-REWA-191",
-      "0056-REWA-192",
-      "0056-REWA-193",
-      "0056-REWA-194",
-      "0056-REWA-195",
-      "0056-REWA-196",
-      "0056-REWA-197",
-      "0056-REWA-198",
       "0085-RVST-015",
       "0085-RVST-016",
       "0085-RVST-017",
@@ -709,27 +681,6 @@
       "0056-REWA-218",
       "0056-REWA-219"
     ]
-  },
-  "Spot AMM": {
-    "milestone": "genbu_temple",
-    "acs": [
-      "0092-SAMM-001",
-      "0092-SAMM-002",
-      "0092-SAMM-003",
-      "0092-SAMM-004",
-      "0092-SAMM-005",
-      "0092-SAMM-006",
-      "0092-SAMM-007",
-      "0092-SAMM-008"
-    ]
-  },
-  "LP 3.0": {
-    "milestone": "genbu_temple",
-    "acs": []
-  },
-  "Token Buyback auction": {
-    "milestone": "genbu_temple",
-    "acs": []
   },
   "Cancelling Proposals": {
     "milestone": "historic_distillery",
