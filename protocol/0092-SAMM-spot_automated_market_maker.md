@@ -201,7 +201,7 @@ Then simply return the absolute difference between these two values.
 
 ## Determining Liquidity Contribution
 
-Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0090-SAMM](./0090-SAMM-automated_market_maker.md)
+Liquidity contribution for spot AMMs should be determined identically to that for futures market vAMMs in [0090-VAMM](./0090-VAMM-automated_market_maker.md)
 
 ## Setting Fees
 
