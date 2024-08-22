@@ -1255,7 +1255,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards. (<a name="0056-REWA-188" href="#0056-REWA-188">0056-REWA-188</a>)
 - Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards. (<a name="0056-REWA-189" href="#0056-REWA-189">0056-REWA-189</a>)
 
-## Lottery dispatch strategy
+## Lottery distribution strategy
 
-- Given a recurring transfer using the litter-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity. (<a name="0056-REWA-190" href="#0056-REWA-190">0056-REWA-190</a>)
+- Given a recurring transfer using the lottery-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity. (<a name="0056-REWA-190" href="#0056-REWA-190">0056-REWA-190</a>)
 - Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers. (<a name="0056-REWA-191" href="#0056-REWA-191">0056-REWA-191</a>)
