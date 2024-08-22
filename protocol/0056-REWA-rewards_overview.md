@@ -260,11 +260,34 @@ Recurring transfers can target groups of markets, or all markets for a settlemen
 
 All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
+If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to take from the source account and distribute as rewards is scaled as per the mechanics defined in section [reward scaling](#reward-scaling).
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
 Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
+
+
+### Reward scaling
+
+Before distributing rewards amongst entities, in order to prevent over funding rewards when volume is low, the actual amount transferred and distributed can be scaled based on the target notional volume and the actual notional volume over the reward window (the size of the window specified in the recurring transfer).
+
+$$T_a = T\cdot\min{(1, \frac{\sum_{i}^{n}V_i}{V_t})}$$
+
+Where:
+
+- $T_a$ is the actual amount of funds to transfer and distribute amongst entities.
+- $T$ is the transfer amount specified in the recurring transfer.
+- $V_t$ is the target average notional volume specified in the recurring transfer (represented in asset decimals).
+- ${V_i}$ is the actual notional volume across all markets within scope in epoch $i$ (represented in asset decimals).
+
+Note the following considerations:
+
+- If no target notional volume is specified in the recurring transfer, no scaling takes place. The full transfer amount is always distributed if possible.
+- If the actual notional volume is greater than the target notional volume, the rewards will not be scaled (as the scaling factor will be `1`). The final transfer amount cannot be greater than the transfer amount specified in the recurring transfer.
+- reward scaling is not possible.
+  - when using the [Validator ranking](#validator-ranking-metric) metric
+  - when using the [Market creation](#market-creation-reward-metrics) metric
+  - when using the [Eligible entities](#eligible-entities-metric) metric and specifying no asset for metric (i.e. when only specifying a staking requirement)
 
 ### Distributing rewards amongst entities
 
@@ -1164,6 +1187,42 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
+
+### Reward Scaling
+
+#### Specifying valid/invalid values
+
+- If a `target_notional_volume` is not specified, the full transfer amount should be paid out regardless of the volume. (<a name="0056-REWA-200" href="#0056-REWA-200">0056-REWA-200</a>).
+- If a `target_notional_volume` is specified but the value is zero. The transfer should be rejected. (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is specified, the transfer should be accepted. (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is **not** specified, the transfer should be rejected. (<a name="0056-REWA-203" href="#0056-REWA-203">0056-REWA-203</a>).
+- If a `target_notional_volume` is specified and the dispatch metric is for market creation rewards, the transfer should be rejected. (<a name="0056-REWA-204" href="#0056-REWA-204">0056-REWA-204</a>).
+- If a `target_notional_volume` is specified and the dispatch metric is for validator ranking rewards, the transfer should be rejected. (<a name="0056-REWA-205" href="#0056-REWA-205">0056-REWA-205</a>).
+
+#### Interactions with scoping markets
+
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that market's volume is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-206" href="#0056-REWA-206">0056-REWA-206</a>).
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that market's volume is greater than the target, no more than the full reward amount is distributed. (<a name="0056-REWA-207" href="#0056-REWA-207">0056-REWA-207</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should receive the same amount of rewards). (<a name="0056-REWA-208" href="#0056-REWA-208">0056-REWA-208</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should receive the same amount of rewards). (<a name="0056-REWA-209" href="#0056-REWA-209">0056-REWA-209</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards). (<a name="0056-REWA-210" href="#0056-REWA-210">0056-REWA-210</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards). (<a name="0056-REWA-211" href="#0056-REWA-211">0056-REWA-211</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume). (<a name="0056-REWA-212" href="#0056-REWA-212">0056-REWA-212</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume). (<a name="0056-REWA-213" href="#0056-REWA-213">0056-REWA-213</a>).
+
+#### Interactions with reward windows
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-214" href="#0056-REWA-214">0056-REWA-214</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is distributed. (<a name="0056-REWA-215" href="#0056-REWA-215">0056-REWA-215</a>).
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-216" href="#0056-REWA-216">0056-REWA-216</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed. (<a name="0056-REWA-217" href="#0056-REWA-217">0056-REWA-217</a>).
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-218" href="#0056-REWA-218">0056-REWA-218</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed. (<a name="0056-REWA-219" href="#0056-REWA-219">0056-REWA-219</a>).
 
 ### Spot markets
 
