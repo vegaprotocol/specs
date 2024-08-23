@@ -429,7 +429,7 @@ Run for another epoch with no fee generated. Expect no transfer to be made to th
 ### Locked Reward
 
 When a party earns locked rewards (in governance token), they are transferred into the party's vesting account account but locked for the appropriate period before vesting.
-The rewards in the vesting account (both locked and unlocked) should count toward the party's staking balance and they can be [staked](0059-STKG-simple_staking_and_delegating.md).
+The rewards in the vesting account and vested (both locked and unlocked) should count toward the party's staking balance and they can be [staked](0059-STKG-simple_staking_and_delegating.md).
 
 - When a party receives a governance token reward that is locked, the [LOCKED_FOR_STAKING] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-220" href="#0056-REWA-220">0056-REWA-220</a>).
 - Total balance of the governance asset in the [LOCKED_FOR_STAKING] account counts towards the party's staking balance and can be nominated to a validator and earn staking rewards. (<a name="0056-REWA-221" href="#0056-REWA-221">0056-REWA-221</a>).
