@@ -426,6 +426,14 @@ Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next ep
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts.
 
+### Locked Reward
+
+When a party earns locked rewards (in governance token), they are transferred into the party's vesting account account but locked for the appropriate period before vesting.
+The rewards in the vesting and vested account (both locked and unlocked) should count toward the party's staking balance and they can be [staked](0059-STKG-simple_staking_and_delegating.md).
+
+- When a party receives a governance token reward that is locked, the [LOCKED_FOR_STAKING] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-220" href="#0056-REWA-220">0056-REWA-220</a>).
+- Total balance of the governance asset in the [LOCKED_FOR_STAKING] account counts towards the party's staking balance and can be nominated to a validator and earn staking rewards. (<a name="0056-REWA-221" href="#0056-REWA-221">0056-REWA-221</a>).
+
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
 for product spot: (<a name="0056-REWA-060" href="#0056-REWA-060">0056-REWA-060</a>)
@@ -445,14 +453,13 @@ There are no markets.
 - `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 - `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10.
 - Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
-- During epoch `2` we have `party_1` make one buy market order with volume `2`.
-- During epoch `2` we have `party_2` make one sell market order each with notional `1`.
+- During epoch `2` we have `party_1` make one buy market order with volume `2`.During epoch `2` we have `party_2` make one sell market order each with notional `1`.
 
 #### Funding reward accounts 1
 
 - `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
-  - `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
-  - `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
+- `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
+- `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
 
 #### Expectation 1
 
@@ -1143,7 +1150,6 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
 - If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
-
 
 ### Entity Scope
 

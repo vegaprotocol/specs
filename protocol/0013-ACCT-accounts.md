@@ -2,8 +2,11 @@
 
 ## Accounts controlled by parties
 
-A party only has control over balances in the "general" account for each asset.
+A party only has control over balances in the "general" and "LOCKED_FOR_STAKING" account for each asset.
 [Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created.
+
+When a party earns locked rewards (in governance token), they will have an option to create a "LOCKED_FOR_STAKING" account for the relevant [asset], the rewards will be transferred to this account once created. Party can transfer the tokens in and out of this LOCKED_FOR_STAKING account. The balance in this account should count towards the tokens [associated](./0059-STKG-simple_staking_and_delegating.md) with the Vega key for staking purposes and can be staked to specific validators, earning staking rewards for that key.
+
 In order to submit [orders](./0014-ORDT-order_types.md) a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
 
 Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md).
@@ -182,3 +185,4 @@ One key difference with staking accounts is that the collateral is not held in a
 
 - It is possible to deposit funds from Ethereum directly into the global rewards account by specifying the `0` Vega address. (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
 - It is possible to transfer funds from a Vega general account to the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)
+
