@@ -355,8 +355,6 @@
       "0004-AMND-061"
     ]
   },
-
-
   "Reward Improvements": {
     "milestone": "colosseo",
     "acs": [
@@ -407,7 +405,6 @@
       "0057-TRAN-079"
     ]
   },
-
   "Capped Futures": {
     "milestone": "colosseo_II",
     "acs": [
@@ -679,22 +676,29 @@
       "0056-REWA-216",
       "0056-REWA-217",
       "0056-REWA-218",
-      "0056-REWA-219", 
-      "0056-REWA-220", 
-      "0056-REWA-221"
+      "0056-REWA-219"
     ]
   },
   "Cancelling Proposals": {
     "milestone": "historic_distillery",
-    "acs": ["0028-GOVE-188", "0028-GOVE-189", "0028-GOVE-190", "0028-GOVE-191"]
+    "acs": [
+      "0028-GOVE-188",
+      "0028-GOVE-189",
+      "0028-GOVE-190",
+      "0028-GOVE-191"
+    ]
   },
   "Perpetual funding rates": {
     "milestone": "historic_distillery",
-    "acs": ["0053-PERP-036"]
+    "acs": [
+      "0053-PERP-036"
+    ]
   },
   "LPs voting without gov token": {
     "milestone": "historic_distillery",
-    "acs": ["0028-GOVE-185"]
+    "acs": [
+      "0028-GOVE-185"
+    ]
   },
   "Spot stretch": {
     "milestone": "historic_distillery",
@@ -796,7 +800,15 @@
       "0095-HVMR-037",
       "0095-HVMR-038",
       "0095-HVMR-039"
-
+    ]
+  },
+  "staking tokens from general account": {
+    "milestone": "suzuka_castle_II",
+    "acs": [
+      "0056-REWA-220",
+      "0056-REWA-221",
+      "0057-TRAN-003",
+      "0057-TRAN-004"
     ]
   },
   "Unknown": {
