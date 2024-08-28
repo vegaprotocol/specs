@@ -1086,8 +1086,41 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Reward Eligibility
 
+### Staking requirements
+
 - If a parties staked governance tokens ($VEGA) is strictly less than the `staking_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-076" href="#0056-REWA-076">0056-REWA-076</a>).
+
+### Notional position requirements
+
 - If a parties time-weighted average position (across all in scope-markets) is strictly less than the `notional_time_weighted_average_position_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-077" href="#0056-REWA-077">0056-REWA-077</a>).
+
+## Key requirements
+
+- Given the following dispatch metrics, if no `eligible keys` list is specified in the recurring transfer, all parties meeting other eligibility criteria should receive a score (if they meet the criteria for one):
+  - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
+  - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-203" href="#0056-REWA-203">0056-REWA-203</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-204" href="#0056-REWA-204">0056-REWA-204</a>).
+  - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-205" href="#0056-REWA-205">0056-REWA-205</a>).
+  - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-206" href="#0056-REWA-206">0056-REWA-206</a>).
+  - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-207" href="#0056-REWA-207">0056-REWA-207</a>).
+  - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-208" href="#0056-REWA-208">0056-REWA-208</a>).
+  - `DISPATCH_METRIC_VALIDATOR_RANKING` (<a name="0056-REWA-209" href="#0056-REWA-209">0056-REWA-209</a>).
+  - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-210" href="#0056-REWA-210">0056-REWA-210</a>).
+
+- Given the following dispatch metrics, if an `eligible keys` list is specified in the recurring transfer, only parties included in the list and meeting other eligibility criteria should receive a score (if they meet the criteria for one):
+  - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-211" href="#0056-REWA-211">0056-REWA-211</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-212" href="#0056-REWA-212">0056-REWA-212</a>).
+  - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-213" href="#0056-REWA-213">0056-REWA-213</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-214" href="#0056-REWA-214">0056-REWA-214</a>).
+  - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-215" href="#0056-REWA-215">0056-REWA-215</a>).
+  - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-216" href="#0056-REWA-216">0056-REWA-216</a>).
+  - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-217" href="#0056-REWA-217">0056-REWA-217</a>).
+  - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-218" href="#0056-REWA-218">0056-REWA-218</a>).
+  - `DISPATCH_METRIC_VALIDATOR_RANKING` (<a name="0056-REWA-219" href="#0056-REWA-219">0056-REWA-219</a>).
+  - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-220" href="#0056-REWA-220">0056-REWA-220</a>).
+
+- Given an `eligible keys` list is specified, live data should only be published for keys in that list (<a name="0056-REWA-221" href="#0056-REWA-221">0056-REWA-221</a>).
 
 ### Average Position
 
@@ -1258,30 +1291,68 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ### Valid combinations
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network regardless of trading activity.
-  - no dispatch metric specified
+  - no dispatch asset specified
   - no markets specified
   - no staking requirement specified
   - no position requirement specified
+  - no eligible keys list specified
 (<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
-  - no dispatch metric specified
+  - no dispatch asset specified
   - no markets specified
   - a staking requirement specified
   - no position requirement specified
+  - no eligible keys list specified
 (<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network meeting the position requirement across all markets using that asset.
-  - a dispatch metric specified
+  - a dispatch asset specified
   - no markets specified
+  - no staking requirement
   - a position requirement specified
+  - no eligible keys list specified
 (<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities  meeting the position requirement across the specified markets.
-  - a dispatch metric specified
+  - a dispatch asset specified
   - a set of markets specified
+  - no staking requirement
   - a position requirement specified
+  - no eligible keys list specified
 (<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list regardless of staking and trading activity.
+  - no dispatch asset specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-222" href="#0056-REWA-222">0056-REWA-222</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list meeting the staking requirement.
+  - no dispatch asset specified
+  - no markets specified
+  - a staking requirement specified
+  - no position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-223" href="#0056-REWA-223">0056-REWA-223</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list meeting the trading requirement activity requirement.
+  - a dispatch asset specified
+  - no set of markets specified
+  - no staking requirement specified
+  - a position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-224" href="#0056-REWA-224">0056-REWA-224</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys meeting the staking and trading activity requirements.
+  - a dispatch asset specified
+  - a set of markets specified
+  - a staking requirement specified
+  - a position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-225" href="#0056-REWA-225">0056-REWA-225</a>)
 
 ### Invalid combinations
 

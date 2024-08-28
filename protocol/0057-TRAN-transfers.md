@@ -108,6 +108,7 @@ To support entity scoping, the transaction include the following fields:
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
 - `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
+- `eligible keys` - optional list of keys who are eligible to participate in the game. If no list is specified, all parties are eligible, if a list is specified, only parties included in the list will have a score. If specified the list must have more than one key.
 
 A party should be able to configure the distribution of rewards by specifying the following fields:
 
@@ -419,3 +420,8 @@ If a party sets up a recurring transfer with a `transfer_interval` field strictl
 If a party sets up a recurring transfer with a transfer interval strictly greater than `1` and specifies a `cap_reward_fee_multiple`. If `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum`(<a name="0057-TRAN-079" href="#0057-TRAN-079">0057-TRAN-079</a>)
 
 A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-080" href="#0057-TRAN-080">0057-TRAN-080</a>)
+s
+
+A recurring transfer to a reward account specifying a set of eligible keys should be rejected if their are zero keys listed (<a name="0057-TRAN-081" href="#0057-TRAN-081">0057-TRAN-081</a>).
+
+A recurring transfer to a reward account specifying a set of eligible keys should be accepted if their are more than zero keys listed (<a name="0057-TRAN-082" href="#0057-TRAN-082">0057-TRAN-082</a>).

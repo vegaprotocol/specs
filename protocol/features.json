@@ -600,6 +600,37 @@
       "0085-RVST-025"
     ]
   },
+  "Rewards eligibile keys": {
+    "milestone": "suzuka_castle_II",
+    "acs": [
+      "0056-REWA-201",
+      "0056-REWA-202",
+      "0056-REWA-203",
+      "0056-REWA-204",
+      "0056-REWA-205",
+      "0056-REWA-206",
+      "0056-REWA-207",
+      "0056-REWA-208",
+      "0056-REWA-209",
+      "0056-REWA-210",
+      "0056-REWA-211",
+      "0056-REWA-212",
+      "0056-REWA-213",
+      "0056-REWA-214",
+      "0056-REWA-215",
+      "0056-REWA-216",
+      "0056-REWA-217",
+      "0056-REWA-218",
+      "0056-REWA-219",
+      "0056-REWA-220",
+      "0056-REWA-221",
+      "0056-REWA-222",
+      "0056-REWA-223",
+      "0056-REWA-224",
+      "0057-TRAN-081",
+      "0057-TRAN-082"
+    ]
+  },
   "LP 3.0": {
     "milestone": "genbu_temple",
     "acs": []
