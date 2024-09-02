@@ -1100,24 +1100,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
   - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
   - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
   - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-203" href="#0056-REWA-203">0056-REWA-203</a>).
-  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-204" href="#0056-REWA-204">0056-REWA-204</a>).
   - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-205" href="#0056-REWA-205">0056-REWA-205</a>).
   - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-206" href="#0056-REWA-206">0056-REWA-206</a>).
   - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-207" href="#0056-REWA-207">0056-REWA-207</a>).
   - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-208" href="#0056-REWA-208">0056-REWA-208</a>).
-  - `DISPATCH_METRIC_VALIDATOR_RANKING` (<a name="0056-REWA-209" href="#0056-REWA-209">0056-REWA-209</a>).
   - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-210" href="#0056-REWA-210">0056-REWA-210</a>).
 
 - Given the following dispatch metrics, if an `eligible keys` list is specified in the recurring transfer, only parties included in the list and meeting other eligibility criteria should receive a score (if they meet the criteria for one):
   - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-211" href="#0056-REWA-211">0056-REWA-211</a>).
   - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-212" href="#0056-REWA-212">0056-REWA-212</a>).
   - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-213" href="#0056-REWA-213">0056-REWA-213</a>).
-  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-214" href="#0056-REWA-214">0056-REWA-214</a>).
   - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-215" href="#0056-REWA-215">0056-REWA-215</a>).
   - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-216" href="#0056-REWA-216">0056-REWA-216</a>).
   - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-217" href="#0056-REWA-217">0056-REWA-217</a>).
   - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-218" href="#0056-REWA-218">0056-REWA-218</a>).
-  - `DISPATCH_METRIC_VALIDATOR_RANKING` (<a name="0056-REWA-219" href="#0056-REWA-219">0056-REWA-219</a>).
   - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-220" href="#0056-REWA-220">0056-REWA-220</a>).
 
 - Given an `eligible keys` list is specified, live data should only be published for keys in that list (<a name="0056-REWA-221" href="#0056-REWA-221">0056-REWA-221</a>).

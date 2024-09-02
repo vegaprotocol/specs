@@ -422,6 +422,3 @@ If a party sets up a recurring transfer with a transfer interval strictly greate
 A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-080" href="#0057-TRAN-080">0057-TRAN-080</a>)
 s
 
-A recurring transfer to a reward account specifying a set of eligible keys should be rejected if their are zero keys listed (<a name="0057-TRAN-081" href="#0057-TRAN-081">0057-TRAN-081</a>).
-
-A recurring transfer to a reward account specifying a set of eligible keys should be accepted if their are more than zero keys listed (<a name="0057-TRAN-082" href="#0057-TRAN-082">0057-TRAN-082</a>).
