@@ -235,6 +235,33 @@ $$
 
 Then simply return the absolute difference between these two prices.
 
+## Best bid / best ask
+
+As the volume provided between two ticks can theoretically be less than the smallest unit of volume supported by the market's position decimals, the best-bid and ask will not always simply be one tick greater or less than the AMMs current fair price.
+
+Instead the best-bid and best-ask of an AMM curve is defined as the price levels at which the AMM will quote at least one unit of volume between those prices and the current fair price. Re-arranging the formulas defined in the prior [section](#volume-between-two-prices) yields the following:
+
+$$
+p_{bb} = \frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}}
+$$
+
+$$
+p_{ba} = \frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}}
+$$
+
+Where:
+
+- $P_{bb}$ is the calculated best bid
+- $P_{ba}$ is the calculated best ask
+- $p_{f}$ is the current fair price as calculated [here](#fair-price)
+- $L$ is the liquidity score for the current curve as calculated [here](#determining-volumes-and-prices)
+- $\Delta{P}$ is the smallest possible position supported by the markets position decimals, i.e. 1 unit of volume.
+
+Note, there is no need to handle the complexity where the fair price is currently on the lower curve but the best ask exists on the upper curve (or visa-versa) as by definition if the party has the smallest possible position $\Delta{P}$, their fair price should be such that between that price and the base price they quote at least $\Delta{P}$. In short:
+
+- if the fair price is currently on the lower curve, the best-ask will also be on the lower curve
+- if the fair price is currently on the upper curve, the best-bid will also be on the upper curve
+
 ## Determining Liquidity Contribution
 
 The provided liquidity from an AMM commitment must be determined for two reasons. Firstly to decide instantaneous distribution of liquidity fees between the various liquidity types and secondly to calculate a virtual liquidity commitment amount for assigning AMM users with an ELS value. This will be used for determining the distribution of ELS-eligible fees on a market along with voting weight in market change proposals.
