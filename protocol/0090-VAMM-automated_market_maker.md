@@ -167,7 +167,7 @@ $$
 P_{v_u} = \frac{r_f b}{p_u (1 + r_f) - r_f p_a} ,
 $$
 
-where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the current total balance of the vAMM across all accounts, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound. The final $L$ scores can then be reached with the equation
+where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the commitment amount, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound. The final $L$ scores can then be reached with the equation
 
 $$
 L = P_v \cdot \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} = P_v L_u,
