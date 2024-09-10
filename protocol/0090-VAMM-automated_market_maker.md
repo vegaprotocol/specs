@@ -242,11 +242,11 @@ As the volume provided between two ticks can theoretically be less than the smal
 Instead the best-bid and best-ask of an AMM curve is defined as the price levels at which the AMM will quote at least one unit of volume between those prices and the current fair price. Re-arranging the formulas defined in the prior [section](#volume-between-two-prices) yields the following:
 
 $$
-p_{bb} = \frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}}
+p_{bb} = (\frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}})^2
 $$
 
 $$
-p_{ba} = \frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}}
+p_{ba} = (\frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}})^2
 $$
 
 Where:
@@ -268,13 +268,17 @@ To prevent the protocol evaluating AMMs providing little liquidity to the networ
 
 If the number of ticks in the largest price range in which the AMM quotes zero volume is more than the parameter $allowedEmptyAmmLevels$, then the submission or amendment will be rejected. Note this parameter is defined on each market to allow different markets with varying volatility to be configured appropriately.
 
-- for the lower curve, this range is between the fair price at which the AMMs long position is $P=1$ and the base price.
-- for the upper curve, this range is between the fair price at which the AMMs short position is $(P_v-1)$ and the upper price bound.
+- for the lower curve, this range is between the base price and the best bid price when the fair price is the base price.
+- for the upper curve, this range is between the upper bound and the best bid price when the fair price is the upper bound.
 
 The above definitions yield the following inequality which must be satisfied for both the upper and lower curve (providing they are defined) for the AMM to be valid.
 
 $$
-n\cdot\Delta{p} \geq \frac{L\cdot\sqrt{p_u}}{L + \Delta{P}\cdot \sqrt{p_u}}
+n\cdot\Delta{p} \geq (p_u - p_{bb})
+$$
+
+$$
+n\cdot\Delta{p} \geq {p_u} - (\frac{L\cdot\sqrt{p_u}}{L + \Delta{P}\cdot \sqrt{p_u}})^2
 $$
 
 Where:
