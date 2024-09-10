@@ -242,11 +242,11 @@ As the volume provided between two ticks can theoretically be less than the smal
 Instead the best-bid and best-ask of an AMM curve is defined as the price levels at which the AMM will quote at least one unit of volume between those prices and the current fair price. Re-arranging the formulas defined in the prior [section](#volume-between-two-prices) yields the following:
 
 $$
-p_{bb} = (\frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}})^2
+p_{bb} = \bigg(\frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}}\bigg)^2
 $$
 
 $$
-p_{ba} = (\frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}})^2
+p_{ba} = \bigg(\frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}}\bigg)^2
 $$
 
 Where:
