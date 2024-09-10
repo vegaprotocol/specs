@@ -262,6 +262,31 @@ Note, there is no need to handle the complexity where the fair price is currentl
 - if the fair price is currently on the lower curve, the best-ask will also be on the lower curve
 - if the fair price is currently on the upper curve, the best-bid will also be on the upper curve
 
+## Curve validity
+
+To prevent the protocol evaluating AMMs providing little liquidity to the network, the network will reject AMM submissions or amendments which cause an AMMs liquidity to be spread too thinly across it's entire range.
+
+If the number of ticks in the largest price range in which the AMM quotes zero volume is more than the parameter $allowedEmptyAmmLevels$, then the submission or amendment will be rejected. Note this parameter is defined on each market to allow different markets with varying volatility to be configured appropriately.
+
+- for the lower curve, this range is between the fair price at which the AMMs long position is $P=1$ and the base price.
+- for the upper curve, this range is between the fair price at which the AMMs short position is $(P_v-1)$ and the upper price bound.
+
+The above definitions yield the following inequality which must be satisfied for both the upper and lower curve (providing they are defined) for the AMM to be valid.
+
+$$
+n\cdot\Delta{p} \geq \frac{L\cdot\sqrt{p_u}}{L + \Delta{P}\cdot \sqrt{p_u}}
+$$
+
+Where:
+
+- $\Delta{p}$ is the smallest price movement supported by the market's price decimals and tick size
+- $\Delta{P}$ is the smallest position size supported by the market's position decimals
+- $n$ is the market parameter $allowedEmptyAmmLevels$
+- $L$ is the liquidity score for the relevant curve
+- $p_u$ is the upper price (the base price for the lower curve and the upper bound for the upper curve)
+
+Note, if the market parameter $allowedEmptyAmmLevels$ is updated via governance all existing pools that would no longer satisfy the inequality **must not** be cancelled. Amends to these pools should be evaluated and rejected if necessary and any cancellations should be accepted.
+
 ## Determining Liquidity Contribution
 
 The provided liquidity from an AMM commitment must be determined for two reasons. Firstly to decide instantaneous distribution of liquidity fees between the various liquidity types and secondly to calculate a virtual liquidity commitment amount for assigning AMM users with an ELS value. This will be used for determining the distribution of ELS-eligible fees on a market along with voting weight in market change proposals.

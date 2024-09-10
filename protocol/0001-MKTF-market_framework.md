@@ -35,6 +35,7 @@ Data:
 - **Tick size**: the minimum change in quote price for the market. Order prices and offsets for pegged orders must be given as an exact multiple of the tick size. For example if the tick size is 0.02 USD. then a price of 100.02 USD is acceptable and a price of 100.03 USD is not. The tick size of a market can be updated through governance. Note, the tick size should be specified in terms of the market decimals, e.g. for a scaled tick size of `0.02` (USDT) in a market using `5` decimal places, the tick size would be set to `2000`.
 - **Liquidation strategy**: A field specifying the liquidation strategy for the market. Please refer to [0012-POSR-position_resolution](./0012-POSR-position_resolution.md#managing-networks-position) for supported strategies.
 - **Transaction Prioritisation**: A boolean, whether to enable [transaction prioritisation](./0092-TRTO-trading_transaction_ordering.md).
+- **Empty AMM Price Levels**: An integer greater than or equal to zero which defines the maximum number of price levels permitted in an AMM range which would quote zero volume. This value should default to 100.
 
 Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a `BTCUSD` market that allows order/position sizes equivalent to 1 sat.
 
