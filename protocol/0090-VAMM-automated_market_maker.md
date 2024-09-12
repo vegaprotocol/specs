@@ -167,7 +167,7 @@ $$
 P_{v_u} = \frac{r_f b}{p_u (1 + r_f) - r_f p_a} ,
 $$
 
-where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the current total balance of the vAMM across all accounts, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound. The final $L$ scores can then be reached with the equation
+where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the commitment amount, $P_{v_l}$ is the theoretical volume and the bottom of the lower bound and $P_{v_u}$ is the (absolute value of the) theoretical volume at the top of the upper bound. The final $L$ scores can then be reached with the equation
 
 $$
 L = P_v \cdot \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} = P_v L_u,
@@ -234,6 +234,62 @@ P_i = L \cdot \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}} ,
 $$
 
 Then simply return the absolute difference between these two prices.
+
+## Best bid / best ask
+
+As the volume provided between two ticks can theoretically be less than the smallest unit of volume supported by the market's position decimals, the best-bid and ask will not always simply be one tick greater or less than the AMMs current fair price.
+
+Instead the best-bid and best-ask of an AMM curve is defined as the price levels at which the AMM will quote at least one unit of volume between those prices and the current fair price. Re-arranging the formulas defined in the prior [section](#volume-between-two-prices) yields the following:
+
+$$
+p_{bb} = \bigg(\frac{L\cdot\sqrt{p_f}}{L + \Delta{P}\cdot \sqrt{p_f}}\bigg)^2
+$$
+
+$$
+p_{ba} = \bigg(\frac{L\cdot\sqrt{p_f}}{L - \Delta{P}\cdot \sqrt{p_f}}\bigg)^2
+$$
+
+Where:
+
+- $P_{bb}$ is the calculated best bid
+- $P_{ba}$ is the calculated best ask
+- $p_{f}$ is the current fair price as calculated [here](#fair-price)
+- $L$ is the liquidity score for the current curve as calculated [here](#determining-volumes-and-prices)
+- $\Delta{P}$ is the smallest possible position supported by the markets position decimals, i.e. 1 unit of volume.
+
+Note, there is no need to handle the complexity where the fair price is currently on the lower curve but the best ask exists on the upper curve (or visa-versa) as by definition if the party has the smallest possible position $\Delta{P}$, their fair price should be such that between that price and the base price they quote at least $\Delta{P}$. In short:
+
+- if the fair price is currently on the lower curve, the best-ask will also be on the lower curve
+- if the fair price is currently on the upper curve, the best-bid will also be on the upper curve
+
+## Curve validity
+
+To prevent the protocol evaluating AMMs providing little liquidity to the network, the network will reject AMM submissions or amendments which cause an AMMs liquidity to be spread too thinly across it's entire range.
+
+If the number of ticks in the largest price range in which the AMM quotes zero volume is more than the parameter $allowedEmptyAmmLevels$, then the submission or amendment will be rejected. Note this parameter is defined on each market to allow different markets with varying volatility to be configured appropriately.
+
+- for the lower curve, this range is between the base price and the best bid price when the fair price is the base price.
+- for the upper curve, this range is between the upper bound and the best bid price when the fair price is the upper bound.
+
+The above definitions yield the following inequality which must be satisfied for both the upper and lower curve (providing they are defined) for the AMM to be valid.
+
+$$
+n\cdot\Delta{p} \geq (p_u - p_{bb})
+$$
+
+$$
+n\cdot\Delta{p} \geq {p_u} - (\frac{L\cdot\sqrt{p_u}}{L + \Delta{P}\cdot \sqrt{p_u}})^2
+$$
+
+Where:
+
+- $\Delta{p}$ is the smallest price movement supported by the market's price decimals and tick size
+- $\Delta{P}$ is the smallest position size supported by the market's position decimals
+- $n$ is the market parameter $allowedEmptyAmmLevels$
+- $L$ is the liquidity score for the relevant curve
+- $p_u$ is the upper price (the base price for the lower curve and the upper bound for the upper curve)
+
+Note, if the market parameter $allowedEmptyAmmLevels$ is updated via governance all existing pools that would no longer satisfy the inequality **must not** be cancelled. Amends to these pools should be evaluated and rejected if necessary and any cancellations should be accepted.
 
 ## Determining Liquidity Contribution
 
