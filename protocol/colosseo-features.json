@@ -366,7 +366,6 @@
       "0056-REWA-167"
     ]
   },
-  
   "Spot stop orders": {
     "milestone": "colosseo",
     "acs": [
@@ -486,7 +485,8 @@
     "acs": [
       "0012-POSR-031",
       "0012-POSR-032",
-      "0012-POSR-033"]
+      "0012-POSR-033"
+    ]
   },
   "Order spam": {
     "milestone": "colosseo_II",
