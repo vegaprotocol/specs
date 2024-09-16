@@ -636,14 +636,6 @@
       "0094-PRAC-008"
     ]
   },
-  "Misc": {
-    "milestone": "genbutemple",
-    "acs": [
-      "0016-PFUT-029",
-      "0016-PFUT-030",
-      "0016-PFUT-031"
-    ]
-  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
