@@ -366,7 +366,6 @@
       "0056-REWA-167"
     ]
   },
-  
   "Spot stop orders": {
     "milestone": "colosseo",
     "acs": [
@@ -486,7 +485,8 @@
     "acs": [
       "0012-POSR-031",
       "0012-POSR-032",
-      "0012-POSR-033"]
+      "0012-POSR-033"
+    ]
   },
   "Order spam": {
     "milestone": "colosseo_II",
@@ -634,6 +634,14 @@
       "0094-PRAC-006",
       "0094-PRAC-007",
       "0094-PRAC-008"
+    ]
+  },
+  "Misc": {
+    "milestone": "genbutemple",
+    "acs": [
+      "0016-PFUT-029",
+      "0016-PFUT-030",
+      "0016-PFUT-031"
     ]
   },
   "Unknown": {
