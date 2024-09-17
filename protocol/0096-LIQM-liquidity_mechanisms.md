@@ -73,12 +73,10 @@ The range and required proportion of the epoch are controlled though market conf
 - `lp_price_range`: a number in the range $[0, 100]$ which defines the range in which an LPs orders will contribute towards their volume of notional, refer to section [instantaneous volume-of-notional](#instantaneous volume of notional) for more details.
 - `minimum_time_fraction`: a number in the range $[0, 1]$ which defines the minimum proportion of an epoch an LP must have provided an amount of volume for in order for that amount to be set as their volume of notional, refer to section [calculating the volume of notional](#calculating-the-volume-of-notional) for more details.
 
+
 ### Instantaneous Volume of Notional
 
 To calculate each LPs volume of notional, throughout the epoch, the network must sample and store the current volume of notional supplied by each LP at that point. Call this the instantaneous volume of notional. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
-
->[!NOTE]
-> Whilst the SLA parameters are uniquely configurable per market, they can also be specified for a liquidity SLA reward metric. As such, for each LP, the network must also track the instantaneous volume of notional provided within each unique price range specified by a reward.
 
 Calculating the notional volume supplied at any given point in time is done as follows:
 
