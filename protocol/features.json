@@ -630,23 +630,6 @@
     "milestone": "genbu_temple",
     "acs": []
   },
-  "Token Buyback auction": {
-    "milestone": "genbu_temple",
-    "acs": []
-  },
-  "Spot AMM": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0092-SAMM-001",
-      "0092-SAMM-002",
-      "0092-SAMM-003",
-      "0092-SAMM-004",
-      "0092-SAMM-005",
-      "0092-SAMM-006",
-      "0092-SAMM-007",
-      "0092-SAMM-008"
-    ]
-  },
   "Model-free alternatives": {
     "milestone": "historic_distillery",
     "acs": [
@@ -705,21 +688,6 @@
       "0056-REWA-245"
     ]
   },
-  "Cancelling Proposals": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0028-GOVE-188",
-      "0028-GOVE-189",
-      "0028-GOVE-190",
-      "0028-GOVE-191"
-    ]
-  },
-  "Perpetual funding rates": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0053-PERP-036"
-    ]
-  },
   "Spot AMM": {
     "milestone": "genbu_temple",
     "acs": [
@@ -737,87 +705,10 @@
     "milestone": "genbu_temple",
     "acs": []
   },
-  "Token Buyback auction": {
-    "milestone": "genbu_temple",
-    "acs": []
-  },
-  "Cancelling Proposals": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0028-GOVE-188",
-      "0028-GOVE-189",
-      "0028-GOVE-190",
-      "0028-GOVE-191"
-    ]
-  },
   "Perpetual funding rates": {
     "milestone": "historic_distillery",
     "acs": [
       "0053-PERP-036"
-    ]
-  },
-  "LPs voting without gov token": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0028-GOVE-185"
-    ]
-  },
-  "Spot stretch": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0029-FEES-015",
-      "0029-FEES-016",
-      "0029-FEES-017",
-      "0029-FEES-018",
-      "0029-FEES-019",
-      "0029-FEES-020",
-      "0029-FEES-021",
-      "0029-FEES-022",
-      "0049-TVAL-007",
-      "0049-TVAL-008",
-      "0049-TVAL-009",
-      "0049-TVAL-010",
-      "0049-TVAL-011",
-      "0049-TVAL-012",
-      "0051-PROD-004",
-      "0051-PROD-005",
-      "0051-PROD-006",
-      "0052-FPOS-003",
-      "0052-FPOS-004",
-      "0054-NETP-007",
-      "0054-NETP-008",
-      "0054-NETP-009",
-      "0054-NETP-010",
-      "0054-NETP-011",
-      "0057-TRAN-063",
-      "0065-FTCO-005",
-      "0065-FTCO-006",
-      "0065-FTCO-007",
-      "0065-FTCO-008",
-      "0070-MKTD-010",
-      "0070-MKTD-011",
-      "0070-MKTD-012",
-      "0070-MKTD-013",
-      "0070-MKTD-014",
-      "0070-MKTD-015",
-      "0070-MKTD-022",
-      "0070-MKTD-024",
-      "0070-MKTD-025",
-      "0070-MKTD-026",
-      "0074-BTCH-012",
-      "0074-BTCH-015",
-      "0074-BTCH-016",
-      "0074-BTCH-019",
-      "0079-TGAP-006",
-      "0079-TGAP-007",
-      "0028-GOVE-186",
-      "0028-GOVE-187",
-      "0080-SPOT-024",
-      "0080-SPOT-025",
-      "0080-SPOT-026",
-      "0080-SPOT-027",
-      "0080-SPOT-028",
-      "0080-SPOT-029"
     ]
   },
   "Volume rebate program": {
@@ -898,12 +789,6 @@
       "0028-GOVE-191"
     ]
   },
-  "Perpetual funding rates": {
-    "milestone": "historic_distillery",
-    "acs": [
-      "0053-PERP-036"
-    ]
-  },
   "LPs voting without gov token": {
     "milestone": "historic_distillery",
     "acs": [
@@ -966,14 +851,6 @@
       "0080-SPOT-027",
       "0080-SPOT-028",
       "0080-SPOT-029"
-    ]
-  },
-  "Misc improvements": {
-    "milestone": "genbutemple",
-    "acs": [
-      "0016-PFUT-029",
-      "0016-PFUT-030",
-      "0016-PFUT-031"
     ]
   },
   "Unknown": {
