@@ -66,17 +66,11 @@ By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 
 The volume of notional is a measure of how much liquidity an LP provided to a market throughout the epoch.
 
-Each LPs `volume of notional` is defined as, the maximum notional volume that they supplied through orders within a specified range for at least N % of the epoch.
+Each LPs `volume of notional` is defined as, the maximum notional volume that they supplied through orders within a specified range for at least N % of the epoch (where the liquidity range and N are market configurable parameters).
 
-The range and required proportion of the epoch are controlled though market configurable SLA parameters:
-
-- `lp_price_range`: a number in the range $[0, 100]$ which defines the range in which an LPs orders will contribute towards their volume of notional, refer to section [instantaneous volume-of-notional](#instantaneous volume of notional) for more details.
-- `minimum_time_fraction`: a number in the range $[0, 1]$ which defines the minimum proportion of an epoch an LP must have provided an amount of volume for in order fot that amount to be set as their volume of notional, refer to section [calculating the volume of notional](#calculating-the-volume-of-notional) for more details.
-
+To calculate the volume of notional, throughout the epoch, the network must sample and store the current volume of notional supplied by each LP at that point. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
 
 ### Instantaneous Volume of Notional
-
-To calculate each LPs volume of notional, throughout the epoch, the network must sample and store the current volume of notional supplied by each LP at that point. Call this the instantaneous volume of notional. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
 
 Calculating the notional volume supplied at any given point in time is done as follows:
 
@@ -87,7 +81,7 @@ Whilst in continuous trading:
 - If there is a mid price calculate the volume of notional that is in the range.
 
 ```text
-(1.0-lp_price_range) x mid <= price levels <= (1+lp_price_range)x mid
+(1.0-market.liquidity.priceRange) x mid <= price levels <= (1+market.liquidity.priceRange)x mid.
 ```
 
 Whilst in monitoring auctions:
@@ -95,16 +89,16 @@ Whilst in monitoring auctions:
 - If there is an indicative uncrossing price calculate the volume of notional that is in the range.
 
 ```text
-(1.0-lp_price_range) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+lp_price_range) x max(last trade price, indicative uncrossing price)
+(1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
 - If there is no 'indicative uncrossing price' each LP is treated as supplying `0` volume.
 
 ### Calculating the Volume of Notional
 
-At the end of the epoch, before distributing fees, each LPs `volume of notional` is set to the largest volume of notional that was supplied for at least a specified proportion of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
+At the end of the epoch, before distributing fees, each LPs `volume of notional` is set to the largest volume of notional that was supplied for at least N % of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
 
-$$i= \lceil\text{len(array)}\cdot{\text{minTimeFraction}}\rceil$$
+$$i= \text{ceil}(len(array)/N)$$
 
 ## Distributing Liquidity Fees
 
