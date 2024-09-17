@@ -113,6 +113,6 @@ $$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{L_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
 Where:
 
 - $f_{i_j}$ is the liquidity fees distributed to party $j$ in epoch $i$
-- $f_{i}$ is the liquidity fees accumulated by the market in epoch $i$
+- $f_{i_j}$ is the liquidity fees accumulated by the market in epoch $i$
 - $ELS_j$ is the current number of ELS points for party $j$
 - $L_j$ is the implied commitment amount of party $j$
