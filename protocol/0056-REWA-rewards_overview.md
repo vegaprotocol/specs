@@ -215,28 +215,6 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Note this reward metric **is not** available for team rewards.
 
-### Liquidity SLA Metric
-
-The Liquidity SLA metric, $m_{lq}$, rewards LPs for providing greater volumes of notional within a specified range for at least a specific proportion of the epoch.
-
-The mechanics for calculating each LPs volume of notional is the same as for the liquidity mechanics specified in [0095-LIQM](./0095-LIQM-liquidity_mechanisms.md#volume-of-notional) but instead of using the markets SLA parameters the SLA parameters specified in the transfer are used.
-
->[!NOTE]
-> As a market can support multiple liquidity SLA rewards each specifying their own SLA parameters the network must track the [instantaneous volume of notional](./0095-LIQM-liquidity_mechanisms.md#instantaneous-volume-of-notional) supplied by each LP within each unique liquidity price range.
-
-At the end of the epoch, the average realised return metric over the last $N$ epochs is calculated as follows.
-
-Let:
-
-- $m_{lp}$ be the parties LPs  metric.
-- $v_{i}$ be the parties "volume of notional" for epoch $i$.
-- $N$ be the window length specified in the recurring transfer.
-
-$$m_{lp} = \frac{\sum_{i}^{n}{v_{i}}}{N}$$
-
-As a point of clarification, the network will only calculate a volume of notional for parties designated as an LP for that epoch, see [designating liquidity providers](./0095-LIQM-liquidity_mechanisms.md#designating-liquidity-providers) from the liquidity mechanics spec. Therefore if a party is not designated as an LP for an epoch their reward metric will be `0` regardless of whether they provided volume or not.
-
-
 ## Team reward metrics
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
