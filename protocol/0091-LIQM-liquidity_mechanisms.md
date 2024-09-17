@@ -62,6 +62,7 @@ By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 - "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide uncompetitive liquidity).
 - "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
 
+
 ## Implied Commitment Amount
 
 Each LPs `implied commitment amount` is defined as, the maximum volume of notional liquidity that they supplied within a specified range for at least N % of the epoch (where the liquidity range and N are market configurable parameters).
@@ -90,13 +91,18 @@ Whilst in monitoring auctions:
 (1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
-- If there is no 'indicative uncrossing price' each LP is treated as supplying `0` liquidity.
+- If there is no 'indicative uncrossing price' then volume placed at any price should count towards the LP's commitment i.e the price range is interpreted as
+
+```text
+-infinity <=  price levels <= infinity
+```
 
 ### Calculating the implied commitment amount
 
 At the end of the epoch, before distributing fees, each LPs `implied commitment amount` is set to the largest volume of notional that was supplied for at least N % of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
 
 $$i= \text{ceil}(len(array)/N)$$
+
 
 ## Distributing Liquidity Fees
 
