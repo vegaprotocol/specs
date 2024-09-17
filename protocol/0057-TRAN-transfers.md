@@ -6,7 +6,10 @@ These transfers are not to be confused with the internal concept of transfers wh
 Allowing users to initiate transfers allows for the following capabilities:
 
 - A user can transfer funds from a public key A to a public key B.
-- A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+- A user can transfer governance tokens from general account to another key's general account.
+- A user can transfer governance tokens from and to a locked account used for staking [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
+
+
 - A user can set up a recurring transfer.
 - A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
@@ -17,12 +20,12 @@ Transfer can only be initiated by a party using their own funds from [accounts](
 Here's the list of accounts types from which a user send funds from:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
+- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md)
 
 Here's the list of accounts types into which funds can be sent:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
+- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md)
 - [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts) (only by the special recurring transfer to reward accounts transfer type)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
@@ -105,6 +108,7 @@ To support entity scoping, the transaction include the following fields:
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
 - `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
+- `eligible keys` - optional list of keys who are eligible to participate in the game. If no list is specified, all parties are eligible, if a list is specified, only parties included in the list will have a score. If specified the list must have more than one key.
 
 A party should be able to configure the distribution of rewards by specifying the following fields:
 
@@ -113,10 +117,13 @@ A party should be able to configure the distribution of rewards by specifying th
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
 - `cap_reward_fee_multiple` [optional] - if set, the actual amount of reward transferred to each public key during distribution for this transfer will be `min(calculated_reward_in_quantum, cap_reward_fee_multiple × feed_paid_since_last_payout)` (fees paid since last payout is akin to checking the total fees paid over the last `transfer_interval` epochs). When calculating how much of the reward each one is getting, if some is left from the applied cap, we recalculate on the remaining balance only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10. If all keys are capped (i.e. the total amount of the transfer cannot be be sent to eligible keys without breaching the cap) then the remaining balance must be left in the reward pool and included in the distribution in future epochs. If this occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made.
 Here, `feed_paid_since_last_payout` are the total trading fees paid by a party (arising from `infrastructure_fee` paid, `maker_fee` paid plus `liquidity_fee` paid, since the last payout and expressed in quantum units).
+- `sla_parameters` - to support the [Liquidity SLA Metric](./0056-REWA-rewards_overview.md#liquidity-sla-metric), if the distribution metric is `DISPATCH_METRIC_LIQUIDITY_SLA`, SLA parameters must be provided for the network to evaluate each LPs liquidity performance. These parameters are the same as defined in the [liquidity mechanisms specification](./0095-LIQM-liquidity_mechanisms.md#volume-of-notional).
+- `target_notional_volume` - an optional integer greater than zero which defines the volume required for the full amount of funds to be distributed as rewards (see [reward scaling](./0056-REWA-rewards_overview.md#reward-scaling)). It is represented in the decimals of the dispatch asset.
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
   - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
   - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
-- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK`, an ordered list dictionaries defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers in an ascending order and the table can have strictly no more than 500 rows.
+  - `DISTRIBUTION_STRATEGY_RANK_LOTTERY` - rewards should be distributed among entities [based on randomly assigned rank](./0056-REWA-rewards_overview.md#distributing-based-on-lottery).
+- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK` or `DISTRIBUTION_STRATEGY_RANK_LOTTERY`, an ordered list dictionary defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers in an ascending order and the table can have strictly no more than 500 rows.
 
     ```pseudo
         rank_table = [
@@ -259,8 +266,8 @@ message CancelTransfer {
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 - As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-- As a user I can transfer funds from a general account I control to a locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-003" href="#0057-PALAZZO-003">0057-PALAZZO-003</a>).
-- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-004" href="#0057-PALAZZO-004">0057-PALAZZO-004</a>)
+- As a user I can transfer the governance token from a general account I control to a LOCKED_FOR_STAKING account. Such transfer must be immediate. (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>).
+- As a user I can transfer the governance token from a LOCKED_FOR_STAKING account under my control to any party's general account. Such transfer must be immediate.  (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
@@ -413,3 +420,5 @@ If a party sets up a recurring transfer with a `transfer_interval` field strictl
 If a party sets up a recurring transfer with a transfer interval strictly greater than `1` and specifies a `cap_reward_fee_multiple`. If `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_since_last_payout_in_quantum`(<a name="0057-TRAN-079" href="#0057-TRAN-079">0057-TRAN-079</a>)
 
 A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-080" href="#0057-TRAN-080">0057-TRAN-080</a>)
+s
+

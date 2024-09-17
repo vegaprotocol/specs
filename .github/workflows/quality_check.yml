@@ -11,8 +11,9 @@ name: "Quality checks"
       - palazzo
       - colosseo
       - colosseo_II
-      - genbutemple
       - suzukacastle
+      - suzukacastle_II
+      - genbutemple
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

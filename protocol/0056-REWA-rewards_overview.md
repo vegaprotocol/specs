@@ -73,35 +73,36 @@ If the reward account balance is `0` at the end of the epoch for a given recurri
 
 Note, trading fees paid or received on Spot markets will contribute to fee-based reward metrics.
 
-### Average position metric
+### Average notional position metric
 
-The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
+The average notional position metric, $m_{ap}$, measures each parties time-weighted average notional position over a number of epochs.
 
-At the start of each epoch, the network must reset each parties time weighted average position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
+At the start of each epoch, the network must reset each parties time weighted average notional position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows (note, to reduce computation the tracker is not updated on every mark price update).
 
 Let:
 
-- $\bar{P}$ be the parties time weighted average position in the epoch so far
-- $P_{n}$ be the parties position before their position changed
+- $\bar{P}$ be the parties time weighted average notional position in the epoch so far
+- $P_{n}$ be the parties notional position before their position changed
 - $t_{n}$ be the time the party held the previous position in seconds
 - $t$ be the amount of time elapsed in the current epoch so far
+- $S$ be the current mark price.
 
 
-$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
+$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + S \cdot \frac{|P_{n}| \cdot t_{n}}{t}$$
 
-At the end of the epoch, the network must store the parties time weighted average position and then calculate their average position reward metric as follows.
+At the end of the epoch, the network must store the parties time weighted average notional position and then calculate their average position reward metric as follows.
 
 Let:
 
-- $m_{ap}$ be the parties average position reward metric
-- $\bar{P_{i}}$ be the parties time weighted average position in the $i$-th epoch
+- $m_{ap}$ be the parties average notional position reward metric
+- $\bar{P_{i}}$ be the parties time weighted average notional position in the $i$-th epoch
 - $N$ be the window length specified in the recurring transfer.
 
 $$m_{ap} = \frac{\sum_{i}^{n}\bar{P_{i}}}{N}$$
 
 ### Relative return metric
 
-The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average position](#average-position-metric), over a number of epochs.
+The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their time-weighted average position, over a number of epochs.
 
 At the end of each epoch, the network must calculate and store the parties relative returns as follows.
 
@@ -215,6 +216,50 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Note this reward metric **is not** available for team rewards.
 
+## Eligible entities reward metric
+
+The eligible entities rewards metric $m_ee$ rewards entities who meet all the [eligibility requirements](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) set in the transfer.
+
+If a party meets **all** the eligibility requirements, their reward metric $m_ee$ is simply set to $1$.
+
+### Conditional transfer fields
+
+In order to allow creation of rewards which can pay-out to parties who are not actively trading, a transfer using this metric should be accepted in the cases where:
+
+- it specifies no metric asset, no markets within the market scope, no staking requirement, and no position requirement - in this case, all parties on the network are given a score of $1$.
+- it specifies no metric asset, no markets within the market scope, no position requirement, but does specify a staking requirement - in this case, all parties meeting the staking requirement are given a score of $1$.
+
+If however a position requirement is specified, an asset must be specified also and then parties must meet the position requirement to receive rewards.
+
+### Reward windows and transfer delays
+
+Note the following interactions with reward windows and transfer delays.
+
+- if a reward window greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated,
+- if a transfer delay greater than one is specified, an entity needs to meet the eligibility requirements in all the epochs over which the reward is evaluated (as per the point above).
+
+### Liquidity SLA Metric
+
+The Liquidity SLA metric, $m_{lq}$, rewards LPs for providing greater volumes of notional within a specified range for at least a specific proportion of the epoch.
+
+The mechanics for calculating each LPs volume of notional is the same as for the liquidity mechanics specified in [0095-LIQM](./0095-LIQM-liquidity_mechanisms.md#volume-of-notional) but instead of using the markets SLA parameters the SLA parameters specified in the transfer are used.
+
+>[!NOTE]
+> As a market can support multiple liquidity SLA rewards each specifying their own SLA parameters the network must track the [instantaneous volume of notional](./0095-LIQM-liquidity_mechanisms.md#instantaneous-volume-of-notional) supplied by each LP within each unique liquidity price range.
+
+At the end of the epoch, the average realised return metric over the last $N$ epochs is calculated as follows.
+
+Let:
+
+- $m_{lp}$ be the parties LPs  metric.
+- $v_{i}$ be the parties "volume of notional" for epoch $i$.
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{lp} = \frac{\sum_{i}^{n}{v_{i}}}{N}$$
+
+As a point of clarification, the network will only calculate a volume of notional for parties designated as an LP for that epoch, see [designating liquidity providers](./0095-LIQM-liquidity_mechanisms.md#designating-liquidity-providers) from the liquidity mechanics spec. Therefore if a party is not designated as an LP for an epoch their reward metric will be `0` regardless of whether they provided volume or not.
+
+
 ## Team reward metrics
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
@@ -237,11 +282,34 @@ Recurring transfers can target groups of markets, or all markets for a settlemen
 
 All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
+If a `target_notional_volume` is specified in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts), the amount to take from the source account and distribute as rewards is scaled as per the mechanics defined in section [reward scaling](#reward-scaling).
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
 Any rewards earned by an AMM sub-key should be sent as normal to the relevant vesting account for that sub-key. The party owning the sub-key will be able to withdraw any vested rewards using a regular one-off transfer specifying a `from` key (as per the mechanics detailed [here](./0057-TRAN-transfers.md)), or alternatively leave the reward in the vesting / vested accounts to receive a multiplier on any future rewards (as per the mechanics detailed [here](./0085-RVST-rewards_vesting.md#clarification-for-amm-sub-accounts).
+
+
+### Reward scaling
+
+Before distributing rewards amongst entities, in order to prevent over funding rewards when volume is low, the actual amount transferred and distributed can be scaled based on the target notional volume and the actual notional volume over the reward window (the size of the window specified in the recurring transfer).
+
+$$T_a = T\cdot\min{(1, \frac{\sum_{i}^{n}V_i}{V_t})}$$
+
+Where:
+
+- $T_a$ is the actual amount of funds to transfer and distribute amongst entities.
+- $T$ is the transfer amount specified in the recurring transfer.
+- $V_t$ is the target average notional volume specified in the recurring transfer (represented in asset decimals).
+- ${V_i}$ is the actual notional volume across all markets within scope in epoch $i$ (represented in asset decimals).
+
+Note the following considerations:
+
+- If no target notional volume is specified in the recurring transfer, no scaling takes place. The full transfer amount is always distributed if possible.
+- If the actual notional volume is greater than the target notional volume, the rewards will not be scaled (as the scaling factor will be `1`). The final transfer amount cannot be greater than the transfer amount specified in the recurring transfer.
+- reward scaling is not possible.
+  - when using the [Validator ranking](#validator-ranking-metric) metric
+  - when using the [Market creation](#market-creation-reward-metrics) metric
+  - when using the [Eligible entities](#eligible-entities-metric) metric and specifying no asset for metric (i.e. when only specifying a staking requirement)
 
 ### Distributing rewards amongst entities
 
@@ -314,6 +382,24 @@ Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$,
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
+### Distributing based on lottery
+
+Rewards funded using the lottery-distribution strategy use the same rank-table as described in [0057-TRAN](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) and should be distributed as follows.
+
+1. At the end of the epoch, take the hash of the most recent block as the seed.
+2. Iterate over the rank table, randomly assigning an entity to that rank where an entities probability of selection is as follows.
+
+Let:
+
+- $p_i$ be the probability entity $i$ is selected
+- $r_i$ be the reward score of entity $i$
+
+$$p_{i} = \frac{r_i}{\sum_{i}^{n}{r_i}}$$
+
+Note: after the first iterations only entities which aren't already included in the ranking are concerned for selection, i.e. it's not possible for any entity to be selected more than once.
+
+Finally distribute rewards in the exact same way as described in [Distributed based on rank](#distributing-based-on-rank) only using each entities randomly assigned rank rather than their in-order rank.
+
 ### Distributing rewards amongst team members
 
 If rewards are distributed to a team, rewards must then be distributed between team members who had a reward metric, $m$, greater than `0` based on their payout multipliers.
@@ -362,6 +448,14 @@ Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next ep
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts.
 
+### Locked Reward
+
+When a party earns locked rewards (in governance token), they are transferred into the party's vesting account account but locked for the appropriate period before vesting.
+The rewards in the vesting and vested account (both locked and unlocked) should count toward the party's staking balance and they can be [staked](0059-STKG-simple_staking_and_delegating.md).
+
+- When a party receives a governance token reward that is locked, the [LOCKED_FOR_STAKING] balance for the party is incremented by the corresponding amount. (<a name="0056-REWA-246" href="#0056-REWA-246">0056-REWA-246</a>).
+- Total balance of the governance asset in the [LOCKED_FOR_STAKING] account counts towards the party's staking balance and can be nominated to a validator and earn staking rewards. (<a name="0056-REWA-247" href="#0056-REWA-247">0056-REWA-247</a>).
+
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
 for product spot: (<a name="0056-REWA-060" href="#0056-REWA-060">0056-REWA-060</a>)
@@ -381,14 +475,13 @@ There are no markets.
 - `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 - `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10.
 - Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
-- During epoch `2` we have `party_1` make one buy market order with volume `2`.
-- During epoch `2` we have `party_2` make one sell market order each with notional `1`.
+- During epoch `2` we have `party_1` make one buy market order with volume `2`.During epoch `2` we have `party_2` make one sell market order each with notional `1`.
 
 #### Funding reward accounts 1
 
 - `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
-  - `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
-  - `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
+- `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
+- `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
 
 #### Expectation 1
 
@@ -1015,17 +1108,48 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Reward Eligibility
 
+### Staking requirements
+
 - If a parties staked governance tokens ($VEGA) is strictly less than the `staking_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-076" href="#0056-REWA-076">0056-REWA-076</a>).
+
+### Notional position requirements
+
 - If a parties time-weighted average position (across all in scope-markets) is strictly less than the `notional_time_weighted_average_position_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-077" href="#0056-REWA-077">0056-REWA-077</a>).
+
+## Key requirements
+
+- Given the following dispatch metrics, if no `eligible keys` list is specified in the recurring transfer, all parties meeting other eligibility criteria should receive a score (if they meet the criteria for one):
+  - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-201" href="#0056-REWA-201">0056-REWA-201</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-202" href="#0056-REWA-202">0056-REWA-202</a>).
+  - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-203" href="#0056-REWA-203">0056-REWA-203</a>).
+  - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-205" href="#0056-REWA-205">0056-REWA-205</a>).
+  - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-206" href="#0056-REWA-206">0056-REWA-206</a>).
+  - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-207" href="#0056-REWA-207">0056-REWA-207</a>).
+  - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-208" href="#0056-REWA-208">0056-REWA-208</a>).
+  - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-210" href="#0056-REWA-210">0056-REWA-210</a>).
+
+- Given the following dispatch metrics, if an `eligible keys` list is specified in the recurring transfer, only parties included in the list and meeting other eligibility criteria should receive a score (if they meet the criteria for one):
+  - `DISPATCH_METRIC_MAKER_FEES_PAID` (<a name="0056-REWA-211" href="#0056-REWA-211">0056-REWA-211</a>).
+  - `DISPATCH_METRIC_MAKER_FEES_RECEIVED` (<a name="0056-REWA-212" href="#0056-REWA-212">0056-REWA-212</a>).
+  - `DISPATCH_METRIC_LP_FEES_RECEIVED` (<a name="0056-REWA-213" href="#0056-REWA-213">0056-REWA-213</a>).
+  - `DISPATCH_METRIC_MARKET_VALUE` (<a name="0056-REWA-215" href="#0056-REWA-215">0056-REWA-215</a>).
+  - `DISPATCH_METRIC_AVERAGE_POSITION` (<a name="0056-REWA-216" href="#0056-REWA-216">0056-REWA-216</a>).
+  - `DISPATCH_METRIC_RELATIVE_RETURN` (<a name="0056-REWA-217" href="#0056-REWA-217">0056-REWA-217</a>).
+  - `DISPATCH_METRIC_RETURN_VOLATILITY` (<a name="0056-REWA-218" href="#0056-REWA-218">0056-REWA-218</a>).
+  - `DISPATCH_METRIC_REALISED_RETURN` (<a name="0056-REWA-220" href="#0056-REWA-220">0056-REWA-220</a>).
+
+- Given an `eligible keys` list is specified, live data should only be published for keys in that list (<a name="0056-REWA-221" href="#0056-REWA-221">0056-REWA-221</a>).
 
 ### Average Position
 
-- If an eligible party opens a position at the beginning of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-078" href="#0056-REWA-078">0056-REWA-078</a>).
-- If an eligible party held an open position at the start of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-079" href="#0056-REWA-079">0056-REWA-079</a>).
-- If an eligible party opens a position half way through the epoch, their average position reward metric should be half the size of the position at the end of the epoch (<a name="0056-REWA-080" href="#0056-REWA-080">0056-REWA-080</a>).
-- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average position reward metric should be equal to the size of that position at the end of the epoch (<a name="0056-REWA-081" href="#0056-REWA-081">0056-REWA-081</a>).
-- If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
-- If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
+- If an eligible party opens a position at the beginning of the epoch, and the mark price does **not** change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-192" href="#0056-REWA-192">0056-REWA-192</a>).
+- If an eligible party opens a position at the beginning of the epoch, and the price changes during the epoch, their average notional position reward metric should be set equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-193" href="#0056-REWA-193">0056-REWA-193</a>).
+- If an eligible party held an open position at the start of the epoch, and the mark price does **not** change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-194" href="#0056-REWA-194">0056-REWA-194</a>).
+- If an eligible party held an open position at the start of the epoch, and the mark price does change during the epoch, their average notional position reward metric should be equal to the notional value of the position at the end of the epoch (<a name="0056-REWA-195" href="#0056-REWA-195">0056-REWA-195</a>).
+- If an eligible party opens a position half way through the epoch, their average notional position reward metric should be half the notional value of the position at the end of the epoch (<a name="0056-REWA-196" href="#0056-REWA-196">0056-REWA-196</a>).
+- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average notional position reward metric should be equal to half the notional value of the position at the point they closed their position (<a name="0056-REWA-197" href="#0056-REWA-197">0056-REWA-197</a>).
+- If an eligible party held positions in multiple in-scope markets, their average notional position reward metric should be the sum of their time-weighted-average-notional-position in each market (<a name="0056-REWA-198" href="#0056-REWA-198">0056-REWA-198</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties average notional position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-199" href="#0056-REWA-199">0056-REWA-199</a>).
 
 ### Relative returns
 
@@ -1078,7 +1202,6 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
 - If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
 
-
 ### Entity Scope
 
 #### Individuals
@@ -1122,6 +1245,42 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
 
+### Reward Scaling
+
+#### Specifying valid/invalid values
+
+- If a `target_notional_volume` is not specified, the full transfer amount should be paid out regardless of the volume. (<a name="0056-REWA-226" href="#0056-REWA-226">0056-REWA-226</a>).
+- If a `target_notional_volume` is specified but the value is zero. The transfer should be rejected. (<a name="0056-REWA-227" href="#0056-REWA-227">0056-REWA-227</a>).
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is specified, the transfer should be accepted. (<a name="0056-REWA-228" href="#0056-REWA-228">0056-REWA-228</a>).
+- If a `target_notional_volume` is specified, the dispatch metric is for eligible entities rewards and an `asset_for_metric` is **not** specified, the transfer should be rejected. (<a name="0056-REWA-229" href="#0056-REWA-229">0056-REWA-229</a>).
+- If a `target_notional_volume` is specified and the dispatch metric is for market creation rewards, the transfer should be rejected. (<a name="0056-REWA-230" href="#0056-REWA-230">0056-REWA-230</a>).
+- If a `target_notional_volume` is specified and the dispatch metric is for validator ranking rewards, the transfer should be rejected. (<a name="0056-REWA-231" href="#0056-REWA-231">0056-REWA-231</a>).
+
+#### Interactions with scoping markets
+
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that market's volume is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-232" href="#0056-REWA-232">0056-REWA-232</a>).
+- Given a recurring transfer scoping a single market and specifying a non-zero `target_notional_volume`. If that market's volume is greater than the target, no more than the full reward amount is distributed. (<a name="0056-REWA-233" href="#0056-REWA-233">0056-REWA-233</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should receive the same amount of rewards). (<a name="0056-REWA-234" href="#0056-REWA-234">0056-REWA-234</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should receive the same amount of rewards). (<a name="0056-REWA-235" href="#0056-REWA-235">0056-REWA-235</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the markets, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards). (<a name="0056-REWA-236" href="#0056-REWA-236">0056-REWA-236</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the markets, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards). (<a name="0056-REWA-237" href="#0056-REWA-237">0056-REWA-237</a>).
+
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is less than the target, the rewards distributed are scaled accordingly (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume). (<a name="0056-REWA-238" href="#0056-REWA-238">0056-REWA-238</a>).
+- Given a recurring transfer scoping multiple markets and specifying a non-zero `target_notional_volume`. When the volume is zero in one market, if the cumulative volume is greater than the target, no more than the full reward amount is distributed (participants in each market with the same score should **STILL** receive the same amount of rewards including the market which contributed no volume). (<a name="0056-REWA-239" href="#0056-REWA-239">0056-REWA-239</a>).
+
+#### Interactions with reward windows
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-240" href="#0056-REWA-240">0056-REWA-240</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread evenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is distributed. (<a name="0056-REWA-241" href="#0056-REWA-241">0056-REWA-241</a>).
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the window, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-242" href="#0056-REWA-242">0056-REWA-242</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is spread unevenly across the window, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed. (<a name="0056-REWA-243" href="#0056-REWA-243">0056-REWA-243</a>).
+
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is less than the target, the rewards distributed are scaled accordingly. (<a name="0056-REWA-244" href="#0056-REWA-244">0056-REWA-244</a>).
+- Given a recurring transfer with a reward window `>1` and specifying a non-zero `target_notional_volume`. When the volume is zero in the current epoch, if the cumulative volume across the window is greater than the target, no more than the full reward amount is **still** distributed. (<a name="0056-REWA-245" href="#0056-REWA-245">0056-REWA-245</a>).
+
 ### Spot markets
 
 - In a spot market, trades in which a party is the buyer and the aggressor will contribute to the parties’ maker fees paid reward metric for the quote asset. (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
@@ -1144,3 +1303,113 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 ## vAMMs
 
 - If an AMM sub-key earns rewards, they are transferred into the sub-keys vesting account and locked for the appropriate period before vesting (<a name="0056-REWA-170" href="#0056-REWA-170">0056-REWA-170</a>).
+
+## Eligible Entities Metric
+
+### Valid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network regardless of trading activity.
+  - no dispatch asset specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+  - no eligible keys list specified
+(<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
+  - no dispatch asset specified
+  - no markets specified
+  - a staking requirement specified
+  - no position requirement specified
+  - no eligible keys list specified
+(<a name="0056-REWA-172" href="#0056-REWA-172">0056-REWA-172</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities on the network meeting the position requirement across all markets using that asset.
+  - a dispatch asset specified
+  - no markets specified
+  - no staking requirement
+  - a position requirement specified
+  - no eligible keys list specified
+(<a name="0056-REWA-173" href="#0056-REWA-173">0056-REWA-173</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities  meeting the position requirement across the specified markets.
+  - a dispatch asset specified
+  - a set of markets specified
+  - no staking requirement
+  - a position requirement specified
+  - no eligible keys list specified
+(<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list regardless of staking and trading activity.
+  - no dispatch asset specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-222" href="#0056-REWA-222">0056-REWA-222</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list meeting the staking requirement.
+  - no dispatch asset specified
+  - no markets specified
+  - a staking requirement specified
+  - no position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-223" href="#0056-REWA-223">0056-REWA-223</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys list meeting the trading requirement activity requirement.
+  - a dispatch asset specified
+  - no set of markets specified
+  - no staking requirement specified
+  - a position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-224" href="#0056-REWA-224">0056-REWA-224</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities in the eligible keys meeting the staking and trading activity requirements.
+  - a dispatch asset specified
+  - a set of markets specified
+  - a staking requirement specified
+  - a position requirement specified
+  - an eligible keys list specified
+(<a name="0056-REWA-225" href="#0056-REWA-225">0056-REWA-225</a>)
+
+### Invalid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - no markets specified
+  - a position requirement specified
+(<a name="0056-REWA-175" href="#0056-REWA-175">0056-REWA-175</a>)
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
+  - no dispatch metric specified
+  - a set of markets specified
+  - a position requirement specified
+(<a name="0056-REWA-176" href="#0056-REWA-176">0056-REWA-176</a>)
+
+### Interaction with reward multipliers
+
+- Given a recurring transfer using the eligible entries metric and scoping individuals. If multiple parties meet all eligibility they should receive rewards proportional to any reward multipliers. (<a name="0056-REWA-178" href="#0056-REWA-178">0056-REWA-178</a>)
+
+### Interaction with reward windows
+
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch as well as the previous `N-1` epochs will receive rewards at the end of the epoch. (<a name="0056-REWA-179" href="#0056-REWA-179">0056-REWA-179</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length `N` greater than one, a party who met the eligibility requirements in the current epoch only will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-180" href="#0056-REWA-180">0056-REWA-180</a>)
+- Given a recurring transfer using the eligible entities metric and a reward window length greater than one, a party who met the eligibility requirements in a previous epoch in the window, but not the current epoch will receive **no** rewards at the end of the epoch. (<a name="0056-REWA-181" href="#0056-REWA-181">0056-REWA-181</a>)
+
+### Distributing rewards
+
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity meets the staking requirement they will receive rewards. (<a name="0056-REWA-182" href="#0056-REWA-182">0056-REWA-182</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a staking requirement. If an entity does not meet the staking requirement they will receive no rewards. (<a name="0056-REWA-183" href="#0056-REWA-183">0056-REWA-183</a>)
+
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity meets the position requirement they will receive rewards. (<a name="0056-REWA-184" href="#0056-REWA-184">0056-REWA-184</a>)
+- Given a recurring transfer using the eligible entities metric and specifying only a position requirement (assume all markets within scope). If an entity does not meet the position requirement they will receive no rewards. (<a name="0056-REWA-185" href="#0056-REWA-185">0056-REWA-185</a>)
+
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets neither the staking or position requirement, they will receive no rewards. (<a name="0056-REWA-186" href="#0056-REWA-186">0056-REWA-186</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the staking but not the position requirement, they will receive no rewards. (<a name="0056-REWA-187" href="#0056-REWA-187">0056-REWA-187</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets the position requirement but not the staking requirement, they will receive no rewards. (<a name="0056-REWA-188" href="#0056-REWA-188">0056-REWA-188</a>)
+- Given a recurring transfer using the eligible entities metric and specifying both a staking and position requirement. If an entity meets both the staking and position requirement, they will receive rewards. (<a name="0056-REWA-189" href="#0056-REWA-189">0056-REWA-189</a>)
+
+## Lottery distribution strategy
+
+- Given a recurring transfer using the lottery-distribution method, if there are only $n$ entities with a score, then only the top $n$ ranks should be filled and assigned an entity. (<a name="0056-REWA-190" href="#0056-REWA-190">0056-REWA-190</a>)
+- Given a recurring transfer using the lottery-distribution method, each parties final share of the rewards should account for any reward multipliers. (<a name="0056-REWA-191" href="#0056-REWA-191">0056-REWA-191</a>)

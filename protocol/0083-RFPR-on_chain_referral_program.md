@@ -583,3 +583,31 @@ The Estimate Fees API should now calculate the following additional information:
 1. If when evaluating the tier to set the `referral_reward_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-039" href="#0083-RFPR-039">0083-RFPR-039</a>).
 1. If when evaluating the tier to set the `referral_discount_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-040" href="#0083-RFPR-040">0083-RFPR-040</a>).
 1. If when evaluating the tier to set the `referral_reward_multiplier`, a referee does not qualify for any tier, their `referral_reward_multiplier` is set to `1` (<a name="0083-RFPR-047" href="#0083-RFPR-047">0083-RFPR-047</a>).
+
+#### Checking benefit application
+
+Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
+
+Note, discounts are calculated and applied one after the other and **before** rewards are calculated. Additionally, no benefit discounts can be applied to the treasury or buyback fee components as these may be required for the `high volume market maker rebate`.
+
+Referrer should see the discount applied to the total fee from below:
+
+`total fee = infrastructure_fee_after_referral_discount + maker_fee_after_referral_discount + liquidity_fee_after_referral_discount + treasury_fee + buyback_fee`
+
+while
+
+`infrastructure_fee_after_referral_discount = original_infrastructure_fee - infrastructure_fee_referral_discount`
+`liquidity_fee_after_referral_discount = original_infrastructure_fee - liquidity_fee_referral_discount`
+`maker_fee_after_referral_discount = original_infrastructure_fee - maker_fee_referral_discount`
+
+while
+
+`infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_infrastructure_discount_factor)`
+`liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_liquidity_discount_factor)`
+`maker_fee_referral_discount = floor(original_maker_fee * referral_maker_discount_factor)`
+
+when `trade_value_for_fee_purposes>0`, then `total fee` should be  `maker_fee_after_referral_discount+ treasury_fee + buyback_fee` when fee_factor[infrastructure] = 0, fee_factor[liquidity] = 0 (<a name="0083-RFPR-053" href="#0083-RFPR-053">0083-RFPR-053)
+
+when `trade_value_for_fee_purposes>0`, then `total fee` should be  `liquidity_fee_after_referral_discount+ treasury_fee + buyback_fee` when fee_factor[maker] = 0, fee_factor[infrastructure] = 0 (<a name="0083-RFPR-054" href="#0083-RFPR-054">0083-RFPR-054)
+
+when `trade_value_for_fee_purposes>0`, then `total fee` should be  `infrastructure_fee_after_referral_discount+ treasury_fee + buyback_fee` when fee_factor[maker] = 0, fee_factor[liquidity] = 0 (<a name="0083-RFPR-055" href="#0083-RFPR-055">0083-RFPR-055)
