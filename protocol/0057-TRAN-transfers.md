@@ -39,12 +39,8 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 
 ## Minimum transfer amount
 
-Transfers are subject to a minimum transfer amount (expressed in quantum).
-
-- transfers to a reward pool are controlled by `transfer.minRewardTransferQuantumMultiple`.
-- all other transfers are controlled by `transfer.minTransferQuantumMultiple`.
-
-These network parameters are quantum specified for the relevant [asset](0040-ASSF-asset_framework.md) and the minimum transfer amount is the product of the relevant network parameter and the assets quantum.
+This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md).
+The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
 
 If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less than the full balance is not permitted).
 
@@ -117,7 +113,6 @@ A party should be able to configure the distribution of rewards by specifying th
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
 - `cap_reward_fee_multiple` [optional] - if set, the actual amount of reward transferred to each public key during distribution for this transfer will be `min(calculated_reward_in_quantum, cap_reward_fee_multiple × feed_paid_since_last_payout)` (fees paid since last payout is akin to checking the total fees paid over the last `transfer_interval` epochs). When calculating how much of the reward each one is getting, if some is left from the applied cap, we recalculate on the remaining balance only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10. If all keys are capped (i.e. the total amount of the transfer cannot be be sent to eligible keys without breaching the cap) then the remaining balance must be left in the reward pool and included in the distribution in future epochs. If this occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made.
 Here, `feed_paid_since_last_payout` are the total trading fees paid by a party (arising from `infrastructure_fee` paid, `maker_fee` paid plus `liquidity_fee` paid, since the last payout and expressed in quantum units).
-- `sla_parameters` - to support the [Liquidity SLA Metric](./0056-REWA-rewards_overview.md#liquidity-sla-metric), if the distribution metric is `DISPATCH_METRIC_LIQUIDITY_SLA`, SLA parameters must be provided for the network to evaluate each LPs liquidity performance. These parameters are the same as defined in the [liquidity mechanisms specification](./0095-LIQM-liquidity_mechanisms.md#volume-of-notional).
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
   - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
   - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
