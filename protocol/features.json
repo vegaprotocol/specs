@@ -720,6 +720,42 @@
       "0053-PERP-036"
     ]
   },
+  "Spot AMM": {
+    "milestone": "genbu_temple",
+    "acs": [
+      "0092-SAMM-001",
+      "0092-SAMM-002",
+      "0092-SAMM-003",
+      "0092-SAMM-004",
+      "0092-SAMM-005",
+      "0092-SAMM-006",
+      "0092-SAMM-007",
+      "0092-SAMM-008"
+    ]
+  },
+  "LP 3.0": {
+    "milestone": "genbu_temple",
+    "acs": []
+  },
+  "Token Buyback auction": {
+    "milestone": "genbu_temple",
+    "acs": []
+  },
+  "Cancelling Proposals": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0028-GOVE-188",
+      "0028-GOVE-189",
+      "0028-GOVE-190",
+      "0028-GOVE-191"
+    ]
+  },
+  "Perpetual funding rates": {
+    "milestone": "historic_distillery",
+    "acs": [
+      "0053-PERP-036"
+    ]
+  },
   "LPs voting without gov token": {
     "milestone": "historic_distillery",
     "acs": [
@@ -837,21 +873,12 @@
       "0057-TRAN-004"
     ]
   },
-  "Unknown": {
-    "milestone": "unknown",
-    "acs": []
-  }
-  "Spot AMM": {
-    "milestone": "genbu_temple",
+  "Misc improvements": {
+    "milestone": "genbutemple",
     "acs": [
-      "0092-SAMM-001",
-      "0092-SAMM-002",
-      "0092-SAMM-003",
-      "0092-SAMM-004",
-      "0092-SAMM-005",
-      "0092-SAMM-006",
-      "0092-SAMM-007",
-      "0092-SAMM-008"
+      "0016-PFUT-029",
+      "0016-PFUT-030",
+      "0016-PFUT-031"
     ]
   },
   "LP 3.0": {

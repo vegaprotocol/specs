@@ -35,7 +35,6 @@ The default settings should be:
   | `1min`    | `5min`                        |
   | `10min`   | `1h`                          |
   | `1h`      | `1h`                          |
-<<<<<<< HEAD
   | `6h`      | `3h`                          |
   | `24h`     | `6h`                          |
 
@@ -45,10 +44,6 @@ The default settings should be:
 When market goes into auction mode from its default trading mode then the auction trigger which caused this should be listed as `trigger` on the API as long as that auction hasn't finished (including cases when it gets extended).
 
 When another trigger gets activated for the market then the end time of auction for that market should be the maximum of the original end time and that implied by the latest trigger. If the original end time is larger then nothing changes. If end time implied by the latest trigger is larger than the end time gets set to this value and the `extension_trigger` field gets set (or overwritten if market has already been in an extended auction at this point) to represent the latest trigger. Governance auction is assumed to have an infinite duration (it can only be ended with an appropriate governance auction and the timing of that action is generally unknown a priori).
-=======
-  | `6h`      | `3h`                         |
-  | `24h`     | `6h`                         |
->>>>>>> 85b28baa (chore: update genbutemple branch (#2308))
 
 ## Acceptance criteria
 
