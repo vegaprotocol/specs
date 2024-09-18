@@ -93,6 +93,9 @@ Any APIs which report a party's rebate factor should adhere to this cap and retu
 1. Updating any of the following network parameters whilst there is an active volume rebate program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future volume rebate program proposals.
     - `volumeRebateProgram.maxBenefitTiers` (<a name="0095-HVMR-012" href="#0095-HVMR-012">0095-HVMR-012</a>).
 
+1. Given a volume discount program program is not active, if an `UpdateVolumeRebateProgram` is enacted in epoch `k`. The program should be active in `k+1` **AND** all parties that qualify for a tier in the new program should receive the relevant factors from the new programs tier. (<a name="0095-HVMR-040" href="#0095-HVMR-040">0095-HVMR-040</a>).
+1. Given a volume discount program program is active, if an `UpdateVolumeRebateProgram` is enacted in epoch `k`. The program should be updated in `k+1` **AND** all parties that qualify for a tier in the updated program should receive the relevant factors from the updated programs tier. (<a name="0095-HVMR-041" href="#0095-HVMR-041">0095-HVMR-041</a>).
+
 ### Maker volume fraction
 
 #### Contributing trades
