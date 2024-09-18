@@ -17,16 +17,24 @@ A Protocol Automated Purchase (PAP) program can be proposed through governance a
 - **Account Type To**: The account type for the network to which the purchased tokens will be sent
 - **Market ID**: The market which will be used to enact the exchange
 - **Price Oracle**: The oracle which will define an approximate acceptable price for the transaction
+- **Oracle Staleness Tolerance** The maximum time between the oracles last reported price and the current time for that price to be used.
 - **Oracle Offset Factor**: The final acceptable price should be the **Price Oracle** value weighted by this factor (e.g. `1.05` to allow for 5% slippage on the purchase)
 - **Auction Schedule**: A time based oracle for when auctions will occur
 - **Auction Length**: How long an auction 
 - **Auction Volume Snapshot Schedule**: A time based oracle for when an observation will be taken of the balance of the source account. This will emit an event notifying of the balance planned to exchange, along with storing this value. When an auction occurs, the latest reading for this value will be used for the volume to trade, rather than the full balance of the account.
 - **Minimum Auction Size**: Minimum number of the source token to be exchanged (specified in asset decimals). If less than this are available in the account at the last snapshot before auction, no auction will occur and the balance will roll over to the next scheduled auction.
 - **Maximum Auction Size**: Maximum number of the source token to be exchanged (specified in asset decimals). If more than this are available in the account at the last snapshot before auction, this maximum value will be used instead, and the remainder will be rolled over to the next scheduled auction.
+- **Expiry**: Timestamp in Unix seconds, when the automated purchase is stopped. If an auction is in action it will be removed when the auction is finished. 
 
-Each program should be given a unique ID which should be the same as the proposal ID.
+Each program will be given a unique ID which should be the same as the proposal ID.
 
-A separate proposal will exist for cancelling an active program.
+### Handling conflicting auctions
+
+To prevent overlapping PAP auction on a single market and prevent protocol orders self-trading. A market will be restricted to supporting a single PAP program. Therefore, if a market currently is supporting an active PAP program, if another proposal specifies this market it will be rejected on enactment. This should happen regardless of whether different source tokens are specified.
+
+Note, once a program is expired or cancelled, a user will be free to propose a new program for that market.
+
+### Creating the network order
 
 ## Mechanics
 
@@ -38,8 +46,6 @@ The lifecycle of the auction process should be:
  4. Any traded balance should be send to the account specified in **Account Type To**. Note that these sales do not change ownership, and so the destination key does not require specification (all accounts are network-owned).
 
 Note, if a PAP cancellation proposal is enacted in between a snapshot being taken and the auction ending, the final auction should still occur before the program is cancelled.
-
-### Creating the network order
 
 #### Determining order side
 
@@ -91,22 +97,90 @@ where:
 - $f_t$ is the current treasury fee factor
 
 > [!WARNING]
-> If the fee factors are updated mid auction, the worst-case fees are updated also. The network must therefore recalculate the size of their buy order and amend their existing GFA order.
+> If the fee factors are increased mid auction after the network has calculated its order size, the protocol may be unable to cover the incurred fees on auction uncrossing. In this case normal spot mechanics will be applied and the order will be stopped. Earmarked funds will be returned to the relevant source account and made available for the next PAP auction.
 
-### Handling conflicting auctions
-
-To support as many use cases as possible, the network allows multiple PAP programs per source account and per market. As such, PAP programs may simultaneously appropriate tokens from the same source account and triggered PAP auctions on a single market may overlap.
-
-To support overlapping auctions requesting funds from the same source account:
-
-- as part of the snapshot, tokens to be exchanged **must** be earmarked so multiple PAP programs cannot appropriate the same tokens.
-
-To support overlapping auctions on the same market, if a PAP auction is already active when another is triggered, the network must:
-
-- set the end time of the current auction to the latest end time specified by each triggered program - extending the current auction if necessary.
-- submit the necessary GFA order - the network can therefore have more than one order per auction.
-
-> [!WARNING]
-> As the network allows PAP programs to trigger coinciding PAP auctions where the network can place both a buy and sell order, in certain configurations these orders may cross. In this case the orders should simply be stopped on auction exit resulting in no exchange of tokens.
 
 ## Acceptance Criteria
+
+### Governance
+
+#### Source tokens and markets
+
+- A proposal specifying a market which is a futures market should be rejected.
+- A proposal specifying a market which is a perpetual market should be rejected.
+- A proposal specifying a source token which is neither the base asset or quote asset of the specified spot market should be rejected.
+- A proposal specifying a market closed spot market should be rejected.
+
+To ensure a market can only ever support one **active** PAP program:
+- Given a market with an active PAP program specifying the markets quote asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
+- Given a market with an active PAP program specifying the markets base asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
+- Given an active PAP program is cancelled. A user should be able to propose a PAP program specifying that same market.
+
+#### Account types
+
+- A user should be able to create A PAP program specifying one of the following account types as the from account type (any other account type should be rejected).
+- `ACCOUNT_TYPE_BUY_BACK_FEES`
+
+- A user should be able to create A PAP program specifying one of the following account types as the to account type (any other account type should be rejected).
+- `ACCOUNT_TYPE_INSURANCE`
+- `ACCOUNT_TYPE_GLOBAL_INSURANCE`
+- `ACCOUNT_TYPE_GLOBAL_REWARD`
+- `ACCOUNT_TYPE_NETWORK_TREASURY`
+- `ACCOUNT_TYPE_BUY_BACK_FEES`
+
+- A user should be able to create more than one PAP program funded from the same buyback account providing different markets are specified.
+
+#### Oracles
+
+- A proposal specifying an oracle offset factor less than or equal to zero should be rejected.
+- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor greater than 1 (resulting in automated buy orders at a price above the oracle price).
+- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor less than 1 (resulting in automated buy orders at a price above the oracle price).
+- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor greater than 1 (resulting in automated sell orders at a price above the oracle price).
+- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor less than 1 (resulting in automated sell buy orders at a price above the oracle price).
+
+#### Market updates
+
+- If the spot market specified in the PAP program is closed, then the PAP program should be cancelled.
+
+#### Expiry and cancellations
+
+- Once a program's expiry timestamp is reached, the 
+
+### Snapshots
+
+- Once the volume snapshot of a program is triggered, if the balance of the from account is below the minimum auction size specified in the program, then no funds are earmarked for the next auction.
+- Once the volume snapshot of a program is triggered, if the balance of the from account is above the maximum auction size specified in the program, then the maximum auction size is earmarked for the next auction.
+
+- If a volume snapshot is triggered and then before the next auction, another volume snapshot is triggered, the program should release all funds previously earmarked before re-calculating how many tokens to earmark for it's next auction.
+
+- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `750` tokens for it's next auction, once the snapshot of program B is triggered it will only be allocated `250` tokens for it's next auction. This happens regardless of whether the auction of program B is triggered before the auction of program A.
+- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `1000` tokens for it's next auction, once the snapshot of program B is triggered it will be allocated `0` tokens and it's next auction will be skipped. This happens regardless of whether the auction of program B is triggered before the auction of program A.
+
+### Auctions
+
+- Given the market is currently in continuous trading, once an auction trigger occurs, the market should be put into an auction with an auction end time equal to the current time plus the program auction length.
+- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is greater than the current time plus the program auction length, the auction end time is unchanged
+- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is less than the current time plus the program auction length, the auction end time is extended to the current time plus the program auction length.
+- Given the market is currently suspended, once an auction trigger occurs, the market remains suspended and the auction is skipped.
+
+- Given an auction trigger occurs, if the price oracle has not yet reported a valid price, then the auction is skipped.
+- Given an auction trigger occurs, if the price oracle has reported a valid price but the value is stale, then the auction is skipped.
+
+- Given the end of an auction is reached and the book is not crossed, the market will remain in auction un till an uncrossing price can be determined.
+- Given the end of an auction is reached and the book is crossed, if the uncrossing price would break an active price monitoring trigger, the auction is extended by the relevant length.
+- Given the end of an auction is reached and the book is crossed, if the uncrossing price would not break an active price monitoring trigger, the auction is ended.
+
+### Protocol Automated Orders
+
+- Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction.
+- Given the program specifies a source asset matching the quote asset of the market, the network will place a buy order at the start of an auction triggered by 
+
+- The price of the order will equal the product of the oracle price and the programs oracle offset factor.
+
+- Given the program specifies a source asset matching the base asset of the market, the size of the order will match the number of tokens earmarked for the auction during the latest snapshot.
+- Given the program specifies a source asset matching the quote asset of the market, the size of the order will use the number of tokens earmarked for the auction during the latest snapshot to calculate the correct order size given the order price and current fee factors.
+- If the fee factors change during an auction resulting in the network being unable to cover the fees on auction uncrossing. The order will be stopped and the auction will end without the network exchanging any tokens.
+
+- If an automated purchase order is not filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order) and all earmarked funds returned to the relevant source account.
+- If an automated purchase order is only partially filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order), any swapped tokens transferred to the correct to account, and the remaining earmarked funds returned to the relevant source account.
+- If an automated purchase order is fully filled on auction uncrossing, all swapped tokens are transferred to the correct to account.
