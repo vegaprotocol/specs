@@ -170,6 +170,9 @@ The Trades API should now also expose the following additional information for e
     - `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-015" href="#0084-VDPR-015">0084-VDPR-015</a>).
     - `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-016" href="#0084-VDPR-016">0084-VDPR-016</a>).
 
+1. Given a volume discount program program is not active, if an `UpdateVolumeDiscountProgram` is enacted in epoch `k`. The program should be active in `k+1` **AND** all parties that qualify for a tier in the new program should receive the relevant factors from the new programs tier. (<a name="0084-VDPR-019" href="#0084-VDPR-019">0084-VDPR-019</a>).
+1. Given a volume discount program program is active, if an `UpdateVolumeDiscountProgram` is enacted in epoch `k`. The program should be updated in `k+1` **AND** all parties that qualify for a tier in the updated program should receive the relevant factors from the updated programs tier. (<a name="0084-VDPR-020" href="#0084-VDPR-020">0084-VDPR-020</a>).
+
 ### Setting benefit factors
 
 1. At the start of an epoch, each parties `volume_discount_factors` are reevaluated and fixed for the epoch (<a name="0084-VDPR-012" href="#0084-VDPR-012">0084-VDPR-012</a>).

@@ -512,6 +512,9 @@ The Estimate Fees API should now calculate the following additional information:
     - `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-042" href="#0083-RFPR-042">0083-RFPR-042</a>)
     - `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-043" href="#0083-RFPR-043">0083-RFPR-043</a>)
 
+1. Given a referral program is not active, if an `UpdateReferralProgram` is enacted in epoch `k`. The program should be active in `k+1` **AND** all parties that qualify for a tier in the new program should receive the relevant factors from the new programs tier. (<a name="0083-RFPR-056" href="#0083-RFPR-056">0083-RFPR-056</a>).
+1. Given a referral program is active, if an `UpdateReferralProgram` is enacted in epoch `k`. The program should be updated in `k+1` **AND** all parties that qualify for a tier in the updated program should receive the relevant factors from the updated programs tier. (<a name="0083-RFPR-057" href="#0083-RFPR-057">0083-RFPR-057</a>).
+
 ### Referral set mechanics
 
 #### Creating a referral set

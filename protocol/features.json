@@ -856,6 +856,17 @@
       "0080-SPOT-029"
     ]
   },
+  "Program enactment fixes": {
+  "milestone": "genbutemple",
+    "acs": [
+      "0083-RFPR-056",
+      "0083-RFPR-057",
+      "0084-VDPR-019",
+      "0084-VDPR-020",
+      "0095-HVMR-040",
+      "0095-HVMR-041"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
