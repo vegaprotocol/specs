@@ -123,7 +123,6 @@ To ensure a market can only ever support one **active** PAP program:
 - `ACCOUNT_TYPE_BUY_BACK_FEES` (<a name="0097-PAPU-008" href="#0097-PAPU-008">0097-PAPU-008</a>).
 
 - A user should be able to create A PAP program specifying one of the following account types as the to account type (any other account type should be rejected).
-- `ACCOUNT_TYPE_INSURANCE` (<a name="0097-PAPU-009" href="#0097-PAPU-009">0097-PAPU-009</a>).
 - `ACCOUNT_TYPE_GLOBAL_INSURANCE` (<a name="0097-PAPU-010" href="#0097-PAPU-010">0097-PAPU-010</a>).
 - `ACCOUNT_TYPE_GLOBAL_REWARD` (<a name="0097-PAPU-011" href="#0097-PAPU-011">0097-PAPU-011</a>).
 - `ACCOUNT_TYPE_NETWORK_TREASURY` (<a name="0097-PAPU-012" href="#0097-PAPU-012">0097-PAPU-012</a>).
