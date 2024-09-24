@@ -83,7 +83,7 @@ If the network is placing a sell order (i.e. the source token is the base asset)
 If the network is placing a buy order (i.e. the source token is the quote asset) the network must calculate the number of tokens it can afford to buy given the amount of the source token it has available to swap and account for any fees incurred on auction exit as these are locked in the parties holding account whilst the trade is active (see [spot](./0080-SPOT-product_builtin_spot.md#7-trading) spec).
 
 $$
-S = \frac{b}{s\cdot\left(1+0.5\cdot\left(f_m+f_i+f_b+f_t\right)\right)}
+S = \frac{b}{s\cdot\left(1+0.5\cdot\left(f_l+f_i+f_b+f_t\right)\right)}
 $$
 
 where:
@@ -91,7 +91,7 @@ where:
 - $S$ is the size of the order (the amount of the base asset to be bought)
 - $s$ is the price of the order
 - $b$ is the amount of the quote asset earmarked to be swapped in the previous snapshot
-- $f_m$ is the current maker fee factor
+- $f_l$ is the current liquidity fee factor
 - $f_i$ is the current infrastructure fee factor
 - $f_b$ is the current buyback fee factor
 - $f_t$ is the current treasury fee factor
