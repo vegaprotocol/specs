@@ -142,9 +142,11 @@ To ensure a market can only ever support one **active** PAP program:
 
 - If the spot market specified in the PAP program is closed, then the PAP program should be cancelled.
 
-#### Expiry and cancellations
+### Expiry and cancellations
 
-- Once a program's expiry timestamp is reached, the 
+- Given the program currently has no funds earmarked for an auction, if a program's expiry timestamp is reached, the program will be cancelled and no further auctions will take place.
+- Given the program currently has earmarked funds for an auction but is not yet in the auction, if a program's expiry timestamp is reached, the program will be cancelled, the earmarked funds released and no further auctions will take place.
+- Given the program is currently in an automated auction, if a program's expiry timestamp is reached, the program will only be cancelled when the current auction uncrosses at which point no further auctions will take place.
 
 ### Snapshots
 
