@@ -20,11 +20,11 @@ A Protocol Automated Purchase (PAP) program can be proposed through governance a
 - **Oracle Staleness Tolerance** The maximum time between the oracles last reported price and the current time for that price to be used.
 - **Oracle Offset Factor**: The final acceptable price should be the **Price Oracle** value weighted by this factor (e.g. `1.05` to allow for 5% slippage on the purchase)
 - **Auction Schedule**: A time based oracle for when auctions will occur
-- **Auction Length**: How long an auction 
+- **Auction Length**: How long an auction
 - **Auction Volume Snapshot Schedule**: A time based oracle for when an observation will be taken of the balance of the source account. This will emit an event notifying of the balance planned to exchange, along with storing this value. When an auction occurs, the latest reading for this value will be used for the volume to trade, rather than the full balance of the account.
 - **Minimum Auction Size**: Minimum number of the source token to be exchanged (specified in asset decimals). If less than this are available in the account at the last snapshot before auction, no auction will occur and the balance will roll over to the next scheduled auction.
 - **Maximum Auction Size**: Maximum number of the source token to be exchanged (specified in asset decimals). If more than this are available in the account at the last snapshot before auction, this maximum value will be used instead, and the remainder will be rolled over to the next scheduled auction.
-- **Expiry**: Timestamp in Unix seconds, when the automated purchase is stopped. If an auction is in action it will be removed when the auction is finished. 
+- **Expiry**: Timestamp in Unix seconds, when the automated purchase is stopped. If an auction is in action it will be removed when the auction is finished.
 
 Each program will be given a unique ID which should be the same as the proposal ID.
 
@@ -47,7 +47,7 @@ The lifecycle of the auction process should be:
 
 Note, if a PAP cancellation proposal is enacted in between a snapshot being taken and the auction ending, the final auction should still occur before the program is cancelled.
 
-#### Determining order side
+### Determining order side
 
 Note as the source token can either be the quote or base asset of the specified market, whether the network is placing a buy or sell order on the market must be inferred from the specified asset, i.e.
 
@@ -56,7 +56,7 @@ Note as the source token can either be the quote or base asset of the specified 
 
 If the source token matches neither the quote or base asset of the specified market then the proposal is invalid and should be rejected.
 
-#### Determining order price
+### Determining order price
 
 The price of the order is simply:
 
@@ -76,7 +76,7 @@ For maximum flexibility, the network **will not** account for the side of the or
 - to specify an offset factor $>1$, if the source token is the quote asset (resulting in a buy order)
 - to specify an offset factor $<1$, if the source token is the base asset (resulting in a sell order)
 
-#### Determining order size
+### Determining order size
 
 If the network is placing a sell order (i.e. the source token is the base asset) the size of the order is simply the number of tokens to be exchanged. Any fees incurred will simply be taken from the amount of quote asset due to the network from the exchange.
 
@@ -112,6 +112,7 @@ where:
 - A proposal specifying a market closed spot market should be rejected.
 
 To ensure a market can only ever support one **active** PAP program:
+
 - Given a market with an active PAP program specifying the markets quote asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
 - Given a market with an active PAP program specifying the markets base asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
 - Given an active PAP program is cancelled. A user should be able to propose a PAP program specifying that same market.
@@ -175,7 +176,7 @@ To ensure a market can only ever support one **active** PAP program:
 ### Protocol Automated Orders
 
 - Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction.
-- Given the program specifies a source asset matching the quote asset of the market, the network will place a buy order at the start of an auction triggered by 
+- Given the program specifies a source asset matching the quote asset of the market, it will place a sell order at the start of the auction.
 
 - The price of the order will equal the product of the oracle price and the programs oracle offset factor.
 
