@@ -106,84 +106,84 @@ where:
 
 #### Source tokens and markets
 
-- A proposal specifying a market which is a futures market should be rejected.
-- A proposal specifying a market which is a perpetual market should be rejected.
-- A proposal specifying a source token which is neither the base asset or quote asset of the specified spot market should be rejected.
-- A proposal specifying a market closed spot market should be rejected.
+- A proposal specifying a market which is a futures market should be rejected. (<a name="0097-PAPU-001" href="#0097-PAPU-001">0097-PAPU-001</a>).
+- A proposal specifying a market which is a perpetual market should be rejected. (<a name="0097-PAPU-002" href="#0097-PAPU-002">0097-PAPU-002</a>).
+- A proposal specifying a source token which is neither the base asset or quote asset of the specified spot market should be rejected. (<a name="0097-PAPU-003" href="#0097-PAPU-003">0097-PAPU-003</a>).
+- A proposal specifying a market closed spot market should be rejected. (<a name="0097-PAPU-004" href="#0097-PAPU-004">0097-PAPU-004</a>).
 
 To ensure a market can only ever support one **active** PAP program:
 
-- Given a market with an active PAP program specifying the markets quote asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
-- Given a market with an active PAP program specifying the markets base asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset.
-- Given an active PAP program is cancelled. A user should be able to propose a PAP program specifying that same market.
+- Given a market with an active PAP program specifying the markets quote asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset. (<a name="0097-PAPU-005" href="#0097-PAPU-005">0097-PAPU-005</a>).
+- Given a market with an active PAP program specifying the markets base asset as the source token; if another proposal is created specifying that market, it should be rejected regardless of whether the source token specified was the markets quote or base asset. (<a name="0097-PAPU-006" href="#0097-PAPU-006">0097-PAPU-006</a>).
+- Given an active PAP program is cancelled. A user should be able to propose a PAP program specifying that same market. (<a name="0097-PAPU-007" href="#0097-PAPU-007">0097-PAPU-007</a>).
 
 #### Account types
 
 - A user should be able to create A PAP program specifying one of the following account types as the from account type (any other account type should be rejected).
-- `ACCOUNT_TYPE_BUY_BACK_FEES`
+- `ACCOUNT_TYPE_BUY_BACK_FEES` (<a name="0097-PAPU-008" href="#0097-PAPU-008">0097-PAPU-008</a>).
 
 - A user should be able to create A PAP program specifying one of the following account types as the to account type (any other account type should be rejected).
-- `ACCOUNT_TYPE_INSURANCE`
-- `ACCOUNT_TYPE_GLOBAL_INSURANCE`
-- `ACCOUNT_TYPE_GLOBAL_REWARD`
-- `ACCOUNT_TYPE_NETWORK_TREASURY`
-- `ACCOUNT_TYPE_BUY_BACK_FEES`
+- `ACCOUNT_TYPE_INSURANCE` (<a name="0097-PAPU-009" href="#0097-PAPU-009">0097-PAPU-009</a>).
+- `ACCOUNT_TYPE_GLOBAL_INSURANCE` (<a name="0097-PAPU-010" href="#0097-PAPU-010">0097-PAPU-010</a>).
+- `ACCOUNT_TYPE_GLOBAL_REWARD` (<a name="0097-PAPU-011" href="#0097-PAPU-011">0097-PAPU-011</a>).
+- `ACCOUNT_TYPE_NETWORK_TREASURY` (<a name="0097-PAPU-012" href="#0097-PAPU-012">0097-PAPU-012</a>).
+- `ACCOUNT_TYPE_BUY_BACK_FEES` (<a name="0097-PAPU-013" href="#0097-PAPU-013">0097-PAPU-013</a>).
 
-- A user should be able to create more than one PAP program funded from the same buyback account providing different markets are specified.
+- A user should be able to create more than one PAP program funded from the same buyback account providing different markets are specified. (<a name="0097-PAPU-014" href="#0097-PAPU-014">0097-PAPU-014</a>).
 
 #### Oracles
 
-- A proposal specifying an oracle offset factor less than or equal to zero should be rejected.
-- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor greater than 1 (resulting in automated buy orders at a price above the oracle price).
-- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor less than 1 (resulting in automated buy orders at a price above the oracle price).
-- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor greater than 1 (resulting in automated sell orders at a price above the oracle price).
-- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor less than 1 (resulting in automated sell buy orders at a price above the oracle price).
+- A proposal specifying an oracle offset factor less than or equal to zero should be rejected. (<a name="0097-PAPU-015" href="#0097-PAPU-015">0097-PAPU-015</a>).
+- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor greater than 1 (resulting in automated buy orders at a price above the oracle price). (<a name="0097-PAPU-016" href="#0097-PAPU-016">0097-PAPU-016</a>).
+- A user should be able to create a PAP program specifying a source token which is the quote asset of a market with an oracle offset factor less than 1 (resulting in automated buy orders at a price above the oracle price). (<a name="0097-PAPU-017" href="#0097-PAPU-017">0097-PAPU-017</a>).
+- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor greater than 1 (resulting in automated sell orders at a price above the oracle price). (<a name="0097-PAPU-018" href="#0097-PAPU-018">0097-PAPU-018</a>).
+- A user should be able to create a PAP program specifying a source token which is the base asset of a market with an oracle offset factor less than 1 (resulting in automated sell buy orders at a price above the oracle price). (<a name="0097-PAPU-019" href="#0097-PAPU-019">0097-PAPU-019</a>).
 
 #### Market updates
 
-- If the spot market specified in the PAP program is closed, then the PAP program should be cancelled.
+- If the spot market specified in the PAP program is closed, then the PAP program should be cancelled. (<a name="0097-PAPU-020" href="#0097-PAPU-020">0097-PAPU-020</a>).
 
 ### Expiry and cancellations
 
-- Given the program currently has no funds earmarked for an auction, if a program's expiry timestamp is reached, the program will be cancelled and no further auctions will take place.
-- Given the program currently has earmarked funds for an auction but is not yet in the auction, if a program's expiry timestamp is reached, the program will be cancelled, the earmarked funds released and no further auctions will take place.
-- Given the program is currently in an automated auction, if a program's expiry timestamp is reached, the program will only be cancelled when the current auction uncrosses at which point no further auctions will take place.
+- Given the program currently has no funds earmarked for an auction, if a program's expiry timestamp is reached, the program will be cancelled and no further auctions will take place. (<a name="0097-PAPU-021" href="#0097-PAPU-021">0097-PAPU-021</a>).
+- Given the program currently has earmarked funds for an auction but is not yet in the auction, if a program's expiry timestamp is reached, the program will be cancelled, the earmarked funds released and no further auctions will take place. (<a name="0097-PAPU-022" href="#0097-PAPU-022">0097-PAPU-022</a>).
+- Given the program is currently in an automated auction, if a program's expiry timestamp is reached, the program will only be cancelled when the current auction uncrosses at which point no further auctions will take place. (<a name="0097-PAPU-023" href="#0097-PAPU-023">0097-PAPU-023</a>).
 
 ### Snapshots
 
-- Once the volume snapshot of a program is triggered, if the balance of the from account is below the minimum auction size specified in the program, then no funds are earmarked for the next auction.
-- Once the volume snapshot of a program is triggered, if the balance of the from account is above the maximum auction size specified in the program, then the maximum auction size is earmarked for the next auction.
+- Once the volume snapshot of a program is triggered, if the balance of the from account is below the minimum auction size specified in the program, then no funds are earmarked for the next auction. (<a name="0097-PAPU-024" href="#0097-PAPU-024">0097-PAPU-024</a>).
+- Once the volume snapshot of a program is triggered, if the balance of the from account is above the maximum auction size specified in the program, then the maximum auction size is earmarked for the next auction. (<a name="0097-PAPU-025" href="#0097-PAPU-025">0097-PAPU-025</a>).
 
-- If a volume snapshot is triggered and then before the next auction, another volume snapshot is triggered, the program should release all funds previously earmarked before re-calculating how many tokens to earmark for it's next auction.
+- If a volume snapshot is triggered and then before the next auction, another volume snapshot is triggered, the program should release all funds previously earmarked before re-calculating how many tokens to earmark for it's next auction. (<a name="0097-PAPU-026" href="#0097-PAPU-026">0097-PAPU-026</a>).
 
-- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `750` tokens for it's next auction, once the snapshot of program B is triggered it will only be allocated `250` tokens for it's next auction. This happens regardless of whether the auction of program B is triggered before the auction of program A.
-- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `1000` tokens for it's next auction, once the snapshot of program B is triggered it will be allocated `0` tokens and it's next auction will be skipped. This happens regardless of whether the auction of program B is triggered before the auction of program A.
+- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `750` tokens for it's next auction, once the snapshot of program B is triggered it will only be allocated `250` tokens for it's next auction. This happens regardless of whether the auction of program B is triggered before the auction of program A. (<a name="0097-PAPU-027" href="#0097-PAPU-027">0097-PAPU-027</a>).
+- Given a network with two PAP programs, `A` and `B`, funded from the same account with a balance of `1000`. If the snapshot of program A is triggered and is allocated `1000` tokens for it's next auction, once the snapshot of program B is triggered it will be allocated `0` tokens and it's next auction will be skipped. This happens regardless of whether the auction of program B is triggered before the auction of program A. (<a name="0097-PAPU-028" href="#0097-PAPU-028">0097-PAPU-028</a>).
 
 ### Auctions
 
-- Given the market is currently in continuous trading, once an auction trigger occurs, the market should be put into an auction with an auction end time equal to the current time plus the program auction length.
-- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is greater than the current time plus the program auction length, the auction end time is unchanged
-- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is less than the current time plus the program auction length, the auction end time is extended to the current time plus the program auction length.
-- Given the market is currently suspended, once an auction trigger occurs, the market remains suspended and the auction is skipped.
+- Given the market is currently in continuous trading, once an auction trigger occurs, the market should be put into an auction with an auction end time equal to the current time plus the program auction length. (<a name="0097-PAPU-029" href="#0097-PAPU-029">0097-PAPU-029</a>).
+- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is greater than the current time plus the program auction length, the auction end time is unchanged.  (<a name="0097-PAPU-030" href="#0097-PAPU-030">0097-PAPU-030</a>).
+- Given the market is currently in a monitoring auction, once an auction trigger occurs, if the current auction end time is less than the current time plus the program auction length, the auction end time is extended to the current time plus the program auction length. (<a name="0097-PAPU-031" href="#0097-PAPU-031">0097-PAPU-031</a>).
+- Given the market is currently suspended, once an auction trigger occurs, the market remains suspended and the auction is skipped. (<a name="0097-PAPU-032" href="#0097-PAPU-032">0097-PAPU-032</a>).
 
-- Given an auction trigger occurs, if the price oracle has not yet reported a valid price, then the auction is skipped.
-- Given an auction trigger occurs, if the price oracle has reported a valid price but the value is stale, then the auction is skipped.
+- Given an auction trigger occurs, if the price oracle has not yet reported a valid price, then the auction is skipped. (<a name="0097-PAPU-033" href="#0097-PAPU-033">0097-PAPU-033</a>).
+- Given an auction trigger occurs, if the price oracle has reported a valid price but the value is stale, then the auction is skipped. (<a name="0097-PAPU-034" href="#0097-PAPU-034">0097-PAPU-034</a>).
 
-- Given the end of an auction is reached and the book is not crossed, the market will remain in auction un till an uncrossing price can be determined.
-- Given the end of an auction is reached and the book is crossed, if the uncrossing price would break an active price monitoring trigger, the auction is extended by the relevant length.
-- Given the end of an auction is reached and the book is crossed, if the uncrossing price would not break an active price monitoring trigger, the auction is ended.
+- Given the end of an auction is reached and the book is not crossed, the market will remain in auction un till an uncrossing price can be determined. (<a name="0097-PAPU-035" href="#0097-PAPU-035">0097-PAPU-035</a>).
+- Given the end of an auction is reached and the book is crossed, if the uncrossing price would break an active price monitoring trigger, the auction is extended by the relevant length. (<a name="0097-PAPU-036" href="#0097-PAPU-036">0097-PAPU-036</a>).
+- Given the end of an auction is reached and the book is crossed, if the uncrossing price would not break an active price monitoring trigger, the auction is ended. (<a name="0097-PAPU-037" href="#0097-PAPU-037">0097-PAPU-037</a>).
 
 ### Protocol Automated Orders
 
-- Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction.
-- Given the program specifies a source asset matching the quote asset of the market, it will place a sell order at the start of the auction.
+- Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-038" href="#0097-PAPU-038">0097-PAPU-038</a>).
+- Given the program specifies a source asset matching the quote asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-039" href="#0097-PAPU-039">0097-PAPU-039</a>).
 
-- The price of the order will equal the product of the oracle price and the programs oracle offset factor.
+- The price of the order will equal the product of the oracle price and the programs oracle offset factor. (<a name="0097-PAPU-040" href="#0097-PAPU-040">0097-PAPU-040</a>).
 
-- Given the program specifies a source asset matching the base asset of the market, the size of the order will match the number of tokens earmarked for the auction during the latest snapshot.
-- Given the program specifies a source asset matching the quote asset of the market, the size of the order will use the number of tokens earmarked for the auction during the latest snapshot to calculate the correct order size given the order price and current fee factors.
-- If the fee factors change during an auction resulting in the network being unable to cover the fees on auction uncrossing. The order will be stopped and the auction will end without the network exchanging any tokens.
+- Given the program specifies a source asset matching the base asset of the market, the size of the order will match the number of tokens earmarked for the auction during the latest snapshot. (<a name="0097-PAPU-041" href="#0097-PAPU-041">0097-PAPU-041</a>).
+- Given the program specifies a source asset matching the quote asset of the market, the size of the order will use the number of tokens earmarked for the auction during the latest snapshot to calculate the correct order size given the order price and current fee factors. (<a name="0097-PAPU-042" href="#0097-PAPU-042">0097-PAPU-042</a>).
+- If the fee factors change during an auction resulting in the network being unable to cover the fees on auction uncrossing. The order will be stopped and the auction will end without the network exchanging any tokens. (<a name="0097-PAPU-043" href="#0097-PAPU-043">0097-PAPU-043</a>).
 
-- If an automated purchase order is not filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order) and all earmarked funds returned to the relevant source account.
-- If an automated purchase order is only partially filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order), any swapped tokens transferred to the correct to account, and the remaining earmarked funds returned to the relevant source account.
-- If an automated purchase order is fully filled on auction uncrossing, all swapped tokens are transferred to the correct to account.
+- If an automated purchase order is not filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order) and all earmarked funds returned to the relevant source account. (<a name="0097-PAPU-044" href="#0097-PAPU-044">0097-PAPU-044</a>).
+- If an automated purchase order is only partially filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order), any swapped tokens transferred to the correct to account, and the remaining earmarked funds returned to the relevant source account. (<a name="0097-PAPU-045" href="#0097-PAPU-045">0097-PAPU-045</a>).
+- If an automated purchase order is fully filled on auction uncrossing, all swapped tokens are transferred to the correct to account. (<a name="0097-PAPU-046" href="#0097-PAPU-046">0097-PAPU-046</a>).
