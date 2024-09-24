@@ -171,7 +171,13 @@ A fee is taken from all transfers (except transfers from a vested account to a g
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
 As such, the transfer fee value used will be: `min(transfer amount x transfer.fee.factor, transfer.fee.maxQuantumAmount x quantum)`, `quantum` is for asset
-The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
+The fee is taken from the transfer initiator's account immediately on execution, and is taken either:
+
+1. on top of the total amount transferred,
+2. subtracted from the amount being transferred (so that the target account gets `amount-fees` amount).
+
+This should be governed by an optional parameter with the default option being that fees are added on top of the total amount transferred.
+
 It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
 
@@ -187,7 +193,7 @@ For each party and for each asset store the an amount which tracks all trading f
 For each key for each asset assume you store a value denoted `c`.
 During the epoch `k`:
 
-- if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `-min(f-c,0)`. The system subsequently updates `c <- max(0,c-f)`.
+- if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `f_actual = -min(f-c,0)`. The system subsequently updates `c <- max(0,c-f)`.
 
 At the end of epoch `k`:
 
@@ -198,6 +204,7 @@ At the end of epoch `k`:
 1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
+If `c=0` then such amount is `0`. Is `c>=transfer.fee.maxQuantumAmount x quantum` then such amount is infinity. Otherwise the amount is `c/transfer.fee.factor`. In the case of recurring transfers this is only applied to the first transfer.
 
 ## Proposed command
 
@@ -223,6 +230,12 @@ message Transfer {
   oneof kind {
     OneOffTransfer one_off = 101;
     RecurringTransfer recurring = 102;
+  }
+
+  // Fees added on top or subtracted
+  oneof fees {
+    OnTop on_top = 201; (default)
+    Subtracted subtracted = 202;
   }
 }
 
@@ -261,6 +274,9 @@ message CancelTransfer {
 | `transfer.feeDiscountDecayFraction` | String (decimal) | greater than or equal to `0` and strictly less than `1` | `"0.5"`      | The speed of cumulated trading fees decay for the purpose of being used to do transfer-fee-free transfers |
 
 ## Acceptance criteria
+
+- When specifying a transfer of any kind the default behaviour is for the fees to be added on top of the amount being transferred. (<a name="0057-TRAN-081" href="#0057-TRAN-081">0057-TRAN-081</a>)
+- When specifying a transfer of any kind it's possible to provide an optional parameter such that the fees are taken from amount being transferred so that the target account gets `transfer_amount - fees`. (<a name="0057-TRAN-082" href="#0057-TRAN-082">0057-TRAN-082</a>)
 
 ### One off transfer tests
 
@@ -421,4 +437,3 @@ If a party sets up a recurring transfer with a transfer interval strictly greate
 
 A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-080" href="#0057-TRAN-080">0057-TRAN-080</a>)
 s
-
