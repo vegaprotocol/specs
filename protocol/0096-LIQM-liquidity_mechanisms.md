@@ -4,8 +4,8 @@
 
 The aim of the on-chain liquidity mechanisms are to reward parties for supplying competitively priced liquidity and facilitating the growth of a market. At a high level, the liquidity mechanisms are:
 
-- parties [accrue](#accruing-els-points) ELS points over time proportional to their maker fees earned.
-- parties are [designated](#designating-liquidity-providers) as LPs on an epoch by epoch basis if they receive above a specified proportion of the markets maker fees.
+- parties [accrue](#accruing-els-points) ELS points over time proportional to their maker volume earned.
+- parties are [designated](#designating-liquidity-providers) as LPs on an epoch by epoch basis if they comprise more than a specified proportion of the markets maker volume.
 - parties [receive](#distributing-liquidity-fees) a proportion of the liquidity fees accumulated in an epoch relative to their [accrued](#accruing-els-points) ELS points and [volume of notional](#volume-of-notional) (but only when designated as an LP).
 
 With the above mechanisms the protocol incentives the following desirable behaviour.
@@ -21,48 +21,114 @@ The mechanisms also enable the following features:
 
 ## Network parameters
 
-### `liquidityProvider.proportionRequirement`
+### `liquidity.providers.makerRequirement`
 
-A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker fees a party must receive in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
+A number in the range $[0, 1]$ which defines the minimum proportion of a markets maker volume a party must comprise in order to be [designated](#designating-liquidity-providers) as an LP for the next epoch. The parameter should default to `0.1`.
 
 Updates to this parameter will be used the next time LPs are designated, i.e. updating the network parameter will not result in LPs instantly being re-designated.
 
-## Accruing ELS Points
+### `liquidity.els.defaultQuantumFactor`
 
-Whenever a market proposal is enacted (passes opening auction), an internal Vega asset is created to track the ELS points of that market. For a successor market, a new asset should not be created and instead the ELS asset of the parent market should be used.
+A number in the range $(0, 10000]$ which defines the amount to scale the quantum of the markets settlement or quote asset by (for derivative and spot markets respectively) when setting the initial quantum of the internal asset representing the ELS points for the market.
 
-At the end of each epoch, each party accrues ELS points for the relevant market as follows:
+Note, this parameter influences the minimum amount of ELS points a party will have to accrue before being able to transfer.
 
-$$ELS_{i_j} = V_{i_j} \cdot 10^{-Q}$$
+### `liquidity.els.transferEnabled`
 
-Where:
+A boolean, defaulting to `true`, which sets whether internal assets representing ELS points are allowed to be transferred when the asset is first created.
 
-- $ELS_{j}$ is the ELS points accrued by party $j$ in epoch $i$
-- $V_{i_j}$ is the notional maker fees of party $j$ in epoch $i$
-- $Q$ is the quantum of the asset in which the markets prices are expressed in (settlement for future and perpetual markets, quote for spot markets)
+Note, the restriction on the asset can always be updated later through governance.
 
-> [!NOTE]
-> the maker fees is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of maker fees received.
+### `liquidity.els.settlementAssetEnabled`
 
-## Designating Liquidity Providers
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the settlement asset of a derivative market when they are first created.
 
-A party will only be able to receive liquidity fees or earn liquidity rewards providing they are designated as an LP for that epoch.
+Note, the restriction on the asset can always be updated later through governance.
 
-A party will only be designated as an LP providing they received more than a specified proportion of the markets total maker fees in the previous epoch, let this requirement be $N$ (the network parameter `liquidityProvider.proportionRequirement`). Throughout the epoch the network will track each parties maker fees, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
+### `liquidity.els.baseAssetEnabled`
+
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the base asset of a spot market when they are first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+### `liquidity.els.quoteAssetEnabled`
+
+A boolean, defaulting to `false`, which sets whether internal assets representing ELS points are allowed to be used as the quote asset of a spot market when they are first created.
+
+Note, the restriction on the asset can always be updated later through governance.
+
+## Mechanisms
+
+There are three liquidity mechanisms that take place at the end of the epoch.
+
+1. Liquidity fees are distributed amongst liquidity providers
+2. New liquidity providers are designated
+3. The new liquidity providers accrue ELS points
+
+It is critical these stages are done in this order so that:
+
+- Liquidity fees are distributed only to parties who were designated as LPs for the epoch that is ending.
+- ELS points are accrued by parties who have been designated for the next epoch based on the volume they created in the epoch that is ending.
+
+Note, sections in this specification are not listed in the order in which they should be executed but are instead ordered for readability. Refer to the list above for order of execution.
+
+### Designating Liquidity Providers
+
+A party will only be able to accrue ELS points, receive liquidity fees, or earn liquidity rewards providing they are designated as an LP for that epoch.
+
+A party will only be designated as an LP providing they comprised more than a specified proportion of the markets total maker volume in the previous epoch, let this requirement be $N$ (the network parameter `liquidity.providers.makerRequirement`). Throughout the epoch the network will track each parties maker volume, $M$.  At the end of epoch $i$, a party will be designated as an LP for epoch $i+1$ providing:
 
 $$\frac{M_{i_j}}{\sum_{k}^{n}{M_{i_j}}} >= N$$
 
 Where:
 
-- $M_{i_j}$ is the maker fees of party ${j}$ in epoch ${i}$
-- $N$ the requirement specified by the network parameter `liquidityProvider.proportionRequirement`
+- $M_{i_j}$ is the maker volume of party ${j}$ in epoch ${i}$
+- $N$ the requirement specified by the network parameter `liquidity.providers.makerRequirement`
 
 By designating parties as LPs on an epoch by epoch basis the protocol ensures:
 
 - "in-active" parties with a large number of ELS points will no longer be rewarded through liquidity mechanisms should they stop providing liquidity (or provide un-competitive liquidity).
 - "late-arriving" parties with a small number of ELS points will be rewarded through liquidity mechanisms if they provide competitive liquidity and as such comprise a larger proportion of the markets volume.
 
-## Volume of Notional
+### ELS Points
+
+#### Creating ELS points
+
+Whenever a market proposal is enacted (passes opening auction), an internal Vega asset is created to track the ELS points of that market. For a successor market, a new asset should not be created and instead the ELS asset of the parent market should be used.
+
+When ever an internal asset representing ELS points is created the [internal asset restrictions](./0040-ASSF-asset_framework.md#built-in-assets) are defaulted to the respective [network parameter](#network-parameters). Note the faucet restriction has no equivalent network parameter as minting through a faucet should be restricted for these assets and minting should be controlled by the protocol as per the mechanisms defined in [accruing ELS points](#accruing-els-points).
+
+The assets quantum should be set using the following formula. Note, both the restrictions and quantum can later be updated through governance.
+
+$$q_{ELS} = \frac{q}{n}$$
+
+where:
+
+- $q_{ELS}$ is the quantum of the internal asset representing the  
+- $q$ is the quantum of the settlement or quote asset depending on whether the market is a derivative or spot market.
+- $n$ is the network parameter `liquidity.els.defaultQuantumFactor`
+
+The relationship between how many points a party must then accrue before they will have enough to pass spam protection when transferring assets can simply be thought of as:
+
+$$\text{transfer.minTransferQuantumMultiple}\cdot\text{liquidity.els.defaultQuantumFactor}$$
+
+#### Accruing ELS points
+
+At the end of each epoch, each party designated as an LP accrues ELS points for the relevant market as follows:
+
+$$ELS_{i_j} = V_{i_j} \cdot 10^{-Q}$$
+
+Where:
+
+- $ELS_{j}$ is the ELS points accrued by party $j$ in epoch $i$
+- $V_{i_j}$ is the notional maker volume of party $j$ in epoch $i$
+- $Q$ is the quantum of the asset in which the markets prices are expressed in (settlement for future and perpetual markets, quote for spot markets)
+
+> [!NOTE]
+> the maker volume is scaled by the assets quantum such that 1 ELS point is earned for approx. every 1 USD of notional volume created.
+
+
+### Volume of Notional
 
 The volume of notional is a measure of how much liquidity an LP provided to a market throughout the epoch.
 
@@ -73,7 +139,7 @@ The range and required proportion of the epoch are controlled though market conf
 - `lp_price_range`: a number in the range $[0, 100]$ which defines the range in which an LPs orders will contribute towards their volume of notional, refer to section [instantaneous volume-of-notional](#instantaneous volume of notional) for more details.
 - `minimum_time_fraction`: a number in the range $[0, 1]$ which defines the minimum proportion of an epoch an LP must have provided an amount of volume for in order for that amount to be set as their volume of notional, refer to section [calculating the volume of notional](#calculating-the-volume-of-notional) for more details.
 
-### Instantaneous Volume of Notional
+#### Instantaneous Volume of Notional
 
 To calculate each LPs volume of notional, throughout the epoch, the network must sample and store the current volume of notional supplied by each LP at that point. Call this the instantaneous volume of notional. For now this is done once a block but could be sampled randomly to reduce the amount of data stored.
 
@@ -102,15 +168,15 @@ Whilst in monitoring auctions:
 
 - If there is no 'indicative uncrossing price' each LP is treated as supplying `0` volume.
 
-### Calculating the Volume of Notional
+#### Calculating the Volume of Notional
 
 At the end of the epoch, before distributing fees, each LPs `volume of notional` is set to the largest volume of notional that was supplied for at least a specified proportion of the epoch, i.e. in a sorted array of supplied liquidity amounts, the commitment amount would be element $i$ where:
 
 $$i= \lceil\text{len(array)}\cdot{\text{minTimeFraction}}\rceil$$
 
-## Distributing Liquidity Fees
+### Distributing Liquidity Fees
 
-At the end of epoch, after each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points as follows.
+At the end of epoch, before new LPs are designated and each party accrues ELS points for that epochs volume, the accumulated liquidity fees are distributed pro-rata amongst liquidity providers weighted by their accrued ELS points and volume of notional as follows.
 
 $$f_{i_j} = f_{i} \cdot \frac{ELS_j\cdot{V_j}}{\sum_{k}^{n}{ELS_k\cdot{L_k}}}$$
 

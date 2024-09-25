@@ -53,6 +53,7 @@ message BuiltinAsset {
   string symbol = 3;
   string totalSupply = 4;
   uint64 decimals = 5;
+  AssetRestrictions assetRestrictions = 6;
 }
 
 message ERC20 {
@@ -63,6 +64,14 @@ message ERC20 {
 
 message DevAssets {
   repeated AssetSource sources = 1;
+}
+
+message AssetRestrictions {
+  bool faucetEnabled = 1;
+  bool transferEnabled = 1;
+  bool baseAssetEnabled = 1;
+  bool quoteAssetEnabled = 1;
+  bool settlementAssetEnabled = 1;
 }
 ```
 
@@ -211,6 +220,23 @@ NOTE 2: Before running this function, the user must run the ERC-20-standard `app
 ##### Other Ethereum Token Standards (Depositing)
 
 This section will be expanded if additional ethereum based token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
+
+#### Built-In Assets
+
+Built-in assets work much the same as any Vega asset except they can not be deposited or withdrawn. The creation of internal assets through governance proposals is restricted by the network parameter, `limits.assets.proposeBuiltinEnabled`.
+
+They also optionally can be restricted from use in specific functions. These functions include:
+
+- minting
+- transfers
+- as the base asset in a spot market
+- as the quote asset in a spot market
+- as the settlement asset in a derivatives market (future or perpetual)
+
+These restrictions can be updated at any point through governance. When updating an asset the following cases should be considered:
+
+- given an asset allows transfers, if a delayed one-off or recurring transfer is created and then the asset is updated to not allow transfers, any outstanding transfers are not cancelled and are executed as normal.
+- given an asset allows use as a base, quote, or settlement asset, if a market is created using the asset and the asset is later updated to not allow the respective use, the market is not cancelled and should operate as normal.
 
 #### Other Assets
 
