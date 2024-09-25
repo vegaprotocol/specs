@@ -175,7 +175,7 @@ To ensure a market can only ever support one **active** PAP program:
 ### Protocol Automated Orders
 
 - Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-038" href="#0097-PAPU-038">0097-PAPU-038</a>).
-- Given the program specifies a source asset matching the quote asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-039" href="#0097-PAPU-039">0097-PAPU-039</a>).
+- Given the program specifies a source asset matching the quote asset of the market, it will place a buy order at the start of the auction. (<a name="0097-PAPU-039" href="#0097-PAPU-039">0097-PAPU-039</a>).
 
 - The price of the order will equal the product of the oracle price and the programs oracle offset factor. (<a name="0097-PAPU-040" href="#0097-PAPU-040">0097-PAPU-040</a>).
 
