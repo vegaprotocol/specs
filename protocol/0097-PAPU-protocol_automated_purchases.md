@@ -168,7 +168,7 @@ To ensure a market can only ever support one **active** PAP program:
 - Given an auction trigger occurs, if the price oracle has not yet reported a valid price, then the auction is skipped. (<a name="0097-PAPU-033" href="#0097-PAPU-033">0097-PAPU-033</a>).
 - Given an auction trigger occurs, if the price oracle has reported a valid price but the value is stale, then the auction is skipped. (<a name="0097-PAPU-034" href="#0097-PAPU-034">0097-PAPU-034</a>).
 
-- Given the end of an auction is reached and the book is not crossed, the market will remain in auction un till an uncrossing price can be determined. (<a name="0097-PAPU-035" href="#0097-PAPU-035">0097-PAPU-035</a>).
+- Given the end of an auction is reached and the book is not crossed, the auction will end, the automated purchase order removed from the book, and the funds earmarked for the auction released. (<a name="0097-PAPU-035" href="#0097-PAPU-035">0097-PAPU-035</a>).
 - Given the end of an auction is reached and the book is crossed, if the uncrossing price would break an active price monitoring trigger, the auction is extended by the relevant length. (<a name="0097-PAPU-036" href="#0097-PAPU-036">0097-PAPU-036</a>).
 - Given the end of an auction is reached and the book is crossed, if the uncrossing price would not break an active price monitoring trigger, the auction is ended. (<a name="0097-PAPU-037" href="#0097-PAPU-037">0097-PAPU-037</a>).
 
