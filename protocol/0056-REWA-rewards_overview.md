@@ -1188,13 +1188,6 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 ### Valid combinations
 
-- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should not be distributed since no eligibility criteria are set:
-  - no dispatch metric specified
-  - no markets specified
-  - no staking requirement specified
-  - no position requirement specified
-(<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
-
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should be uniformly distributed amongst all entities meeting the staking requirement regardless of trading activity.
   - no dispatch metric specified
   - no markets specified
@@ -1215,6 +1208,13 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 (<a name="0056-REWA-174" href="#0056-REWA-174">0056-REWA-174</a>)
 
 ### Invalid combinations
+
+- Given a recurring transfer using the eligible entities metric and the below combination of fields, rewards should not be distributed since no eligibility criteria are set:
+  - no dispatch metric specified
+  - no markets specified
+  - no staking requirement specified
+  - no position requirement specified
+(<a name="0056-REWA-171" href="#0056-REWA-171">0056-REWA-171</a>)
 
 - Given a recurring transfer using the eligible entities metric and the below combination of fields, the transfer should be rejected.
   - no dispatch metric specified
