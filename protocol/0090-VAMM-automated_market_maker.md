@@ -133,7 +133,7 @@ The base price can either be a fixed scalar specified by a user or an [oracle co
 
 When oracle-driven base price is selected during the vAMM creation then the system first awaits the receipt of the next data point from the oracle and then follows the process outlined in [creation/amendment process](#creationamendment-process) with `base price` set to that value.
 
-Similarly, when the vAMM configuration is amended to use the oracle-driven base price rather than a fixed user supplied value, the system awaits the receipt of the next data point from the oracle and then uses that value as the `base price` in the regular amendment transaction outlined above.
+Similarly, when the vAMM configuration is amended to use the oracle-driven base price rather than a fixed user supplied value, the system awaits the receipt of the next data point from the oracle and then uses that value as the `base price` in the regular amendment transaction outlined above. Please note that **configuration amendment** from a fixed to oracle-driven base price should only be rejected if the oracle specification is incorrect. If the `base price` received from the oracle is such that the **value amendment** is rejected then the value should remain unchanged, but the next **value amendment** should still be attempted the next time around.
 
 #### Maximum update frequency
 
