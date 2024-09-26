@@ -65,7 +65,7 @@ The `Concentrated Liquidity` AMM is a market maker utilising a Uniswap v3-style 
 
 The concentrated liquidity market maker consists of two liquidity curves of prices joined at a given `base price`, an `upper` consisting of the prices above this price point and a `lower` for prices below it. At prices below the `base price` the market maker will be in a long position, and at prices above this `base price` the market maker will be in a short position. This is configured through a number of parameters:
 
-- **Base Price**: The base price is the central price for the market maker. When trading at this level the market maker will have a position of `0`. Volumes for prices above this level will be taken from the `upper` curve and volumes for prices below will be taken from the `lower` curve.
+- **Base Price**: The base price is the central price for the market maker. When trading at this level the market maker will have a position of `0`. Volumes for prices above this level will be taken from the `upper` curve and volumes for prices below will be taken from the `lower` curve. This price can be either user supplied or set (and maintained with an oracle). Please see [oracle-driven base price](#oracle-driven-base-price) section for more detail on the later case.
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
@@ -98,7 +98,7 @@ A `Concentrated Liquidity` AMM has an inherent linkage between position and impl
            - Enter a limit order to sell `5` contracts for `7 USDT` into the order book and allow it to match.
      1. If a price level is reached such that the current price is more than the max slippage specified away from the best bid, reject the transaction.
      1. If there is no upper range specified, it is marked as created immediately.
-  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, then the vAMM would need to become short in order to synchronise with the market. Follow an identical process as above but instead on increasing price levels from `best ask`
+  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, then the vAMM would need to become long in order to synchronise with the market. Follow an identical process as above but instead on increasing price levels from `best ask`
      1. If there is no lower range specified, it is marked as created immediately.
 
 #### Amendment
@@ -126,6 +126,18 @@ In addition to amending to reduce the size a user may also cancel their AMM enti
   - This acts similarly to the mode when an AMM is synchronising, except that the position will be closed in pieces as the price moves towards the `base price` rather than all at once at the nearest price.
 
 Note that, whilst an `Abandon Position` transaction immediately closes the AMM a `Reduce-Only` transaction will keep it active for an uncertain amount of time into the future. During this time, any Amendment transactions received should move the AMM out of `Reduce-Only` mode and back into standard continuous operation.
+
+### Oracle-driven base price
+
+The base price can either be a fixed scalar specified by a user or an [oracle configuration](./0045-DSRC-data_sourcing.md). It should be possible to switch between the two with a regular vAMM amendment transaction.
+
+When oracle-driven base price is selected during the vAMM creation then the system first awaits the receipt of the next data point from the oracle and then follows the process outlined in [creation/amendment process](#creationamendment-process) with `base price` set to that value.
+
+Similarly, when the vAMM configuration is amended to use the oracle-driven base price rather than a fixed user supplied value, the system awaits the receipt of the next data point from the oracle and then uses that value as the `base price` in the regular amendment transaction outlined above.
+
+#### Maximum update frequency
+
+An optional non-negative parameter controlling the maximum update frequency should be included in the oracle-driven base price configuration. When set to `0` the `base price` will update each time a new value is received from the oracle. When set to a positive value, the `base price` should be amended to the last value received from the oracle once the specified time elapses. If such value is the same as the currently specified `base price` then there should be no effect. The default value of this parameter should be `0`.
 
 ### Determining Volumes and Prices
 
