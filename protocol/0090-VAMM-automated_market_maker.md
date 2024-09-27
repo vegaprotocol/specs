@@ -129,7 +129,7 @@ Note that, whilst an `Abandon Position` transaction immediately closes the AMM a
 
 ### Oracle-driven base price
 
-The base price can either be a fixed scalar specified by a user or an [oracle configuration](./0045-DSRC-data_sourcing.md). It should be possible to switch between the two with a regular vAMM amendment transaction.
+The base price can either be a fixed scalar specified by a user or one of the oracles already setup for the market. It should be possible to switch between the two with a regular vAMM amendment transaction.
 
 When oracle-driven base price is selected during the vAMM creation then the system first awaits the receipt of the next data point from the oracle and then follows the process outlined in [creation/amendment process](#creationamendment-process) with `base price` set to that value.
 
