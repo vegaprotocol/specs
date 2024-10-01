@@ -772,7 +772,13 @@
       "0016-PFUT-031",
       "0074-BTCH-024",
       "0074-BTCH-025",
-      "0074-BTCH-026"
+      "0074-BTCH-026",
+      "0090-VAMM-038",
+      "0090-VAMM-039",
+      "0090-VAMM-040",
+      "0090-VAMM-041",
+      "0090-VAMM-042",
+      "0090-VAMM-043"
     ]
   },
   "LP 3.0": {
@@ -903,7 +909,7 @@
     ]
   },
   "Program enactment fixes": {
-  "milestone": "genbutemple",
+    "milestone": "genbutemple",
     "acs": [
       "0083-RFPR-056",
       "0083-RFPR-057",

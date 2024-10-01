@@ -129,15 +129,23 @@ Note that, whilst an `Abandon Position` transaction immediately closes the AMM a
 
 ### Oracle-driven base price
 
-The base price can either be a fixed scalar specified by a user or one of the oracles already setup for the market. It should be possible to switch between the two with a regular vAMM amendment transaction.
+The base price can either be a fixed scalar specified by a user or a dynamic value supplied from one of the oracles already setup for the market. It should be possible to switch between the two with a regular vAMM amendment transaction.
 
 When oracle-driven base price is selected during the vAMM creation then the system first awaits the receipt of the next data point from the oracle and then follows the process outlined in [creation/amendment process](#creationamendment-process) with `base price` set to that value.
 
 Similarly, when the vAMM configuration is amended to use the oracle-driven base price rather than a fixed user supplied value, the system awaits the receipt of the next data point from the oracle and then uses that value as the `base price` in the regular amendment transaction outlined above. Please note that **configuration amendment** from a fixed to oracle-driven base price should only be rejected if the oracle specification is incorrect. If the `base price` received from the oracle is such that the **value amendment** is rejected then the value should remain unchanged, but the next **value amendment** should still be attempted the next time around.
 
-#### Maximum update frequency
+#### Minimum price change trigger
 
-An optional non-negative parameter controlling the maximum update frequency should be included in the oracle-driven base price configuration. When set to `0` the `base price` will update each time a new value is received from the oracle. When set to a positive value, the `base price` should be amended to the last value received from the oracle once the specified time elapses. If such value is the same as the currently specified `base price` then there should be no effect. The default value of this parameter should be `0`.
+An optional non-negative parameter `m` controlling the minimum price change (current `base pase` price the vAMM is using vs value arriving from the oracle) should be included in the oracle-driven base price configuration. When set to `0` the `base price` will update each time a new value is received from the oracle. When set to a positive value, the `base price` should only be amended if `abs(base price / new price - 1) >= m`. The default value of this parameter should be `0`.
+
+#### Slippage
+
+When the new value arriving from the oracle satisfies the [minimum price change trigger](#minimum-price-change-trigger) and the change in `base price` will result in a trade, the slippage of the rebasig trade should be considered - if it violates the maximum slippage setup for the vAMM then the base price should remain unchanged. The next time a value is received from the oracle the process should be carried out again. If the amendment transaction also contains a new value for the maximum slippage then it's this new value that should be used to determine if the rebasing trade should go ahead or not.
+
+#### Bounds
+
+When the `base price` is updated as a result of receiving a new value from the specified oracle the bounds should remain unchanged.
 
 ### Determining Volumes and Prices
 
@@ -353,3 +361,15 @@ At market settlement, an AMM's position will be settled alongside all others as 
 - With an existing book consisting solely of vAMM orders, pegged orders referencing best bid/best ask remain deployed, pegged to their pegs, where the best buy/sell vAMM order price acts as the best bid, or best ask peg respectively. (<a name="0090-VAMM-036" href="#0090-VAMM-036">0090-VAMM-036</a>)
 
 - With an existing book consisting solely of vAMM orders on one side, pegged orders referencing best bid/best ask remain deployed on the side with the vAMM orders. Pegged orders referencing the empty side of the book are parked. (<a name="0090-VAMM-037" href="#0090-VAMM-037">0090-VAMM-037</a>)
+
+- It's possible to setup the vAMM so that it uses one of the oracles already available for the market in which it operates for its `base price`. In that case the deployment attempt should be deferred until the next value is received from the oracle. (<a name="0090-VAMM-038" href="#0090-VAMM-038">0090-VAMM-038</a>)
+
+- It's possible to amend the vAMM with a fixed `base price` so that it uses one of the oracles already available for the market in which it operates for its `base price`. The actual change of base price should only happen once the next value is received. (<a name="0090-VAMM-039" href="#0090-VAMM-039">0090-VAMM-039</a>)
+
+- When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is less than `minimum price change trigger` then base price doesn't get updated. The update only happens once a value received from the oracle is more than `minimum price change trigger`. (<a name="0090-VAMM-040" href="#0090-VAMM-040">0090-VAMM-040</a>)
+
+- When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is more than `minimum price change trigger` as well as the slippage of the rebasing trade is within the maximum slippage setup for the vAMM the `base price` is updated when the new value is received from the oracle. (<a name="0090-VAMM-041" href="#0090-VAMM-041">0090-VAMM-041</a>)
+
+- When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is equal to `minimum price change trigger` but the slippage of the rebaising trade is more than the maximum slippage setup for the vAMM the `base price` doesn't get updated. If when the next value arrives and all the conditions are satisfied then that's when the `base price` gets updated. (<a name="0090-VAMM-042" href="#0090-VAMM-042">0090-VAMM-042</a>)
+
+- If the vAMM amendment contains both the new `maximum slippage` and a transaction to change the `base price` from a fixed value to the oracle-driven one, then the `maximum slippage` gets updated immediately and it's that new value that gets considered in all the subsequent amendments triggered by the receipt of the new `base price` from the oracle. (<a name="0090-VAMM-043" href="#0090-VAMM-043">0090-VAMM-043</a>)
