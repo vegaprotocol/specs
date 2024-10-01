@@ -141,7 +141,7 @@ An optional non-negative parameter `m` controlling the minimum price change (cur
 
 #### Slippage
 
-When the new value arriving from the oracle satisfies the [minimum price change trigger](#minimum-price-change-trigger) and the change in `base price` will result in a trade, the slippage of the rebasig trade should be considered - if it violates the maximum slippage setup for the vAMM then the base price should remain unchanged. The next time a value is received from the oracle the process should be carried out again. If the amendment transaction also contains a new value for the maximum slippage then it's this new value that should be used to determine if the rebasing trade should go ahead or not.
+When the new value arriving from the oracle satisfies the [minimum price change trigger](#minimum-price-change-trigger) and the change in `base price` will result in a trade, the slippage of the rebasing trade should be considered - if it violates the maximum slippage setup for the vAMM then the base price should remain unchanged. The next time a value is received from the oracle the process should be carried out again. If the amendment transaction also contains a new value for the maximum slippage then it's this new value that should be used to determine if the rebasing trade should go ahead or not.
 
 #### Bounds
 
@@ -370,6 +370,6 @@ At market settlement, an AMM's position will be settled alongside all others as 
 
 - When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is more than `minimum price change trigger` as well as the slippage of the rebasing trade is within the maximum slippage setup for the vAMM the `base price` is updated when the new value is received from the oracle. (<a name="0090-VAMM-041" href="#0090-VAMM-041">0090-VAMM-041</a>)
 
-- When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is equal to `minimum price change trigger` but the slippage of the rebaising trade is more than the maximum slippage setup for the vAMM the `base price` doesn't get updated. If when the next value arrives and all the conditions are satisfied then that's when the `base price` gets updated. (<a name="0090-VAMM-042" href="#0090-VAMM-042">0090-VAMM-042</a>)
+- When vAMM uses oracle for the base price, and the relative difference between the new and existing `base price` is equal to `minimum price change trigger` but the slippage of the rebasing trade is more than the maximum slippage setup for the vAMM the `base price` doesn't get updated. If when the next value arrives and all the conditions are satisfied then that's when the `base price` gets updated. (<a name="0090-VAMM-042" href="#0090-VAMM-042">0090-VAMM-042</a>)
 
 - If the vAMM amendment contains both the new `maximum slippage` and a transaction to change the `base price` from a fixed value to the oracle-driven one, then the `maximum slippage` gets updated immediately and it's that new value that gets considered in all the subsequent amendments triggered by the receipt of the new `base price` from the oracle. (<a name="0090-VAMM-043" href="#0090-VAMM-043">0090-VAMM-043</a>)
