@@ -75,8 +75,8 @@ Following section includes a number of considerations for the implementation wit
 
 ## Consensus
 
-- Given the network is currently ready to receive data for a reward paying out at the end of epoch `1`. If in epoch `2` the network has received less than `consensusThreshold` matching metric transactions, then no rewards will be distributed at the end of epoch `2`. 
-- Given the network is currently ready to receive data for a reward paying out at the end of epoch `1`. If in epoch `2` the network has received greater than or equal to `consensusThreshold` matching metric transactions, then rewards will be distributed at the end of epoch `2`. 
+- Given the network is currently ready to receive data for a reward paying out at the end of epoch `1`. If in epoch `2` the network has received less than `consensusThreshold` matching metric transactions, then no rewards will be distributed at the end of epoch `2`.
+- Given the network is currently ready to receive data for a reward paying out at the end of epoch `1`. If in epoch `2` the network has received greater than or equal to `consensusThreshold` matching metric transactions, then rewards will be distributed at the end of epoch `2`.
 
 ## Distribution
 
