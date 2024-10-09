@@ -168,14 +168,14 @@ To ensure a market can only ever support one **active** PAP program:
 - Given an auction trigger occurs, if the price oracle has not yet reported a valid price, then the auction is skipped. (<a name="0097-PAPU-033" href="#0097-PAPU-033">0097-PAPU-033</a>).
 - Given an auction trigger occurs, if the price oracle has reported a valid price but the value is stale, then the auction is skipped. (<a name="0097-PAPU-034" href="#0097-PAPU-034">0097-PAPU-034</a>).
 
-- Given the end of an auction is reached and the book is not crossed, the market will remain in auction un till an uncrossing price can be determined. (<a name="0097-PAPU-035" href="#0097-PAPU-035">0097-PAPU-035</a>).
+- Given the end of an auction is reached and the book is not crossed, the auction will end, the automated purchase order removed from the book, and the funds earmarked for the auction released. (<a name="0097-PAPU-035" href="#0097-PAPU-035">0097-PAPU-035</a>).
 - Given the end of an auction is reached and the book is crossed, if the uncrossing price would break an active price monitoring trigger, the auction is extended by the relevant length. (<a name="0097-PAPU-036" href="#0097-PAPU-036">0097-PAPU-036</a>).
 - Given the end of an auction is reached and the book is crossed, if the uncrossing price would not break an active price monitoring trigger, the auction is ended. (<a name="0097-PAPU-037" href="#0097-PAPU-037">0097-PAPU-037</a>).
 
 ### Protocol Automated Orders
 
 - Given the program specifies a source asset matching the base asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-038" href="#0097-PAPU-038">0097-PAPU-038</a>).
-- Given the program specifies a source asset matching the quote asset of the market, it will place a sell order at the start of the auction. (<a name="0097-PAPU-039" href="#0097-PAPU-039">0097-PAPU-039</a>).
+- Given the program specifies a source asset matching the quote asset of the market, it will place a buy order at the start of the auction. (<a name="0097-PAPU-039" href="#0097-PAPU-039">0097-PAPU-039</a>).
 
 - The price of the order will equal the product of the oracle price and the programs oracle offset factor. (<a name="0097-PAPU-040" href="#0097-PAPU-040">0097-PAPU-040</a>).
 
@@ -186,3 +186,148 @@ To ensure a market can only ever support one **active** PAP program:
 - If an automated purchase order is not filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order) and all earmarked funds returned to the relevant source account. (<a name="0097-PAPU-044" href="#0097-PAPU-044">0097-PAPU-044</a>).
 - If an automated purchase order is only partially filled on auction uncrossing, the order is removed from the book automatically (as it is a GFA order), any swapped tokens transferred to the correct to account, and the remaining earmarked funds returned to the relevant source account. (<a name="0097-PAPU-045" href="#0097-PAPU-045">0097-PAPU-045</a>).
 - If an automated purchase order is fully filled on auction uncrossing, all swapped tokens are transferred to the correct to account. (<a name="0097-PAPU-046" href="#0097-PAPU-046">0097-PAPU-046</a>).
+
+- The following set of ACs assumes a program where the source token matches the base asset of the relevant market. Prices, sizes, and balances are expressed in there scaled integer form:
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-047" href="#0097-PAPU-047">0097-PAPU-047</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=3`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the base asset and the latest oracle price was `100000`. The program will submit a sell order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-048" href="#0097-PAPU-048">0097-PAPU-048</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=3`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1000` at `100000`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-049" href="#0097-PAPU-049">0097-PAPU-049</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=3`
+
+    If the latest snapshot earmarked `1000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1000000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-050" href="#0097-PAPU-050">0097-PAPU-050</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=-3`
+
+    If the latest snapshot earmarked `1000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-051" href="#0097-PAPU-051">0097-PAPU-051</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=3`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the from account holds `1000000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the quote asset. (<a name="0097-PAPU-052" href="#0097-PAPU-052">0097-PAPU-052</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=3`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the from account holds `1000` of the base asset and the latest oracle price was `100`. The program will submit a sell order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000000` of the quote asset. (<a name="0097-PAPU-053" href="#0097-PAPU-053">0097-PAPU-053</a>).
+
+
+- The following set of ACs assumes a program where the source token matches the base asset of the relevant market. Prices, sizes, and balances are expressed in there scaled integer form:
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-054" href="#0097-PAPU-054">0097-PAPU-054</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=3`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the quote asset and the latest oracle price was `100000`. The program will submit a buy order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-055" href="#0097-PAPU-055">0097-PAPU-055</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=3`
+        - `marketPositionDecimals=0`
+
+    If the latest snapshot earmarked `1000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1000` at `100000`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-056" href="#0097-PAPU-056">0097-PAPU-056</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=3`
+
+    If the latest snapshot earmarked `1000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1000000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-057" href="#0097-PAPU-057">0097-PAPU-057</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=-3`
+
+    If the latest snapshot earmarked `1000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-058" href="#0097-PAPU-058">0097-PAPU-058</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=3`
+        - `quoteAssetDecimals=0`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the from account holds `1000000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000` of the base asset. (<a name="0097-PAPU-059" href="#0097-PAPU-059">0097-PAPU-059</a>).
+
+    Given the decimals:
+
+        - `oracleDecimals=0`
+        - `baseAssetDecimals=0`
+        - `quoteAssetDecimals=3`
+        - `marketPriceDecimals=0`
+        - `marketPositionDecimals=0`
+
+    If the from account holds `1000` of the quote asset and the latest oracle price was `100`. The program will submit a buy order of size `1000` at `100`. When the auction uncrosses at that price, the to account will be credited with `100000000` of the base asset. (<a name="0097-PAPU-060" href="#0097-PAPU-060">0097-PAPU-060</a>).
