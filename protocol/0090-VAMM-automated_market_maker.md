@@ -49,6 +49,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
   market,
   slippage_tolerance_percentage,
   proposed_fee,
+  spread,
   concentrated_liquidity_params: {
     base_price,
     lower_price,
@@ -72,6 +73,7 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Leverage at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what leverage that might allow at the price bounds. Using this parameter allows them to set a value such that `position = remaining funds * leverage at bound*`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
   - **Upper Bound Leverage**: `leverage_at_upper_bound`
   - **Lower Bound Leverage**: `leverage_at_lower_bound`
+- **Spread**: an optional float strictly greater than zero which defines the range around the current fair-price in which the AMM will quote no volume.
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -211,39 +213,70 @@ where $p_u$ is `base price` when $P > 0$ or `upper price` when $P < 0$.
 
 #### Price to trade a given volume
 
-Finally, the protocol needs to calculate the inverse of the previous section. That is, given a volume bought from/sold to the AMM, at what price should the trade be executed. This could be calculated naively by summing across all the smallest increment volume differences, however this would be computationally inefficient and can be optimised by instead considering the full trade size.
+Finally, the protocol needs to calculate the inverse of the previous section. That is, given a volume bought from/sold to the AMM ($\Delta x$), at what price should the trade be executed. This could be calculated naively by summing across all the smallest increment volume differences, however this would be computationally inefficient and can be optimised by instead considering the full trade size.
 
+As the VAMM configuration allows for an optional spread to be specified (that is a range in which the AMM quotes no volume) the average execution price of a trade cannot always be derived immediately from the curve. Instead the volume can be split into two components, that is the volume traded at the best bid/offer $\Delta x_a$ and the remaining volume $\Delta x_b$.
+
+$$
+\Delta x = \Delta x_a + \Delta x_b
+$$
+
+Where the average execution price can now be calculated as:
+
+$$
+s_{aep} = \frac{s_a \cdot \Delta x_a + s_b \cdot \Delta x_b}{x_a + x_b} 
+$$
+
+Where:
+- $s_a$ is the best bid / offer price
+- $x_a$ is the volume traded at the best bid / offer
+- $s_b$ is the average execution price of the volume traded beyond the best bid / offer
+- $x_b$ is the volume traded beyond the best bid / offer
+
+Given the above we therefore first need to find $s_b$. The average execution price of volume traded beyond the best bid / offer.
+
+##### Calculating the average execution price of volume beyond best bid/offer
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`), `lower price of the current range` $p_l$ (`base price` if `P < 0` else `lower price`), the volume to trade $\Delta x$ and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
-First, the steps for calculating a fair price should be followed in order to obtain the implied price. Next the virtual `x` and `y` balances must be found:
+First calculate the virtual `x` and `y` balances when the position is equal to the current position plus the volume traded at the best bid / offer, i.e. the virtual balances when the fair price is the best bid / offer:
 
   1. If `P > 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_b}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_b$ is the `base price`.
-     1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
+     1. The virtual `x` of the position can be calculated as $x_v = (P + \Delta{x_a}) + \frac{L}{\sqrt{s_a}}$, where $L$ is the value for the lower range, $P$ is the market position and $s_a$ is the best bid / offer.
+     1. The virtual `y` can be calculated as $y_v = L * \sqrt{s_a}$ where $s_a$ is the best bid / offer.
   1. If `P < 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + P_{v_u} + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price` and $P_{v_u}$ is the theoretical volume at the upper bound.
-     1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
+     1. The virtual `x` of the position can be calculated as $x_v = (P + \Delta{x_a}) + P_{v_u} + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price` and $P_{v_u}$ is the theoretical volume at the upper bound.
+     1. The virtual `y` can be calculated as $y_v = L * \sqrt{s_a}$ where $s_a$ is the best bid / offer.
 
 Once obtained, the price can be obtained from the fundamental requirement of the product $y \cdot x$ remaining constant. This gives the relationship
 
 $$
-y_v \cdot x_v = (y_v + \Delta y) \cdot (x_v - \Delta x) ,
+y_v \cdot x_v = (y_v + \Delta y) \cdot (x_v - \Delta x_b) ,
 $$
 
 From which $\Delta y$ must be calculated
 
 $$
-\Delta y = \frac{y_v \cdot x_v}{x_v - \Delta x} - y_v ,
+\Delta y = \frac{y_v \cdot x_v}{x_v - \Delta x_b} - y_v ,
 $$
 
-Thus giving a final execution price to return of $\frac{\Delta y}{\Delta x}$.
+Thus giving a final execution price of volume beyond the best bid/offer of $\frac{\Delta y}{\Delta x_b}$.
+
+##### Calculating the final average execution price
+
+Finally, we can can calculate the average execution price of the full volume as
+
+$$
+\frac{s_b \cdot \Delta x_a + \frac{\Delta y}{\Delta x_b} \cdot \Delta x_b}{\Delta x_a + \Delta x_b}
+$$
 
 #### Volume between two prices
 
 For the second interface one needs to calculate the volume which would be posted to the book between two price levels. In order to calculate this for an AMM one is ultimately asking the question "what volume of swap would cause the fair price to move from price A to price B?"
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
+
+If the ending price falls within the spread range simply quote zero volume, otherwise...
 
 First, calculate the implied position at `starting price` and `ending price` and return the difference.
 
