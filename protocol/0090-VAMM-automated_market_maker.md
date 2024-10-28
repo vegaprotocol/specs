@@ -25,12 +25,21 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 
 ## Sub-Account Configuration
 
-Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
+Each main Vega key will have a shared collateral sub account and up-to one individual sub account for a given market on which an AMM may be set up. The account keys should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. 
+
+An AMM which uses collateral from a shared collateral sub-account is here by called a shared AMM and an AMM which uses **collateral** from an individual sub-account is here by called an **individual** AMM.
+
+Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
 - Cancellation: When the vAMM is cancelled the strategy specified will be followed:
   - For futures, either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
 - Amendment: Updates the strategy or commitment for a sub-account
+
+Additionally to support shared collateral sub-accounts users will have the additional available actions:
+
+- Deposit: A sub-account can be deposited too with a valid transfer from the main key.
+- Withdraw: A sub-account can be withdrawn from with a valid transfer from the sub-account key. Note this will require some additional core implementation to allow transferring from a sub-account.
 
 ## Interface
 
@@ -49,6 +58,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
   market,
   slippage_tolerance_percentage,
   proposed_fee,
+  spread,
   concentrated_liquidity_params: {
     base_price,
     lower_price,
@@ -56,6 +66,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
     leverage_at_upper_bound,
     leverage_at_lower_bound,
   }
+  shared_collateral
 }
 ```
 
@@ -72,6 +83,8 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Leverage at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what leverage that might allow at the price bounds. Using this parameter allows them to set a value such that `position = remaining funds * leverage at bound*`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
   - **Upper Bound Leverage**: `leverage_at_upper_bound`
   - **Lower Bound Leverage**: `leverage_at_lower_bound`
+- **Spread**: an optional float strictly greater than zero which defines the range around the current fair-price in which the AMM will quote no volume.
+- **Shared Collateral** a boolean which specifies whether the network should use the shared collateral sub-account or individual sub-account. When using the shared sub-account the user will have to manually add funds, when using the individual sub-account funds will automatically be deposited.
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -211,33 +224,63 @@ where $p_u$ is `base price` when $P > 0$ or `upper price` when $P < 0$.
 
 #### Price to trade a given volume
 
-Finally, the protocol needs to calculate the inverse of the previous section. That is, given a volume bought from/sold to the AMM, at what price should the trade be executed. This could be calculated naively by summing across all the smallest increment volume differences, however this would be computationally inefficient and can be optimised by instead considering the full trade size.
+Finally, the protocol needs to calculate the inverse of the previous section. That is, given a volume bought from/sold to the AMM ($\Delta x$), at what price should the trade be executed. This could be calculated naively by summing across all the smallest increment volume differences, however this would be computationally inefficient and can be optimised by instead considering the full trade size.
 
+As the VAMM configuration allows for an optional spread to be specified (that is a range in which the AMM quotes no volume) the average execution price of a trade cannot always be derived immediately from the curve. Instead the volume can be split into two components, that is the volume traded at the best bid/offer $\Delta x_a$ and the remaining volume $\Delta x_b$.
+
+$$
+\Delta x = \Delta x_a + \Delta x_b
+$$
+
+Where the average execution price can now be calculated as:
+
+$$
+s_{aep} = \frac{s_a \cdot \Delta x_a + s_b \cdot \Delta x_b}{x_a + x_b}
+$$
+
+Where:
+
+- $s_a$ is the best bid / offer price
+- $x_a$ is the volume traded at the best bid / offer
+- $s_b$ is the average execution price of the volume traded beyond the best bid / offer
+- $x_b$ is the volume traded beyond the best bid / offer
+
+Given the above we therefore first need to find $s_b$. The average execution price of volume traded beyond the best bid / offer.
+
+##### Calculating the average execution price of volume beyond best bid/offer
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`), `lower price of the current range` $p_l$ (`base price` if `P < 0` else `lower price`), the volume to trade $\Delta x$ and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
-First, the steps for calculating a fair price should be followed in order to obtain the implied price. Next the virtual `x` and `y` balances must be found:
+First calculate the virtual `x` and `y` balances when the position is equal to the current position plus the volume traded at the best bid / offer, i.e. the virtual balances when the fair price is the best bid / offer:
 
   1. If `P > 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_b}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_b$ is the `base price`.
-     1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
+     1. The virtual `x` of the position can be calculated as $x_v = (P + \Delta{x_a}) + \frac{L}{\sqrt{s_a}}$, where $L$ is the value for the lower range, $P$ is the market position and $s_a$ is the best bid / offer.
+     1. The virtual `y` can be calculated as $y_v = L * \sqrt{s_a}$ where $s_a$ is the best bid / offer.
   1. If `P < 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + P_{v_u} + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price` and $P_{v_u}$ is the theoretical volume at the upper bound.
-     1. The virtual `y` can be calculated as $y_v = L * \sqrt{p_f}$ where $p_f$ is the fair price calculated above.
+     1. The virtual `x` of the position can be calculated as $x_v = (P + \Delta{x_a}) + P_{v_u} + \frac{L}{\sqrt{p_u}}$ where $p_u$ is the `upper price` and $P_{v_u}$ is the theoretical volume at the upper bound.
+     1. The virtual `y` can be calculated as $y_v = L * \sqrt{s_a}$ where $s_a$ is the best bid / offer.
 
 Once obtained, the price can be obtained from the fundamental requirement of the product $y \cdot x$ remaining constant. This gives the relationship
 
 $$
-y_v \cdot x_v = (y_v + \Delta y) \cdot (x_v - \Delta x) ,
+y_v \cdot x_v = (y_v + \Delta y) \cdot (x_v - \Delta x_b) ,
 $$
 
 From which $\Delta y$ must be calculated
 
 $$
-\Delta y = \frac{y_v \cdot x_v}{x_v - \Delta x} - y_v ,
+\Delta y = \frac{y_v \cdot x_v}{x_v - \Delta x_b} - y_v ,
 $$
 
-Thus giving a final execution price to return of $\frac{\Delta y}{\Delta x}$.
+Thus giving a final execution price of volume beyond the best bid/offer of $\frac{\Delta y}{\Delta x_b}$.
+
+##### Calculating the final average execution price
+
+Finally, we can can calculate the average execution price of the full volume as
+
+$$
+\frac{s_b \cdot \Delta x_a + \frac{\Delta y}{\Delta x_b} \cdot \Delta x_b}{\Delta x_a + \Delta x_b}
+$$
 
 #### Volume between two prices
 
@@ -245,7 +288,9 @@ For the second interface one needs to calculate the volume which would be posted
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
-First, calculate the implied position at `starting price` and `ending price` and return the difference.
+If the ending price falls within the spread range simply quote zero volume, otherwise...
+
+First, calculate the implied position at `starting price` and `ending price` and let the difference be the theoretical volume quoted between two prices $V$.
 
 For a given price $p$ calculate implied position $P_i$ with
 
@@ -253,7 +298,43 @@ $$
 P_i = L \cdot \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}} ,
 $$
 
-Then simply return the absolute difference between these two prices.
+## Cross Market AMMs
+
+To support creation of AMM pools which provide liquidity on multiple markets with a shared pool of collateral, quote volume may require scaling to ensure:
+
+- an AMM has the correct leverage for a given fair price
+- an AMM has a neutral position when the fair price is the base price
+
+To achieve the above:
+
+If requesting the volume which would increase the AMMs exposure, the AMM should scale the quoted volume by the ratio of available collateral to commitment amount.
+
+$$
+V = V_t\cdot\frac{b_m + b_g}{c}
+$$
+
+If requesting the volume which would reduce the AMMs exposure, the AMM should scale the quoted volume by the ratio of the current position against theoretical position.
+
+Where:
+
+- %V% is the scaled volume the AMM would quote between two prices.
+- $V_t$ is the theoretical volume the AMM would quote between two prices. 
+- $b_m$ is the current balance in the markets margin account.
+- $b_g$ is the current balance in the AMMs general account.
+- $b_g$ is the current balance in the AMMs general account.
+
+$$
+V = V_t\cdot\frac{P_a}{P_t}
+$$
+
+Where:
+
+- %V% is the scaled volume the AMM would quote between two prices.
+- $V_t$ is the theoretical volume the AMM would quote between two prices. 
+- $P_a$ is the current position of the AMM.
+- $P_t$ is the theoretical position of the AMM.
+
+Note, the above implementation ensures after the market trades against an AMM there leverage on that market will always be correct. It does not however ensure the AMMs leverage is correct at all moments in time as the pool will not trigger rebalancing trades itself and instead requires an aggressor to initiate a trade.
 
 ## Determining Liquidity Contribution
 
