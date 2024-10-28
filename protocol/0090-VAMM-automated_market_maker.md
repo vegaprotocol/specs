@@ -224,10 +224,11 @@ $$
 Where the average execution price can now be calculated as:
 
 $$
-s_{aep} = \frac{s_a \cdot \Delta x_a + s_b \cdot \Delta x_b}{x_a + x_b} 
+s_{aep} = \frac{s_a \cdot \Delta x_a + s_b \cdot \Delta x_b}{x_a + x_b}
 $$
 
 Where:
+
 - $s_a$ is the best bid / offer price
 - $x_a$ is the volume traded at the best bid / offer
 - $s_b$ is the average execution price of the volume traded beyond the best bid / offer
