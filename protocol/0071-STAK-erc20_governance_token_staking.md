@@ -17,7 +17,7 @@ Unlike the ERC-20 or ETH bridges however, the Staking Bridge does not rely on an
 
 ### Vega network
 
-Staked assets will appear in a user's [staking account](./../protocol/0013-ACCT-accounts.md) once the Vega network sees the relevant `Stake_Deposited` event(s) with enough confirmations (defined by a network parameter). As the staked tokens will be used for [governance](./../protocol/0028-GOVE-governance.md), the governance will weight votes based on the staking account balance instead of the general account balance. Delegation functionality will also use the staking account balance as the source of truth for the maximum number of delegated tokens.
+Staked assets will appear in a user's [staking account](./../protocol/0013-ACCT-accounts.md) once the Vega network sees the relevant `Stake_Deposited` event(s) with assurance of Ethereum finality. As the staked tokens will be used for [governance](./../protocol/0028-GOVE-governance.md), the governance will weight votes based on the staking account balance instead of the general account balance. Delegation functionality will also use the staking account balance as the source of truth for the maximum number of delegated tokens.
 
 - Vega will have a new `stake account` account type to track the balance of staked tokens for each public key
 - Vega  will listen for `Stake_Deposited` events from the staking bridge and ERC-20 vesting contracts (see below) and increase the balance in the appropriate party's stake account by the amount deposited each time new stake is deposited
